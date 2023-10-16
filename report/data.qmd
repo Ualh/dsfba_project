@@ -3,22 +3,16 @@
 ```{r, echo = FALSE, message = FALSE}
 source(here::here("scripts/setup.R"))
 ```
+__TO DO's__
 
-* Sources
-* Description
-* Wrangling/cleaning
-* Spotting mistakes and missing data (could be part of EDA too)
-* Listing anomalies and outliers (could be part of EDA too)
+* Sources - TBS
+* Description - In progress
+* Wrangling/cleaning - In progress
+* Spotting mistakes and missing data (could be part of EDA too) - TBD
+* Listing anomalies and outliers (could be part of EDA too) - TBD
 
 
 ## Sources
-
-We have sourced our data from multiple repositories to ensure a comprehensive analysis:
-
-1. **Vehicle Registrations Data**: Obtained from Swiss government databases, capturing details from 2005-2022.
-2. **Google Trends Data**: Publicly available data indicating the popularity of search queries related to electric vehicles and environmental consciousness from 2004-2023.
-3. **Oil Prices Data**: Brent Oil Prices data that provides a perspective on global oil price fluctuations.
-4. **Demographic Data**: Comprehensive data from the Swiss government detailing various demographic indicators over the years.
 
 ## Description
 
@@ -53,10 +47,8 @@ for (i in names(datasets)) {
   cat(paste("\nFirst few rows of dataset:", i, "\n"))
   print(head(datasets[[i]]))
 }
-
 ```
 
-Upon initial exploration, various cleaning steps were deemed necessary:
 - **Merging and Joining**: As the vehicle data was split across multiple files, it was necessary to combine them for a holistic view.
 ```{r}
 # did not work:
@@ -67,17 +59,7 @@ Upon initial exploration, various cleaning steps were deemed necessary:
 - **Data Type Conversions**: Ensuring that all data columns were of the correct type (e.g., converting date strings to date objects).
 
 
+
 ## Spotting Mistakes and Missing Data
 
-Detailed Exploratory Data Analysis (EDA) helped in spotting:
-
-- **Anomalies**: Such as sudden spikes or drops in time-series data which might indicate data entry errors.
-- **Missing Data Patterns**: To understand if there's a systematic pattern to missing data or if it appears random.
-
 ## Listing Anomalies and Outliers
-
-- **Outliers**: Visualizations like box plots and scatter plots were instrumental in identifying outliers. Statistical methods, like the IQR method, further aided in this detection.
-- **Anomalies**: Time-series plots, especially for Google Trends and oil prices, helped highlight any potential anomalies.
-
-In the subsequent sections, we will delve deeper into the data exploration, analysis techniques, and insights derived.
-

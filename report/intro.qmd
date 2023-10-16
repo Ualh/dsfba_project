@@ -3,13 +3,12 @@
 ```{r, echo = FALSE, message = FALSE}
 source(here::here("scripts/setup.R"))
 ```
+__TO DO's__
 
-* Overview and Motivation
-* Related Work
-* Research questions
+* Overview and Motivation - ✓
+* Related Work - TBD
+* Research questions - ✓
 
-
-# Analyzing the Impact of External Factors on the Adoption of Electric Vehicles in Switzerland (2005-2022)
 
 ## Background and Motivation
 
@@ -17,18 +16,13 @@ Climatic challenges have emerged as some of the most pressing concerns of our er
 
 Electric vehicles (EVs) offer a sustainable alternative to traditional combustion engine vehicles. Switzerland, with its commitment to environmental sustainability, has seen a notable shift towards EV adoption. This project arises from our team's profound interest in understanding this shift and the external factors influencing it. By deciphering the nuances of eco-friendly consumption patterns, especially in the context of EVs, we aim to provide insights that can guide policy-making, industry shifts, and consumer awareness campaigns.
 
-## Related work ???
+## Related Work 
+TBD
 
+## Reseach Questions
 
-## Research questions
-
-The core objectives of this project revolve around understanding the myriad factors influencing the adoption of EVs in Switzerland:
-
-- **Correlation Analysis**: Explore how environmental awareness, as evidenced by Google Trends data, interacts with electric vehicle adoption patterns in Switzerland.
-- **Causal Inference**: Delve deeper to discern if these factors, including oil prices and demographic shifts, have a direct cause-and-effect relationship with EV adoption rates.
-- **Time Series Analysis**: Analyze the evolution of EV adoption over time, identifying periods of rapid growth or stagnation.
-- **Regional Analysis**: Understand if certain regions in Switzerland are more inclined to adopt EVs and if these regional patterns correlate with external factors.
-- **Policy & Industry Influence**: Assess the impact of significant policy changes and automotive industry trends on the adoption rates of EVs in Switzerland.
-
-In the subsequent sections, we will detail the data sources used, the methodology employed, and the insights derived from our analysis.
-
+- 1. How does the rise in environmental consciousness, as depicted by Google Trends, correlate with electric vehicle adoption in Switzerland across different regions and over time, especially in relation to oil price fluctuations and demographic changes?
+- 2. Given fluctuations in oil prices, demographic shifts, and major policy or automotive industry trends, which of these factors have a direct causal impact on the shifts in the adoption of electric vehicles in Switzerland?
+- 3. Based on past electric vehicle adoption trends in Switzerland, can we forecast future adoption rates and pinpoint times of significant increases or decreases correlated with major events or policy changes?
+- 4. In comparing regions in Switzerland, which areas show higher or lower adoption of electric vehicles, and how does this regional adoption align or vary with external factors like oil price changes, environmental consciousness, and demographic shifts?
+- 5. To what extent have policy alterations, global environmental incidents, and shifts in the automotive industry affected electric vehicle adoption in Switzerland?
