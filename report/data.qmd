@@ -9,3 +9,75 @@ source(here::here("scripts/setup.R"))
 * Wrangling/cleaning
 * Spotting mistakes and missing data (could be part of EDA too)
 * Listing anomalies and outliers (could be part of EDA too)
+
+
+## Sources
+
+We have sourced our data from multiple repositories to ensure a comprehensive analysis:
+
+1. **Vehicle Registrations Data**: Obtained from Swiss government databases, capturing details from 2005-2022.
+2. **Google Trends Data**: Publicly available data indicating the popularity of search queries related to electric vehicles and environmental consciousness from 2004-2023.
+3. **Oil Prices Data**: Brent Oil Prices data that provides a perspective on global oil price fluctuations.
+4. **Demographic Data**: Comprehensive data from the Swiss government detailing various demographic indicators over the years.
+
+## Description
+
+The datasets encompass:
+
+- **Vehicle Registrations**: Detailed regional breakdowns showing vehicle type, fuel type, and numbers across years.
+- **Google Trends**: Time-series data showcasing the interest in electric vehicles and environmental topics over time.
+- **Oil Prices**: Time-series data indicating Brent oil price fluctuations over the years.
+- **Demographics**: Indicators like population growth, immigration, emigration, gender statistics, and more, which can influence vehicle adoption patterns.
+
+## Wrangling/Cleaning
+###Load data
+```{r}
+# Reading the data
+vehicle_data_2005_2008 <- read.csv("../data/road_vehicle_CH_2005-2008.csv")
+vehicle_data_2009_2022 <- read.csv("../data/road_vehicle_CH_2009-2022.csv")
+google_trends_data <- read.csv("../data/google_trend_EV_2004-2023.csv")
+oil_prices_data <- read.csv("../data/BrentOilPrices.csv")
+demographic_data <- read.csv("../data/demographic.csv")
+```
+
+```{r}
+# Storing the data frames in a list
+datasets <- list(vehicle_data_2005_2008 = vehicle_data_2005_2008,
+                 vehicle_data_2009_2022 = vehicle_data_2009_2022,
+                 google_trends_data = google_trends_data,
+                 oil_prices_data = oil_prices_data,
+                 demographic_data = demographic_data)
+
+# Iterating over the list and printing the head of each data frame
+for (i in names(datasets)) {
+  cat(paste("\nFirst few rows of dataset:", i, "\n"))
+  print(head(datasets[[i]]))
+}
+
+```
+
+Upon initial exploration, various cleaning steps were deemed necessary:
+- **Merging and Joining**: As the vehicle data was split across multiple files, it was necessary to combine them for a holistic view.
+```{r}
+# did not work:
+#vehicle_data <- rbind(vehicle_data_2005_2008, vehicle_data_2009_2022)
+```
+
+- **Handling Missing Values**: Some datasets contained missing values which were either filled using appropriate imputation methods or dropped based on their significance.
+- **Data Type Conversions**: Ensuring that all data columns were of the correct type (e.g., converting date strings to date objects).
+
+
+## Spotting Mistakes and Missing Data
+
+Detailed Exploratory Data Analysis (EDA) helped in spotting:
+
+- **Anomalies**: Such as sudden spikes or drops in time-series data which might indicate data entry errors.
+- **Missing Data Patterns**: To understand if there's a systematic pattern to missing data or if it appears random.
+
+## Listing Anomalies and Outliers
+
+- **Outliers**: Visualizations like box plots and scatter plots were instrumental in identifying outliers. Statistical methods, like the IQR method, further aided in this detection.
+- **Anomalies**: Time-series plots, especially for Google Trends and oil prices, helped highlight any potential anomalies.
+
+In the subsequent sections, we will delve deeper into the data exploration, analysis techniques, and insights derived.
+

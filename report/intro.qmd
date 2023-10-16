@@ -9,5 +9,26 @@ source(here::here("scripts/setup.R"))
 * Research questions
 
 
-some text input
-some other text
+# Analyzing the Impact of External Factors on the Adoption of Electric Vehicles in Switzerland (2005-2022)
+
+## Background and Motivation
+
+Climatic challenges have emerged as some of the most pressing concerns of our era. As we grapple with these issues, it becomes crucial to understand the dynamics behind environmentally conscious consumer behaviors, especially in sectors that significantly contribute to carbon emissions, such as transportation. 
+
+Electric vehicles (EVs) offer a sustainable alternative to traditional combustion engine vehicles. Switzerland, with its commitment to environmental sustainability, has seen a notable shift towards EV adoption. This project arises from our team's profound interest in understanding this shift and the external factors influencing it. By deciphering the nuances of eco-friendly consumption patterns, especially in the context of EVs, we aim to provide insights that can guide policy-making, industry shifts, and consumer awareness campaigns.
+
+## Related work ???
+
+
+## Research questions
+
+The core objectives of this project revolve around understanding the myriad factors influencing the adoption of EVs in Switzerland:
+
+- **Correlation Analysis**: Explore how environmental awareness, as evidenced by Google Trends data, interacts with electric vehicle adoption patterns in Switzerland.
+- **Causal Inference**: Delve deeper to discern if these factors, including oil prices and demographic shifts, have a direct cause-and-effect relationship with EV adoption rates.
+- **Time Series Analysis**: Analyze the evolution of EV adoption over time, identifying periods of rapid growth or stagnation.
+- **Regional Analysis**: Understand if certain regions in Switzerland are more inclined to adopt EVs and if these regional patterns correlate with external factors.
+- **Policy & Industry Influence**: Assess the impact of significant policy changes and automotive industry trends on the adoption rates of EVs in Switzerland.
+
+In the subsequent sections, we will detail the data sources used, the methodology employed, and the insights derived from our analysis.
+
