@@ -17,17 +17,6 @@ __TO DO's__
 
 * Wrangling/cleaning
 
-```{r}
-#installing packages
-install.packages("tidyverse")
-install.packages("dplyr")
-install.packages("ggplot2")
-
-#loading packages
-library(tidyverse)
-library(dplyr)
-library(ggplot2)
-```
 
 
 * Spotting mistakes and missing data (could be part of EDA too)
@@ -93,6 +82,13 @@ data_cleaned <- data_long |>
 
 # Display the cleaned dataset
 head(data_cleaned)
+```
+```{r}
+# Creating a new df to keep the original clean
+oil_df <- oil_prices_data
+
+# Changing the Date column as Date data-type
+oil_df$Date <- as.Date(oil_prices_data$Date, format = "%d-%b-%y") #Specifying it's in the 1900-1999 range
 ```
 
 
