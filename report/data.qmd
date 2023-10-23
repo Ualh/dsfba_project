@@ -5,6 +5,34 @@ source(here::here("scripts/setup.R"))
 ```
 __TO DO's__
 
+<<<<<<< HEAD
+* Sources
+
+ https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.24105892.html
+
+* Description
+
+ New registrations of road vehicles by vehicle group and type
+ Results by canton, vehicle group, vehicle type, fuel, month and year
+
+* Wrangling/cleaning
+
+```{r}
+#installing packages
+install.packages("tidyverse")
+install.packages("dplyr")
+install.packages("ggplot2")
+
+#loading packages
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+```
+
+
+* Spotting mistakes and missing data (could be part of EDA too)
+* Listing anomalies and outliers (could be part of EDA too) 
+=======
 * Sources - TBS
 * Description - In progress
 * Wrangling/cleaning - In progress
@@ -82,3 +110,4 @@ head(data_cleaned)
 ## Spotting Mistakes and Missing Data
 
 ## Listing Anomalies and Outliers
+>>>>>>> ab79adeb9376107b0d09e7630f5af95317bcd61d
