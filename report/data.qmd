@@ -46,8 +46,27 @@ datasets <- list(vehicle_data_2005_2008 = vehicle_data_2005_2008,
 for (i in names(datasets)) {
   cat(paste("\nFirst few rows of dataset:", i, "\n"))
   print(head(datasets[[i]]))
+  print(str(datasets[[i]]))
 }
 ```
+```{r}
+# Reshape the dataset from wide to long format
+data_long <- data |>
+  pivot_longer(cols = `2005`:`2008`, names_to = "Year", values_to = "Count")
+
+# Rename columns to match your specifications
+data_cleaned <- data_long |>
+  rename(
+    Location = Canton,
+    Type = `Vehicle group`,
+    Fuel = Fuel,
+    Date = Month
+  )
+
+# Display the cleaned dataset
+head(data_cleaned)
+```
+
 
 - **Merging and Joining**: As the vehicle data was split across multiple files, it was necessary to combine them for a holistic view.
 ```{r}
