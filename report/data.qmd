@@ -17,21 +17,9 @@ __TO DO's__
 
 * Wrangling/cleaning
 
-```{r}
-#installing packages
-install.packages("tidyverse")
-install.packages("dplyr")
-install.packages("ggplot2")
-
-#loading packages
-library(tidyverse)
-library(dplyr)
-library(ggplot2)
-```
-
-
 * Spotting mistakes and missing data (could be part of EDA too)
 * Listing anomalies and outliers (could be part of EDA too) 
+
 =======
 * Sources - TBS
 * Description - In progress
@@ -39,8 +27,6 @@ library(ggplot2)
 * Spotting mistakes and missing data (could be part of EDA too) - TBD
 * Listing anomalies and outliers (could be part of EDA too) - TBD
 
-
-## Sources
 
 ## Description
 
@@ -52,7 +38,8 @@ The datasets encompass:
 - **Demographics**: Indicators like population growth, immigration, emigration, gender statistics, and more, which can influence vehicle adoption patterns.
 
 ## Wrangling/Cleaning
-###Load data
+
+### cleaning of road_vehicle_CH_2005-2008.csv
 ```{r}
 # Reading the data
 vehicle_data_2005_2008 <- read.csv("../data/road_vehicle_CH_2005-2008.csv")
@@ -77,29 +64,122 @@ for (i in names(datasets)) {
   print(str(datasets[[i]]))
 }
 ```
+
 ```{r}
 # Reshape the dataset from wide to long format
-data_long <- data |>
-  pivot_longer(cols = `2005`:`2008`, names_to = "Year", values_to = "Count")
+v_2005_2008 <- vehicle_data_2005_2008 |>
+  pivot_longer(cols = `X2005`:`X2008`, names_to = "Year", values_to = "Count")
 
-# Rename columns to match your specifications
-data_cleaned <- data_long |>
-  rename(
-    Location = Canton,
-    Type = `Vehicle group`,
-    Fuel = Fuel,
-    Date = Month
-  )
+head(v_2005_2008)
+```
+```{r}
+# Remove the "X" prefix from the Year column
+v_2005_2008$Year <- gsub("X", "", v_2005_2008$Year)
 
-# Display the cleaned dataset
-head(data_cleaned)
+# Display the cleaned dataset again
+head(v_2005_2008)
 ```
 
-
-- **Merging and Joining**: As the vehicle data was split across multiple files, it was necessary to combine them for a holistic view.
 ```{r}
-# did not work:
-#vehicle_data <- rbind(vehicle_data_2005_2008, vehicle_data_2009_2022)
+#work on Vehicle.group...type
+v_2005_2008 <- v_2005_2008 |>
+  # Create Category column based on rows starting with '>'
+  mutate(Category = ifelse(str_starts(Vehicle.group...type, ">"), Vehicle.group...type, NA)) |>
+  # Fill down the Category values
+  fill(Category) |>
+  # Remove the prefixes from both Category and Type columns
+  mutate(
+    Category = str_remove(Category, "^>\\s*"),
+    Sub_category = str_remove(Vehicle.group...type, "^\\.\\.\\.\\s*|>\\s*")
+  ) |>
+  # Drop the original Type column
+  select(-Vehicle.group...type)
+
+head(v_2005_2008)
+```
+
+```{r}
+# Rename columns
+v_2005_2008 <- v_2005_2008 |>
+  rename(
+    Location = Canton,
+    Fuel = Fuel
+  )
+
+head(v_2005_2008)
+```
+```{r}
+vehicle_data_2005_2008
+```
+
+```{r}
+#check if same sum()
+total_sum_new_df <- sum(v_2005_2008$Count)
+total_sum_old_df <- sum(colSums(vehicle_data_2005_2008[, c('X2005', 'X2006', 'X2007', 'X2008')]))
+
+total_sum_new_df
+total_sum_old_df
+```
+### Cleaning of road_vehicle_CH_2009-2022.csv
+
+```{r}
+# Reshape the dataset from wide to long format
+v_2009_2022 <- vehicle_data_2009_2022 |>
+  pivot_longer(cols = `X2009`:`X2022`, names_to = "Year", values_to = "Count")
+
+# Remove the "X" prefix from the Year column
+v_2009_2022$Year <- gsub("X", "", v_2009_2022$Year)
+
+#work on Vehicle.group...type
+v_2009_2022 <- v_2009_2022 |>
+  # Create Category column based on rows starting with '>'
+  mutate(Category = ifelse(str_starts(Vehicle.group...type, ">"), Vehicle.group...type, NA)) |>
+  # Fill down the Category values
+  fill(Category) |>
+  # Remove the prefixes from both Category and Type columns
+  mutate(
+    Category = str_remove(Category, "^>\\s*"),
+    Sub_category = str_remove(Vehicle.group...type, "^\\.\\.\\.\\s*|>\\s*")
+  ) |>
+  # Drop the original Type column
+  select(-Vehicle.group...type)
+
+# Rename columns
+v_2009_2022 <- v_2009_2022 |>
+  rename(
+    Location = Canton,
+    Fuel = Fuel
+  )
+
+head(v_2009_2022)
+```
+```{r}
+#check if same sum()
+total_sum_new_df2 <- sum(v_2009_2022$Count)
+total_sum_old_df2 <- sum(colSums(vehicle_data_2009_2022[, c('X2009', 'X2010', 'X2011', 'X2012', 'X2013', 'X2014', 'X2015', 'X2016', 'X2017', 'X2018', 'X2019', 'X2020', 'X2021', 'X2022')]))
+
+total_sum_new_df2
+total_sum_old_df2
+```
+- **Merging and Joining**: As the vehicle data was split across multiple files, it was necessary to combine them for a holistic view.
+
+```{r}
+df_v <- bind_rows(v_2005_2008, v_2009_2022)
+df_v
+```
+```{r}
+total_sum_new_df + total_sum_new_df2
+sum(df_v$Count)
+
+```
+```{r}
+df_v <- df_v |>
+  arrange(df_v$Year)
+```
+```{r}
+str(df_v)
+unique(df_v$Year)
+unique(df_v$Location)
 ```
 
 - **Handling Missing Values**: Some datasets contained missing values which were either filled using appropriate imputation methods or dropped based on their significance.
