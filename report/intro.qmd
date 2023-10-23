@@ -3,7 +3,28 @@
 ```{r, echo = FALSE, message = FALSE}
 source(here::here("scripts/setup.R"))
 ```
+__TO DO's__
 
-* Overview and Motivation
-* Related Work
-* Research questions
+* Overview and Motivation - ✓
+* Related Work - TBD
+* Research questions - ✓
+
+
+## Background and Motivation
+
+With climatic challenges emerging as pivotal concerns of our times, understanding the dynamics 
+driving environmentally conscious consumer behaviors is paramount. Our team's keen interest in 
+environmental sustainability and the transition to electric vehicles in Switzerland spurs this research. 
+This dedication to deciphering the nuances of eco-friendly consumption patterns is the driving force 
+behind our topic selection
+
+## Related Work 
+TBD
+
+## Reseach Questions
+
+- 1. How does the rise in environmental consciousness, as depicted by Google Trends, correlate with electric vehicle adoption in Switzerland across different regions and over time, especially in relation to oil price fluctuations and demographic changes?
+- 2. Given fluctuations in oil prices, demographic shifts, and major policy or automotive industry trends, which of these factors have a direct causal impact on the shifts in the adoption of electric vehicles in Switzerland?
+- 3. Based on past electric vehicle adoption trends in Switzerland, can we forecast future adoption rates and pinpoint times of significant increases or decreases correlated with major events or policy changes?
+- 4. In comparing regions in Switzerland, which areas show higher or lower adoption of electric vehicles, and how does this regional adoption align or vary with external factors like oil price changes, environmental consciousness, and demographic shifts?
+- 5. To what extent have policy alterations, global environmental incidents, and shifts in the automotive industry affected electric vehicle adoption in Switzerland?
