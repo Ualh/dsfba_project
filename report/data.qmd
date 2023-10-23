@@ -5,7 +5,6 @@ source(here::here("scripts/setup.R"))
 ```
 __TO DO's__
 
-<<<<<<< HEAD
 * Sources
 
  https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.24105892.html
@@ -17,19 +16,12 @@ __TO DO's__
 
 * Wrangling/cleaning
 
-
-
-* Spotting mistakes and missing data (could be part of EDA too)
-* Listing anomalies and outliers (could be part of EDA too) 
-=======
 * Sources - TBS
 * Description - In progress
 * Wrangling/cleaning - In progress
 * Spotting mistakes and missing data (could be part of EDA too) - TBD
 * Listing anomalies and outliers (could be part of EDA too) - TBD
 
-
-## Sources
 
 ## Description
 
@@ -41,7 +33,7 @@ The datasets encompass:
 - **Demographics**: Indicators like population growth, immigration, emigration, gender statistics, and more, which can influence vehicle adoption patterns.
 
 ## Wrangling/Cleaning
-###Load data
+
 ```{r}
 # Reading the data
 vehicle_data_2005_2008 <- read.csv("../data/road_vehicle_CH_2005-2008.csv")
@@ -51,6 +43,47 @@ oil_prices_data <- read.csv("../data/BrentOilPrices.csv")
 demographic_data <- read.csv("../data/demographic.csv")
 ```
 
+### Cleaning of oil_prices_data
+```{r}
+# Change date column into Day
+
+# Two types of format: one format before 22.04.2020,a different format after
+
+# 22.04.2020 is on row 8361
+# Format 1: 15-Apr-2020
+oil_df_1 <- oil_prices_data[0:8360,] %>%
+  separate(Date, into = c("Day", "Month", "Year"), sep = "-")
+
+# Format 2 : Apr 22, 2020
+oil_df_2 <- oil_prices_data[8361:nrow(oil_prices_data),] %>%
+  separate(Date, into = c("Month", "Day", "Year"), sep = " |, ")
+
+# Check for NAs
+print(which(rowSums(is.na(oil_df_1)) > 0))
+print(which(rowSums(is.na(oil_df_2)) > 0))
+
+# We don't need dates before 2005
+oil_df_1 <- oil_df_1[4486:nrow(oil_df_1),]
+
+# Years in same format for both
+oil_df_1$Year <- paste0("20", oil_df_1$Year)
+
+# Change the order of both dataframes
+oil_df_1 <- oil_df_1 %>%
+  select("Year", "Month", "Day", "Price")
+
+oil_df_2 <- oil_df_2 %>%
+  select("Year", "Month", "Day", "Price")
+
+# Merging both dataframes together
+oil_df <- rbind(oil_df_1, oil_df_2)
+
+# Displayed clean data
+head(oil_df)
+```
+
+
+### cleaning of road_vehicle_CH_2005-2008.csv
 ```{r}
 # Storing the data frames in a list
 datasets <- list(vehicle_data_2005_2008 = vehicle_data_2005_2008,
@@ -66,36 +99,123 @@ for (i in names(datasets)) {
   print(str(datasets[[i]]))
 }
 ```
+
 ```{r}
 # Reshape the dataset from wide to long format
-data_long <- data |>
-  pivot_longer(cols = `2005`:`2008`, names_to = "Year", values_to = "Count")
+v_2005_2008 <- vehicle_data_2005_2008 |>
+  pivot_longer(cols = `X2005`:`X2008`, names_to = "Year", values_to = "Count")
 
-# Rename columns to match your specifications
-data_cleaned <- data_long |>
+head(v_2005_2008)
+```
+```{r}
+# Remove the "X" prefix from the Year column
+v_2005_2008$Year <- gsub("X", "", v_2005_2008$Year)
+
+# Display the cleaned dataset again
+head(v_2005_2008)
+```
+
+
+```{r}
+#work on Vehicle.group...type
+v_2005_2008 <- v_2005_2008 |>
+  # Create Category column based on rows starting with '>'
+  mutate(Category = ifelse(str_starts(Vehicle.group...type, ">"), Vehicle.group...type, NA)) |>
+  # Fill down the Category values
+  fill(Category) |>
+  # Remove the prefixes from both Category and Type columns
+  mutate(
+    Category = str_remove(Category, "^>\\s*"),
+    Sub_category = str_remove(Vehicle.group...type, "^\\.\\.\\.\\s*|>\\s*")
+  ) |>
+  # Drop the original Type column
+  select(-Vehicle.group...type)
+
+head(v_2005_2008)
+```
+
+```{r}
+# Rename columns
+v_2005_2008 <- v_2005_2008 |>
   rename(
     Location = Canton,
-    Type = `Vehicle group`,
-    Fuel = Fuel,
-    Date = Month
+    Fuel = Fuel
   )
 
-# Display the cleaned dataset
-head(data_cleaned)
+head(v_2005_2008)
 ```
 ```{r}
-# Creating a new df to keep the original clean
-oil_df <- oil_prices_data
-
-# Changing the Date column as Date data-type
-oil_df$Date <- as.Date(oil_prices_data$Date, format = "%d-%b-%y") #Specifying it's in the 1900-1999 range
+vehicle_data_2005_2008
 ```
 
+```{r}
+#check if same sum()
+total_sum_new_df <- sum(v_2005_2008$Count)
+total_sum_old_df <- sum(colSums(vehicle_data_2005_2008[, c('X2005', 'X2006', 'X2007', 'X2008')]))
 
+total_sum_new_df
+total_sum_old_df
+```
+### Cleaning of road_vehicle_CH_2009-2022.csv
+
+```{r}
+# Reshape the dataset from wide to long format
+v_2009_2022 <- vehicle_data_2009_2022 |>
+  pivot_longer(cols = `X2009`:`X2022`, names_to = "Year", values_to = "Count")
+
+# Remove the "X" prefix from the Year column
+v_2009_2022$Year <- gsub("X", "", v_2009_2022$Year)
+
+#work on Vehicle.group...type
+v_2009_2022 <- v_2009_2022 |>
+  # Create Category column based on rows starting with '>'
+  mutate(Category = ifelse(str_starts(Vehicle.group...type, ">"), Vehicle.group...type, NA)) |>
+  # Fill down the Category values
+  fill(Category) |>
+  # Remove the prefixes from both Category and Type columns
+  mutate(
+    Category = str_remove(Category, "^>\\s*"),
+    Sub_category = str_remove(Vehicle.group...type, "^\\.\\.\\.\\s*|>\\s*")
+  ) |>
+  # Drop the original Type column
+  select(-Vehicle.group...type)
+
+# Rename columns
+v_2009_2022 <- v_2009_2022 |>
+  rename(
+    Location = Canton,
+    Fuel = Fuel
+  )
+
+head(v_2009_2022)
+```
+```{r}
+#check if same sum()
+total_sum_new_df2 <- sum(v_2009_2022$Count)
+total_sum_old_df2 <- sum(colSums(vehicle_data_2009_2022[, c('X2009', 'X2010', 'X2011', 'X2012', 'X2013', 'X2014', 'X2015', 'X2016', 'X2017', 'X2018', 'X2019', 'X2020', 'X2021', 'X2022')]))
+
+total_sum_new_df2
+total_sum_old_df2
+```
 - **Merging and Joining**: As the vehicle data was split across multiple files, it was necessary to combine them for a holistic view.
+
 ```{r}
-# did not work:
-#vehicle_data <- rbind(vehicle_data_2005_2008, vehicle_data_2009_2022)
+df_v <- bind_rows(v_2005_2008, v_2009_2022)
+df_v
+```
+```{r}
+total_sum_new_df + total_sum_new_df2
+sum(df_v$Count)
+
+```
+```{r}
+df_v <- df_v |>
+  arrange(df_v$Year)
+```
+```{r}
+str(df_v)
+unique(df_v$Year)
+unique(df_v$Location)
 ```
 
 - **Handling Missing Values**: Some datasets contained missing values which were either filled using appropriate imputation methods or dropped based on their significance.
