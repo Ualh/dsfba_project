@@ -1,8 +1,13 @@
 ---
-title: "A cool title"
-author: "Name I, First Name I and Name II, First Name II"
+title: "Energizing Change: Electric Vehicle Rise in Switzerland"
+author: "Pierre Gasly, Alexis Jeannaret, Hugo, Urs Hurni"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: html_document
+format:
+  html:
+    output-dir: "../docs"
+    toc: true
+    toc_float: true
+    code-fold: true
 ---
 
 ```{r child = c('intro.qmd', 'data.qmd', 'eda.qmd', 'analysis.qmd', 'concl.qmd')}

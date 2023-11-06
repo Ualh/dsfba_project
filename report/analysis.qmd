@@ -1,4 +1,4 @@
-# Analysis
+# 4 Analysis
 
 ```{r, echo = FALSE, message = FALSE}
 source(here::here("scripts/setup.R"))
@@ -9,3 +9,14 @@ __TO DO's__
 * Different methods considered
 * Competing approaches
 * Justifications
+
+## 4.1 RQ1
+
+## 4.2 RQ2
+
+## 4.3 RQ3 
+
+## 4.4 RQç
+
+## 4.5 RQ5
+
