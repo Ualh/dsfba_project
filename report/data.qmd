@@ -1,0 +1,206 @@
+# Data
+
+```{r, echo = FALSE, message = FALSE}
+source(here::here("scripts/setup.R"))
+```
+__TO DO's__
+
+* Sources
+
+ https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.24105892.html
+
+* Description
+
+ New registrations of road vehicles by vehicle group and type
+ Results by canton, vehicle group, vehicle type, fuel, month and year
+
+* Wrangling/cleaning
+
+* Sources - TBS
+* Description - In progress
+* Wrangling/cleaning - In progress
+* Spotting mistakes and missing data (could be part of EDA too) - TBD
+* Listing anomalies and outliers (could be part of EDA too) - TBD
+
+
+## Description
+
+The datasets encompass:
+
+- **Vehicle Registrations**: Detailed regional breakdowns showing vehicle type, fuel type, and numbers across years.
+- **Google Trends**: Time-series data showcasing the interest in electric vehicles and environmental topics over time.
+- **Oil Prices**: Time-series data indicating Brent oil price fluctuations over the years.
+- **Demographics**: Indicators like population growth, immigration, emigration, gender statistics, and more, which can influence vehicle adoption patterns.
+
+## Wrangling/Cleaning
+
+```{r}
+# Reading the data
+vehicle_data_2005_2008 <- read.csv("../data/road_vehicle_CH_2005-2008.csv")
+vehicle_data_2009_2022 <- read.csv("../data/road_vehicle_CH_2009-2022.csv")
+google_trends_data <- read.csv("../data/google_trend_EV_2004-2023.csv")
+oil_prices_data <- read.csv("../data/BrentOilPrices.csv")
+demographic_data <- read.csv("../data/demographic.csv")
+```
+
+### Cleaning of oil_prices_data
+```{r}
+# Change date column into Day
+
+# Two types of format: one format before 22.04.2020,a different format after
+
+# 22.04.2020 is on row 8361
+# Format 1: 15-Apr-2020
+oil_df_1 <- oil_prices_data[0:8360,] %>%
+  separate(Date, into = c("Day", "Month", "Year"), sep = "-")
+
+# Format 2 : Apr 22, 2020
+oil_df_2 <- oil_prices_data[8361:nrow(oil_prices_data),] %>%
+  separate(Date, into = c("Month", "Day", "Year"), sep = " |, ")
+
+# Check for NAs
+print(which(rowSums(is.na(oil_df_1)) > 0))
+print(which(rowSums(is.na(oil_df_2)) > 0))
+
+# We don't need dates before 2005
+oil_df_1 <- oil_df_1[4486:nrow(oil_df_1),]
+
+# Years in same format for both
+oil_df_1$Year <- paste0("20", oil_df_1$Year)
+
+# Change the order of both dataframes
+oil_df_1 <- oil_df_1 %>%
+  select("Year", "Month", "Day", "Price")
+
+oil_df_2 <- oil_df_2 %>%
+  select("Year", "Month", "Day", "Price")
+
+# Merging both dataframes together
+oil_df <- rbind(oil_df_1, oil_df_2)
+
+# Displayed clean data
+head(oil_df)
+```
+
+
+### cleaning of road_vehicle_CH_2005-2008.csv
+```{r}
+# Storing the data frames in a list
+datasets <- list(vehicle_data_2005_2008 = vehicle_data_2005_2008,
+                 vehicle_data_2009_2022 = vehicle_data_2009_2022,
+                 google_trends_data = google_trends_data,
+                 oil_prices_data = oil_prices_data,
+                 demographic_data = demographic_data
+              )
+```
+
+#### Redundancy
+The dataset, representing new vehicle registrations in Switzerland from 2005 onwards, exhibited redundancy in its structure. For example, the data contained both main categories (like '> Passenger cars') and their respective sub-categories ('... Passenger car' and '.. Heavy passenger car'). On examination, it was observed that the counts under the main categories were simply aggregates of the counts of their sub-categories. Such redundancy could lead to double counting in analytical processes.
+
+* remove the main categories to avoid  and to work with a more granular dataset.
+```{r}
+# Filter out main categories (rows starting with '>')
+v_2005_2008 <- vehicle_data_2005_2008 |>
+  filter(!grepl("^>", trimws(Vehicle.group...type)))
+#rename the Vehicle.group...type column to VehicleType and clean the observations' names
+v_2005_2008 <- v_2005_2008 |>
+  rename(Location = Canton,
+         VehicleType = Vehicle.group...type) |>
+  mutate(VehicleType = str_remove(VehicleType, "^\\.\\.\\.\\s*"))
+```
+
+#### Year Extraction, Reshape the dataset from wide to long format
+```{r}
+v_2005_2008 <- v_2005_2008 |>
+  pivot_longer(cols = `X2005`:`X2008`, names_to = "Year", values_to = "Count")
+# Remove the "X" prefix from the Year column
+v_2005_2008$Year <- gsub("X", "", v_2005_2008$Year)
+head(v_2005_2008)
+```
+
+### Cleaning of road_vehicle_CH_2009-2022.csv
+```{r}
+# Filter out main categories (rows starting with '>')
+v_2009_2022 <- vehicle_data_2009_2022 |>
+  filter(!grepl("^>", trimws(Vehicle.group...type)))
+#rename the Vehicle.group...type column to VehicleType and clean the observations' names
+v_2009_2022 <- v_2009_2022 |>
+  rename(Location = Canton,
+         VehicleType = Vehicle.group...type) |>
+  mutate(VehicleType = str_remove(VehicleType, "^\\.\\.\\.\\s*"))
+
+# Year Extraction, Reshape the dataset from wide to long format
+v_2009_2022 <- v_2009_2022 |>
+  pivot_longer(cols = `X2009`:`X2022`, names_to = "Year", values_to = "Count")
+# Remove the "X" prefix from the Year column
+v_2009_2022$Year <- gsub("X", "", v_2009_2022$Year)
+head(v_2009_2022)
+```
+#### Merging and Joining
+As the vehicle data was split across multiple files, it was necessary to combine them for a holistic view.
+
+```{r}
+df_v <- bind_rows(v_2005_2008, v_2009_2022)
+df_v <- df_v |>
+  arrange(df_v$Year)
+df_v
+```
+
+#### Some of the canton names have special characters that haven't been encoded properly in the dataset, causing them to display as hexadecimal escape sequences.
+```{r}
+df_v$Location <- iconv(df_v$Location, from = "latin1", to = "UTF-8")
+```
+
+#### keep only the first name when multiple names are provided for cantons (separated by slashes)
+```{r}
+df_v$Location <- sapply(str_split(df_v$Location, " / "), `[`, 1)
+```
+
+#### convert the year an month into a single column
+We consolidated the 'Year' and 'Month' columns into a singular 'Date' column, converting them into a standard date format. This transformation streamlines time series analyses and provides a more intuitive representation of the data's temporal dimension.
+```{r}
+#create date col
+# Convert month names to month numbers
+df_v$MonthNum <- match(df_v$Month, month.name)
+
+# Combine Year, MonthNum, and "01" to create a date in the format "YYYY-MM-01"
+df_v$Date <- as.Date(paste(df_v$Year, df_v$MonthNum, "01", sep = "-"), format = "%Y-%m-%d")
+
+# Drop the Month, Year, and MonthNum columns
+df_v <- df_v %>% select(-Month, -Year, -MonthNum)
+head(df_v)
+```
+
+```{r}
+str(df_v)
+unique(df_v$Location)
+unique(df_v$VehicleType)
+unique(df_v$Fuel)
+```
+
+#### Count by vehicle Type for further analysis
+```{r}
+(count_by_vehicle_type <- df_v |>
+  group_by(VehicleType) %>%
+  summarize(Count = sum(Count)) |>
+  arrange(desc(Count)))
+
+#save data
+write.csv(count_by_vehicle_type, "../data/vehicle_type_counts.csv", row.names = FALSE)
+
+```
+
+
+
+#### Rows with 0
+Retaining rows with a Count of 0 ensures the completeness of our dataset, indicating periods when specific vehicle types or fuel categories had no registrations. This not only provides a holistic view of vehicle adoption trends over time but also aids in generating continuous time series visualizations without gaps, offering a true representation of the data.
+
+- **Handling Missing Values**: Some datasets contained missing values which were either filled using appropriate imputation methods or dropped based on their significance.
+- **Data Type Conversions**: Ensuring that all data columns were of the correct type (e.g., converting date strings to date objects).
+
+
+
+## Spotting Mistakes and Missing Data
+
+## Listing Anomalies and Outliers
+>>>>>>> ab79adeb9376107b0d09e7630f5af95317bcd61d

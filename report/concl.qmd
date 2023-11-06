@@ -1,0 +1,10 @@
+# Conclusion
+
+```{r, echo = FALSE, message = FALSE}
+source(here::here("scripts/setup.R"))
+```
+__TO DO's__
+
+* Take home message
+* Limitations
+* Future work?
