@@ -11,3 +11,71 @@ __TO DO's__
 * Multivariate visualizations
 * Summary tables
 
+## 3.1 Discovery of data from 2005 to 2022
+```{r}
+# Filter for only Passenger car vehicle type
+passenger_cars <- df_v |>
+  filter(VehicleType == "Passenger car") |>
+  group_by(Date) %>%
+  summarise(Count = sum(Count, na.rm = TRUE), .groups = 'drop')
+
+# Plotting the data with ggplot2, using Date directly for Passenger cars
+ggplot(passenger_cars, aes(x = Date, y = Count)) +
+  geom_line() + # Use geom_bar(stat = "identity") if you prefer bar plots
+  labs(title = "Passenger Car Adoption Over Time",
+       x = "Date",
+       y = "Number of Passenger Cars Registered") +
+  theme_minimal() +
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") # Set date breaks and labels
+
+```
+* seasonality
+
+```{r}
+# Filter for only Passenger car vehicle type
+passenger_cars <- df_v %>%
+  filter(VehicleType == "Passenger car") |>
+  mutate(Year = year(Date), Month = month(Date)) |>
+  group_by(Year, Month) %>%
+  summarise(Count = sum(Count, na.rm = TRUE), .groups = 'drop') |>
+  mutate(Month = factor(Month, levels = 1:12, labels = month.name))  # Convert Month to a factor to ensure proper ordering in the plot
+
+# Plotting the data with ggplot2, showing the trend within each year
+ggplot(passenger_cars, aes(x = Month, y = Count, group = Year, color = as.factor(Year))) +
+  geom_line() +
+  labs(title = "Monthly Passenger Car Registrations by Year",
+       x = "Month",
+       y = "Number of Passenger Cars Registered",
+       color = "Year") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  scale_x_discrete(limits = month.name)  # Ensure months are shown in order
+
+```
+
+* This pattern suggests a seasonal trend with a mid-year peak and a year-end increase.
+
+
+```{r}
+# Filter for only Passenger car vehicle type
+passenger_cars <- vehicle_data |>
+  filter(VehicleType == "Passenger car") |>
+  mutate(YearMonth = floor_date(Date, "month")) |>
+  group_by(YearMonth) %>%
+  summarise(Count = sum(Count, na.rm = TRUE), .groups = 'drop') |>
+  ungroup() %>%
+  mutate(Year = year(YearMonth), 
+         Month = month(YearMonth, label = TRUE, abbr = TRUE)) |>
+  arrange(Year, Month)
+
+# Plotting the data with ggplot2 without month names on the x-axis
+ggplot(passenger_cars, aes(x = as.numeric(format(YearMonth, "%m")), y = Count, group = Year, color = as.factor(Year))) +
+  geom_line() +
+  facet_wrap(~ Year, scales = "free_y") +
+  labs(title = "Seasonal Trends in Passenger Car Registrations",
+       x = "Month",
+       y = "Number of Passenger Cars Registered") +
+  theme_minimal() +
+  theme(axis.text.x = element_blank(), # This will remove the month labels
+        axis.ticks.x = element_blank(), # This will remove the ticks on the x-axis
+        legend.position = "none") # Remove the legend to clean up the plot
