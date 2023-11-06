@@ -6,7 +6,7 @@
 packages <- c(
   "here", # for the project's organization
   "tidyverse", # for wrangling
-  "ggrepel", "gghighlight", "patchwork", "maps", "scales" # for plotting
+  "ggrepel", "gghighlight", "patchwork", "maps","dplyr", "scales" # for plotting
 )
 purrr::walk(packages, library, character.only = TRUE)
 
@@ -41,4 +41,5 @@ knitr::opts_chunk$set(
   message = FALSE,
   echo = FALSE
 )
+
 
