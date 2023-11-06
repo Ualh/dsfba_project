@@ -11,7 +11,22 @@ __TO DO's__
 * Multivariate visualizations
 * Summary tables
 
+```{r}
+str(df_v)
+unique(df_v$Location)
+unique(df_v$VehicleType)
+unique(df_v$Fuel)
+unique(df_v$Date)
+
+str(demographic_data)
+
+str(oil_prices_data)
+
+str(google_trends_data)
+```
+
 ## 3.1 Discovery of data from 2005 to 2022
+### 3.1.1 sesonality
 ```{r}
 # Filter for only Passenger car vehicle type
 passenger_cars <- df_v |>
@@ -58,7 +73,7 @@ ggplot(passenger_cars, aes(x = Month, y = Count, group = Year, color = as.factor
 
 ```{r}
 # Filter for only Passenger car vehicle type
-passenger_cars <- vehicle_data |>
+passenger_cars <- df_v |>
   filter(VehicleType == "Passenger car") |>
   mutate(YearMonth = floor_date(Date, "month")) |>
   group_by(YearMonth) %>%
@@ -79,3 +94,26 @@ ggplot(passenger_cars, aes(x = as.numeric(format(YearMonth, "%m")), y = Count, g
   theme(axis.text.x = element_blank(), # This will remove the month labels
         axis.ticks.x = element_blank(), # This will remove the ticks on the x-axis
         legend.position = "none") # Remove the legend to clean up the plot
+```
+
+### 3.1.2
+
+```{r}
+# Group by Date and Fuel type, and summarize the count
+fuel_type_trends <- df_v %>%
+  group_by(Date, Fuel) %>%
+  summarise(Count = sum(Count, na.rm = TRUE)) %>%
+  ungroup()
+
+# Plotting the trends over time by fuel type
+ggplot(fuel_type_trends, aes(x = Date, y = Count, color = Fuel)) +
+  geom_line() +
+  labs(title = "Vehicle Registrations by Fuel Type Over Time",
+       x = "Date",
+       y = "Number of Vehicles Registered") +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+```
+
+
