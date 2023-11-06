@@ -51,11 +51,11 @@ demographic_data <- read.csv("../data/demographic.csv")
 
 # 22.04.2020 is on row 8361
 # Format 1: 15-Apr-2020
-oil_df_1 <- oil_prices_data[0:8360,] %>%
+oil_df_1 <- oil_prices_data[0:8360,] |>
   separate(Date, into = c("Day", "Month", "Year"), sep = "-")
 
 # Format 2 : Apr 22, 2020
-oil_df_2 <- oil_prices_data[8361:nrow(oil_prices_data),] %>%
+oil_df_2 <- oil_prices_data[8361:nrow(oil_prices_data),] |>
   separate(Date, into = c("Month", "Day", "Year"), sep = " |, ")
 
 # Check for NAs

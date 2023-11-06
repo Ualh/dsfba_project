@@ -5,7 +5,7 @@
 # load the required packages
 packages <- c(
   "here", # for the project's organization
-  "tidyverse", # for wrangling
+  "tidyverse", "tidyr", # for wrangling
   "ggrepel", "gghighlight", "patchwork", "maps","dplyr", "scales" # for plotting
 )
 purrr::walk(packages, library, character.only = TRUE)
