@@ -4,6 +4,8 @@ author: "Pierre Gasly, Alexis Jeannaret, Hugo, Urs Hurni"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 format:
   html:
+    toc: true
+    toc_float: true
     code-fold: true
 ---
 

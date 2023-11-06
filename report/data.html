@@ -6,10 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Pierre Gasly, Alexis Jeannaret, Hugo, Urs Hurni">
-<meta name="dcterms.date" content="2023-11-06">
 
-<title>Energizing Change: Electric Vehicle Rise in Switzerland</title>
+<title>data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -59,134 +57,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </style>
 
 
-<script src="report_files/libs/clipboard/clipboard.min.js"></script>
-<script src="report_files/libs/quarto-html/quarto.js"></script>
-<script src="report_files/libs/quarto-html/popper.min.js"></script>
-<script src="report_files/libs/quarto-html/tippy.umd.min.js"></script>
-<script src="report_files/libs/quarto-html/anchor.min.js"></script>
-<link href="report_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="report_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="report_files/libs/bootstrap/bootstrap.min.js"></script>
-<link href="report_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="report_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="data_files/libs/clipboard/clipboard.min.js"></script>
+<script src="data_files/libs/quarto-html/quarto.js"></script>
+<script src="data_files/libs/quarto-html/popper.min.js"></script>
+<script src="data_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="data_files/libs/quarto-html/anchor.min.js"></script>
+<link href="data_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="data_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="data_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="data_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="data_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
 
 </head>
 
-<body>
+<body class="fullcontent">
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">1 Introduction</a>
-  <ul class="collapse">
-  <li><a href="#background-and-motivation" id="toc-background-and-motivation" class="nav-link" data-scroll-target="#background-and-motivation">1.1 Background and Motivation</a></li>
-  <li><a href="#related-work" id="toc-related-work" class="nav-link" data-scroll-target="#related-work">1.2 Related Work</a></li>
-  <li><a href="#reseach-questions" id="toc-reseach-questions" class="nav-link" data-scroll-target="#reseach-questions">1.3 Reseach Questions</a></li>
-  </ul></li>
-  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data">2 Data</a>
-  <ul class="collapse">
-  <li><a href="#raw-datasets" id="toc-raw-datasets" class="nav-link" data-scroll-target="#raw-datasets">2.1 Raw Datasets</a>
-  <ul class="collapse">
-  <li><a href="#swiss-vehicle-registration-dataset" id="toc-swiss-vehicle-registration-dataset" class="nav-link" data-scroll-target="#swiss-vehicle-registration-dataset">2.1.1 Swiss Vehicle Registration Dataset</a></li>
-  <li><a href="#oil-price-dataset" id="toc-oil-price-dataset" class="nav-link" data-scroll-target="#oil-price-dataset">2.1.2 Oil price Dataset</a></li>
-  <li><a href="#swiss-demographics-dataset" id="toc-swiss-demographics-dataset" class="nav-link" data-scroll-target="#swiss-demographics-dataset">2.1.3 Swiss Demographics Dataset</a></li>
-  <li><a href="#google-trend-data" id="toc-google-trend-data" class="nav-link" data-scroll-target="#google-trend-data">2.1.4 Google trend data</a></li>
-  <li><a href="#french-vehicle-registration-data" id="toc-french-vehicle-registration-data" class="nav-link" data-scroll-target="#french-vehicle-registration-data">2.1.5 French vehicle registration data</a></li>
-  </ul></li>
-  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">2.2 Data Wrangling</a></li>
-  <li><a href="#data-wrangling-oil-clean" id="toc-data-wrangling-oil-clean" class="nav-link" data-scroll-target="#data-wrangling-oil-clean">2.2.1 Data Wrangling : Oil clean</a></li>
-  <li><a href="#data-wrangling-google-trend-clean" id="toc-data-wrangling-google-trend-clean" class="nav-link" data-scroll-target="#data-wrangling-google-trend-clean">2.2.2 Data Wrangling : Google trend clean</a></li>
-  <li><a href="#data-wrangling-swiss-vehicle-clean" id="toc-data-wrangling-swiss-vehicle-clean" class="nav-link" data-scroll-target="#data-wrangling-swiss-vehicle-clean">2.2.3 Data Wrangling : Swiss vehicle clean</a>
-  <ul class="collapse">
-  <li><a href="#cleaning-of-road_vehicle_ch_2009-2022.csv" id="toc-cleaning-of-road_vehicle_ch_2009-2022.csv" class="nav-link" data-scroll-target="#cleaning-of-road_vehicle_ch_2009-2022.csv">Cleaning of road_vehicle_CH_2009-2022.csv</a></li>
-  <li><a href="#cleaning-of-road_vehicle_ch_205-2008.csv" id="toc-cleaning-of-road_vehicle_ch_205-2008.csv" class="nav-link" data-scroll-target="#cleaning-of-road_vehicle_ch_205-2008.csv">Cleaning of road_vehicle_CH_205-2008.csv</a></li>
-  </ul></li>
-  </ul></li>
-  <li><a href="#exploratory-data-analysis" id="toc-exploratory-data-analysis" class="nav-link" data-scroll-target="#exploratory-data-analysis">3 Exploratory data analysis</a></li>
-  <li><a href="#analysis" id="toc-analysis" class="nav-link" data-scroll-target="#analysis">4 Analysis</a>
-  <ul class="collapse">
-  <li><a href="#rq1" id="toc-rq1" class="nav-link" data-scroll-target="#rq1">4.1 RQ1</a></li>
-  <li><a href="#rq2" id="toc-rq2" class="nav-link" data-scroll-target="#rq2">4.2 RQ2</a></li>
-  <li><a href="#rq3" id="toc-rq3" class="nav-link" data-scroll-target="#rq3">4.3 RQ3</a></li>
-  <li><a href="#rqç" id="toc-rqç" class="nav-link" data-scroll-target="#rqç">4.4 RQç</a></li>
-  <li><a href="#rq5" id="toc-rq5" class="nav-link" data-scroll-target="#rq5">4.5 RQ5</a></li>
-  </ul></li>
-  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">5 Conclusion</a></li>
-  </ul>
-</nav>
-</div>
+
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Energizing Change: Electric Vehicle Rise in Switzerland</h1>
-</div>
 
 
-
-<div class="quarto-title-meta">
-
-    <div>
-    <div class="quarto-title-meta-heading">Author</div>
-    <div class="quarto-title-meta-contents">
-             <p>Pierre Gasly, Alexis Jeannaret, Hugo, Urs Hurni </p>
-          </div>
-  </div>
-    
-    <div>
-    <div class="quarto-title-meta-heading">Published</div>
-    <div class="quarto-title-meta-contents">
-      <p class="date">November 6, 2023</p>
-    </div>
-  </div>
-  
-    
-  </div>
-  
-
-</header>
-
-<section id="introduction" class="level1">
-<h1>1 Introduction</h1>
-<p><strong>TO DO’s</strong></p>
-<ul>
-<li>Overview and Motivation - ✓</li>
-<li>Related Work - TBD</li>
-<li>Research questions - ✓</li>
-</ul>
-<section id="background-and-motivation" class="level2">
-<h2 class="anchored" data-anchor-id="background-and-motivation">1.1 Background and Motivation</h2>
-<p>With climatic challenges emerging as pivotal concerns of our times, understanding the dynamics driving environmentally conscious consumer behaviors is paramount. Our team’s keen interest in environmental sustainability and the transition to electric vehicles in Switzerland spurs this research. This dedication to deciphering the nuances of eco-friendly consumption patterns is the driving force behind our topic selection</p>
-</section>
-<section id="related-work" class="level2">
-<h2 class="anchored" data-anchor-id="related-work">1.2 Related Work</h2>
-<p>TBD</p>
-</section>
-<section id="reseach-questions" class="level2">
-<h2 class="anchored" data-anchor-id="reseach-questions">1.3 Reseach Questions</h2>
-<ul>
-<li><ol type="1">
-<li>How does the rise in environmental consciousness, as depicted by Google Trends, correlate with electric vehicle adoption in Switzerland across different regions and over time, especially in relation to oil price fluctuations and demographic changes?</li>
-</ol></li>
-<li><ol start="2" type="1">
-<li>Given fluctuations in oil prices, demographic shifts, and major policy or automotive industry trends, which of these factors have a direct causal impact on the shifts in the adoption of electric vehicles in Switzerland?</li>
-</ol></li>
-<li><ol start="3" type="1">
-<li>Based on past electric vehicle adoption trends in Switzerland, can we forecast future adoption rates and pinpoint times of significant increases or decreases correlated with major events or policy changes?</li>
-</ol></li>
-<li><ol start="4" type="1">
-<li>In comparing regions in Switzerland, which areas show higher or lower adoption of electric vehicles, and how does this regional adoption align or vary with external factors like oil price changes, environmental consciousness, and demographic shifts?</li>
-</ol></li>
-<li><ol start="5" type="1">
-<li>To what extent have policy alterations, global environmental incidents, and shifts in the automotive industry affected electric vehicle adoption in Switzerland?</li>
-</ol></li>
-</ul>
-</section>
-</section>
 <section id="data" class="level1">
 <h1>2 Data</h1>
 <p><strong>TO DO’s</strong></p>
@@ -246,22 +138,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="data-wrangling" class="level2">
 <h2 class="anchored" data-anchor-id="data-wrangling">2.2 Data Wrangling</h2>
 <div class="cell" data-layout-align="center">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reading the data</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>vehicle_data_2005_2008 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/road_vehicle_CH_2005-2008.csv"</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>vehicle_data_2009_2022 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/road_vehicle_CH_2009-2022.csv"</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>google_trends_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/google_trend_EV_2004-2023.csv"</span>)</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>oil_prices_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/BrentOilPrices.csv"</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>demographic_data <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"../data/demographic.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 <section id="data-wrangling-oil-clean" class="level2">
 <h2 class="anchored" data-anchor-id="data-wrangling-oil-clean">2.2.1 Data Wrangling : Oil clean</h2>
 <div class="cell" data-layout-align="center">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Change date column into Day</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Two types of format: one format before 22.04.2020,a different format after</span></span>
@@ -326,18 +213,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 2005-01-10  44.7</span></span>
 <span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 2005-01-11  43.5</span></span>
 <span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 2005-01-12  43.8</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 <section id="data-wrangling-google-trend-clean" class="level2">
 <h2 class="anchored" data-anchor-id="data-wrangling-google-trend-clean">2.2.2 Data Wrangling : Google trend clean</h2>
 <div class="cell" data-layout-align="center">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For this one, we only need to remove the dates from the index</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>google_trends_data <span class="ot">&lt;-</span> google_trends_data <span class="sc">%&gt;%</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rownames_to_column</span>(<span class="at">var =</span> <span class="st">"Date"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 <section id="data-wrangling-swiss-vehicle-clean" class="level2">
@@ -348,10 +231,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 class="anchored" data-anchor-id="redundancy">Redundancy</h4>
 <p>The dataset, representing new vehicle registrations in Switzerland from 2005 onwards, exhibited redundancy in its structure. For example, the data contained both main categories (like ‘&gt; Passenger cars’) and their respective sub-categories (‘… Passenger car’ and ‘.. Heavy passenger car’). On examination, it was observed that the counts under the main categories were simply aggregates of the counts of their sub-categories. Such redundancy could lead to double counting in analytical processes.</p>
 <ul>
-<li>remove the main categories to avoid and to work with a more granular dataset. ::: {.cell layout-align=“center”}</li>
+<li>remove the main categories to avoid and to work with a more granular dataset.</li>
 </ul>
-<details>
-<summary>Code</summary>
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter out main categories (rows starting with '&gt;')</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>v_2005_2008 <span class="ot">&lt;-</span> vehicle_data_2005_2008 <span class="sc">|&gt;</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"^&gt;"</span>, <span class="fu">trimws</span>(Vehicle.group...type)))</span>
@@ -360,14 +242,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">Location =</span> Canton,</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">VehicleType =</span> Vehicle.group...type) <span class="sc">|&gt;</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">VehicleType =</span> <span class="fu">str_remove</span>(VehicleType, <span class="st">"^</span><span class="sc">\\</span><span class="st">.</span><span class="sc">\\</span><span class="st">.</span><span class="sc">\\</span><span class="st">.</span><span class="sc">\\</span><span class="st">s*"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<p>:::</p>
+</div>
 </section>
 <section id="year-extraction-reshape-the-dataset-from-wide-to-long-format" class="level4">
 <h4 class="anchored" data-anchor-id="year-extraction-reshape-the-dataset-from-wide-to-long-format">Year Extraction, Reshape the dataset from wide to long format</h4>
 <div class="cell" data-layout-align="center">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>v_2005_2008 <span class="ot">&lt;-</span> v_2005_2008 <span class="sc">|&gt;</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="st">`</span><span class="at">X2005</span><span class="st">`</span><span class="sc">:</span><span class="st">`</span><span class="at">X2008</span><span class="st">`</span>, <span class="at">names_to =</span> <span class="st">"Year"</span>, <span class="at">values_to =</span> <span class="st">"Count"</span>)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove the "X" prefix from the Year column</span></span>
@@ -382,15 +261,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 Switzerland Passenger car Petrol January  2008  13441</span></span>
 <span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 Switzerland Passenger car Petrol February 2005  11566</span></span>
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 Switzerland Passenger car Petrol February 2006  11987</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 </section>
 <section id="cleaning-of-road_vehicle_ch_205-2008.csv" class="level3">
 <h3 class="anchored" data-anchor-id="cleaning-of-road_vehicle_ch_205-2008.csv">Cleaning of road_vehicle_CH_205-2008.csv</h3>
 <div class="cell" data-layout-align="center">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filter out main categories (rows starting with '&gt;')</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>v_2009_2022 <span class="ot">&lt;-</span> vehicle_data_2009_2022 <span class="sc">|&gt;</span></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"^&gt;"</span>, <span class="fu">trimws</span>(Vehicle.group...type)))</span>
@@ -415,14 +291,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 Switzerland Passenger car Petrol January 2012  14670</span></span>
 <span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 Switzerland Passenger car Petrol January 2013  12253</span></span>
 <span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 Switzerland Passenger car Petrol January 2014  12030</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 <section id="merging-and-joining" class="level4">
 <h4 class="anchored" data-anchor-id="merging-and-joining">Merging and Joining</h4>
 <p>As the vehicle data was split across multiple files, it was necessary to combine them for a holistic view.</p>
 <div class="cell" data-layout-align="center">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>df_v <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(v_2005_2008, v_2009_2022)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>df_v <span class="ot">&lt;-</span> df_v <span class="sc">|&gt;</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(df_v<span class="sc">$</span>Year)</span>
@@ -441,32 +314,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 Switzerland Passenger car Petrol September 2005  14803</span></span>
 <span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 Switzerland Passenger car Petrol October   2005  14126</span></span>
 <span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # i 2,594,582 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 <section id="some-of-the-canton-names-have-special-characters-that-havent-been-encoded-properly-in-the-dataset-causing-them-to-display-as-hexadecimal-escape-sequences." class="level4">
 <h4 class="anchored" data-anchor-id="some-of-the-canton-names-have-special-characters-that-havent-been-encoded-properly-in-the-dataset-causing-them-to-display-as-hexadecimal-escape-sequences.">Some of the canton names have special characters that haven’t been encoded properly in the dataset, causing them to display as hexadecimal escape sequences.</h4>
 <div class="cell" data-layout-align="center">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>df_v<span class="sc">$</span>Location <span class="ot">&lt;-</span> <span class="fu">iconv</span>(df_v<span class="sc">$</span>Location, <span class="at">from =</span> <span class="st">"latin1"</span>, <span class="at">to =</span> <span class="st">"UTF-8"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 <section id="keep-only-the-first-name-when-multiple-names-are-provided-for-cantons-separated-by-slashes" class="level4">
 <h4 class="anchored" data-anchor-id="keep-only-the-first-name-when-multiple-names-are-provided-for-cantons-separated-by-slashes">keep only the first name when multiple names are provided for cantons (separated by slashes)</h4>
 <div class="cell" data-layout-align="center">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>df_v<span class="sc">$</span>Location <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">str_split</span>(df_v<span class="sc">$</span>Location, <span class="st">" / "</span>), <span class="st">`</span><span class="at">[</span><span class="st">`</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 <section id="convert-the-year-an-month-into-a-single-column" class="level4">
 <h4 class="anchored" data-anchor-id="convert-the-year-an-month-into-a-single-column">convert the year an month into a single column</h4>
-<p>We consolidated the ‘Year’ and ‘Month’ columns into a singular ‘Date’ column, converting them into a standard date format. This transformation streamlines time series analyses and provides a more intuitive representation of the data’s temporal dimension. ::: {.cell layout-align=“center”}</p>
-<details>
-<summary>Code</summary>
+<p>We consolidated the ‘Year’ and ‘Month’ columns into a singular ‘Date’ column, converting them into a standard date format. This transformation streamlines time series analyses and provides a more intuitive representation of the data’s temporal dimension.</p>
+<div class="cell" data-layout-align="center">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create date col</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert month names to month numbers</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>df_v<span class="sc">$</span>MonthNum <span class="ot">&lt;-</span> <span class="fu">match</span>(df_v<span class="sc">$</span>Month, month.name)</span>
@@ -486,11 +351,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 4 Switzerland Passenger car Petrol 20334 2005-04-01</span></span>
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 5 Switzerland Passenger car Petrol 18097 2005-05-01</span></span>
 <span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 6 Switzerland Passenger car Petrol 19425 2005-06-01</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<p>:::</p>
+</div>
 <div class="cell" data-layout-align="center">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(df_v)</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; tibble [2,594,592 x 5] (S3: tbl_df/tbl/data.frame)</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  $ Location   : chr [1:2594592] "Switzerland" "Switzerland" "Switz"..</span></span>
@@ -565,14 +427,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-72"><a href="#cb11-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  [9] "Gas (monovalent and bivalent)"          </span></span>
 <span id="cb11-73"><a href="#cb11-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [10] "Other"                                  </span></span>
 <span id="cb11-74"><a href="#cb11-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [11] "Without motor"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 <section id="count-by-vehicle-type-for-further-analysis" class="level4">
 <h4 class="anchored" data-anchor-id="count-by-vehicle-type-for-further-analysis">Count by vehicle Type for further analysis</h4>
 <div class="cell" data-layout-align="center">
-<details>
-<summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>(count_by_vehicle_type <span class="ot">&lt;-</span> df_v <span class="sc">|&gt;</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(VehicleType) <span class="sc">%&gt;%</span></span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">Count =</span> <span class="fu">sum</span>(Count)) <span class="sc">|&gt;</span></span>
@@ -594,7 +453,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">#save data</span></span>
 <span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(count_by_vehicle_type, <span class="st">"../data/vehicle_type_counts.csv"</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 </div>
 </section>
 <section id="rows-with-0" class="level4">
@@ -607,51 +465,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 </section>
-</section>
-<section id="exploratory-data-analysis" class="level1">
-<h1>3 Exploratory data analysis</h1>
-<p><strong>TO DO’s</strong></p>
-<ul>
-<li>Mapping out the underlying structure</li>
-<li>Identifying the most important variables</li>
-<li>Univariate visualizations</li>
-<li>Multivariate visualizations</li>
-<li>Summary tables</li>
-</ul>
-</section>
-<section id="analysis" class="level1">
-<h1>4 Analysis</h1>
-<p><strong>TO DO’s</strong></p>
-<ul>
-<li>Answers to the research questions</li>
-<li>Different methods considered</li>
-<li>Competing approaches</li>
-<li>Justifications</li>
-</ul>
-<section id="rq1" class="level2">
-<h2 class="anchored" data-anchor-id="rq1">4.1 RQ1</h2>
-</section>
-<section id="rq2" class="level2">
-<h2 class="anchored" data-anchor-id="rq2">4.2 RQ2</h2>
-</section>
-<section id="rq3" class="level2">
-<h2 class="anchored" data-anchor-id="rq3">4.3 RQ3</h2>
-</section>
-<section id="rqç" class="level2">
-<h2 class="anchored" data-anchor-id="rqç">4.4 RQç</h2>
-</section>
-<section id="rq5" class="level2">
-<h2 class="anchored" data-anchor-id="rq5">4.5 RQ5</h2>
-</section>
-</section>
-<section id="conclusion" class="level1">
-<h1>5 Conclusion</h1>
-<p><strong>TO DO’s</strong></p>
-<ul>
-<li>Take home message</li>
-<li>Limitations</li>
-<li>Future work?</li>
-</ul>
 </section>
 
 </main>

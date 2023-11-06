@@ -1,21 +1,11 @@
-# Data
+# 2 Data
 
 ```{r, echo = FALSE, message = FALSE}
 source(here::here("scripts/setup.R"))
 ```
 __TO DO's__
 
-* Sources
-
- https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.24105892.html
-
-* Description
-
- New registrations of road vehicles by vehicle group and type
- Results by canton, vehicle group, vehicle type, fuel, month and year
-
 * Wrangling/cleaning
-
 * Sources - TBS
 * Description - In progress
 * Wrangling/cleaning - In progress
@@ -23,7 +13,12 @@ __TO DO's__
 * Listing anomalies and outliers (could be part of EDA too) - TBD
 
 
-## Description
+## 2.1 Raw Datasets
+
+### 2.1.1 Swiss Vehicle Registration Dataset
+
+* Description
+New registrations of road vehicles by vehicle group and type Results by canton, vehicle group, vehicle type, fuel, month and year
 
 The datasets encompass:
 
@@ -32,7 +27,34 @@ The datasets encompass:
 - **Oil Prices**: Time-series data indicating Brent oil price fluctuations over the years.
 - **Demographics**: Indicators like population growth, immigration, emigration, gender statistics, and more, which can influence vehicle adoption patterns.
 
-## Wrangling/Cleaning
+* Source
+ https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.24105892.html
+
+### 2.1.2 Oil price Dataset
+
+* description
+
+* source
+
+### 2.1.3 Swiss Demographics Dataset
+
+* description
+
+* source
+
+### 2.1.4 Google trend data
+
+* description
+
+* source
+
+### 2.1.5 French vehicle registration data
+
+* description
+
+* source
+
+## 2.2 Data Wrangling
 
 ```{r}
 # Reading the data
@@ -43,7 +65,8 @@ oil_prices_data <- read.csv("../data/BrentOilPrices.csv")
 demographic_data <- read.csv("../data/demographic.csv")
 ```
 
-### Cleaning of oil_prices_data
+## 2.2.1 Data Wrangling : Oil clean
+
 ```{r}
 # Change date column into Day
 
@@ -102,7 +125,7 @@ oil_df <- oil_df %>%
 head(oil_df)
 ```
 
-### Cleaning of google_trends_data
+## 2.2.2 Data Wrangling : Google trend clean
 ```{r}
 # For this one, we only need to remove the dates from the index
 google_trends_data <- google_trends_data %>%
@@ -110,18 +133,12 @@ google_trends_data <- google_trends_data %>%
 ```
 
 
-### cleaning of road_vehicle_CH_2005-2008.csv
-```{r}
-# Storing the data frames in a list
-datasets <- list(vehicle_data_2005_2008 = vehicle_data_2005_2008,
-                 vehicle_data_2009_2022 = vehicle_data_2009_2022,
-                 google_trends_data = google_trends_data,
-                 oil_prices_data = oil_prices_data,
-                 demographic_data = demographic_data
-              )
-```
+## 2.2.3 Data Wrangling : Swiss vehicle clean
+
+### Cleaning of road_vehicle_CH_2009-2022.csv
 
 #### Redundancy
+
 The dataset, representing new vehicle registrations in Switzerland from 2005 onwards, exhibited redundancy in its structure. For example, the data contained both main categories (like '> Passenger cars') and their respective sub-categories ('... Passenger car' and '.. Heavy passenger car'). On examination, it was observed that the counts under the main categories were simply aggregates of the counts of their sub-categories. Such redundancy could lead to double counting in analytical processes.
 
 * remove the main categories to avoid  and to work with a more granular dataset.
@@ -145,7 +162,7 @@ v_2005_2008$Year <- gsub("X", "", v_2005_2008$Year)
 head(v_2005_2008)
 ```
 
-### Cleaning of road_vehicle_CH_2009-2022.csv
+### Cleaning of road_vehicle_CH_205-2008.csv
 ```{r}
 # Filter out main categories (rows starting with '>')
 v_2009_2022 <- vehicle_data_2009_2022 |>
@@ -163,6 +180,7 @@ v_2009_2022 <- v_2009_2022 |>
 v_2009_2022$Year <- gsub("X", "", v_2009_2022$Year)
 head(v_2009_2022)
 ```
+
 #### Merging and Joining
 As the vehicle data was split across multiple files, it was necessary to combine them for a holistic view.
 
@@ -227,7 +245,4 @@ Retaining rows with a Count of 0 ensures the completeness of our dataset, indica
 
 
 
-## Spotting Mistakes and Missing Data
 
-## Listing Anomalies and Outliers
->>>>>>> ab79adeb9376107b0d09e7630f5af95317bcd61d
