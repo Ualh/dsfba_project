@@ -78,8 +78,35 @@ oil_df_2 <- oil_df_2 %>%
 # Merging both dataframes together
 oil_df <- rbind(oil_df_1, oil_df_2)
 
+# We want all our data to have the same date format #YYYY-MM-DD
+
+# First we create a df to change the current month format to numbers
+months_numbers <- data.frame(
+  current_month_format = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
+  numbers = 1:12
+)
+
+# Then we update our oil_data
+oil_df <- oil_df %>%
+  left_join(months_numbers, by = c("Month" = "current_month_format")) %>%
+  select(Year, numbers, Day, Price) %>%
+  rename(Months = numbers)
+
+# Regroup the date in 1 column
+oil_df <- oil_df %>%
+  mutate(Date = as.Date(paste(Year, Months, Day, sep = "-"))) %>%
+  select(Date, Price)
+
+
 # Displayed clean data
 head(oil_df)
+```
+
+### Cleaning of google_trends_data
+```{r}
+# For this one, we only need to remove the dates from the index
+google_trends_data <- google_trends_data %>%
+  rownames_to_column(var = "Date")
 ```
 
 
