@@ -41,6 +41,7 @@ vehicle_data_2009_2022 <- read.csv("../data/road_vehicle_CH_2009-2022.csv")
 google_trends_data <- read.csv("../data/google_trend_EV_2004-2023.csv")
 oil_prices_data <- read.csv("../data/BrentOilPrices.csv")
 demographic_data <- read.csv("../data/demographic.csv")
+france_v <- read_excel("../data/parc_vp_france_2022.xlsx",sheet = 2)
 ```
 
 ### Cleaning of oil_prices_data
@@ -109,6 +110,53 @@ google_trends_data <- google_trends_data %>%
   rownames_to_column(var = "Date")
 ```
 
+### Cleaning of parc_vp_france_2022.xlsx
+
+# This dataset will be used to compare our data in Switzerland with a bordering country (FR)
+
+It is important to note that this data set contains all registered vehicles in a given year (vs. all new registered cars for our Swiss data)
+We will only keep the vehicles used for personnal use (not the ones for professional use), to match our Swiss dataset
+
+We decided to remove some anecdotal observations (i.e Hydrogen, Unknown, etc.) as their production / use is marginal. Moreover, we have decided to regroup the different kind of hybrid motors into a single "Hybrid" category.
+```{r}
+
+# the first three rows are empty
+france_v <- france_v[- c(1,2,3),]
+
+# Only taking the private cars from this data
+france_private <- france_v[25:37,]
+
+
+# pivoting to match the Swiss data set and correctly setting the column names
+france_private <- t(france_private)
+colnames(france_private) <- france_private[1,]
+france_private <- france_private[-1,]
+
+# Removing "Particulier" ( =aggregate of all categories), "Gaz" (<1% of cars), "Unknown" (muddies the data), "Hydrogen (anecdotal observations)
+france_private <- as_tibble(france_private)
+
+france_private <- france_private %>%
+  select(-c("Particulier", "Gaz", "Gaz HNR", "Gaz HR", "Hydrogène et autre ZE", "Inconnu"))
+
+# Add info about the year
+france_private <- france_private %>%
+  mutate(Year = 2011:2022)
+
+# Removing the decimals due to previous manipulations
+for (i in 1:(ncol(france_private) - 2)) {  # Exclude the last two columns (Year and Hybrid)
+  france_private[12, i] <- as.character(floor(as.numeric(france_private[12, i])))
+}
+
+# Creating the Hybrid category (aggregating the different kinds of hybrid) and removing the aggregated columns
+france_private <- france_private %>%
+  mutate(Hybrid = as.numeric(`Diesel HNR`) + as.numeric(`Diesel HR`) + as.numeric(`Essence HNR`) + as.numeric(`Essence HR`))
+
+france_private <- france_private %>%
+  select(Diesel, Essence, Hybrid, Electrique, Year)
+
+head(france_private)
+
+```
 
 ### cleaning of road_vehicle_CH_2005-2008.csv
 ```{r}
