@@ -22,17 +22,66 @@ The datasets encompass:
 - **Oil Prices**: Time-series data indicating Brent oil price fluctuations over the years.
 - **Demographics**: Indicators like population growth, immigration, emigration, gender statistics, and more, which can influence vehicle adoption patterns.
 
+```{r}
+# Reading the data
+vehicle_data_2005_2008 <- read.csv("../data/road_vehicle_CH_2005-2008.csv")
+vehicle_data_2009_2022 <- read.csv("../data/road_vehicle_CH_2009-2022.csv")
+google_trends_data <- read.csv("../data/google_trend_EV_2004-2023.csv")
+oil_prices_data <- read.csv("../data/BrentOilPrices.csv")
+demographic_data <- read.csv("../data/demographic.csv")
+france_v <- read_excel("../data/parc_vp_france_2022.xlsx",sheet = 2)
+```
+
 ### 2.1.1 Swiss Vehicle Registration Dataset
 
 * Description
 New registrations of road vehicles by vehicle group and type Results by canton, vehicle group, vehicle type, fuel, month and year
 
+```{r}
+# Create a tibble with variable descriptions
+variable_table_vehicle <- tibble(
+  Variables = c("Canton", "Vehicle group / type", "Fuel", "Month", "2009-2022"),
+  Meaning = c(
+    "The region in Switzerland.",
+    "Type or group of the vehicle.",
+    "Type of fuel used by the vehicle.",
+    "The month of the data.",
+    "Number of vehicles for each respective year. Each with it's own column"
+  )
+)
+
+# Display the table using kableExtra
+variable_table_vehicle %>%
+  kbl() %>%
+  kable_styling(position = "center")
+```
+
+
 * Source
  https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.24105892.html
+
 
 ### 2.1.2 Oil price Dataset
 
 * description
+some text about the dataset
+
+```{r}
+# Create a tibble with variable descriptions
+variable_table <- tibble(
+  Variables = c("Date", "Price"),
+  Meaning = c(
+    "The date when the price was recorded. It seems to be in a day-month-short_year format.",
+    "The price of Brent Oil on the given date."
+  )
+)
+
+# Display the table using kableExtra
+variable_table %>%
+  kbl() %>%
+  kable_styling(position = "center")
+```
+
 
 * source
 
@@ -40,9 +89,55 @@ New registrations of road vehicles by vehicle group and type Results by canton, 
 
 * description
 
+```{r}
+# Create a tibble with variable descriptions
+variable_table <- tibble(
+  Variables = c(
+    "Year", "Citizenship (category)", "Sex", "Age", "Population on 1 January", 
+    "Live birth", "Death", "Natural change", 
+    "Immigration incl. change of population type", "Emigration", 
+    "Net migration incl. change of population type", 
+    "Change of population type", "Acquisition of Swiss citizenship", 
+    "Gender change in the civil register (entry)", 
+    "Gender change in the civil register (exit)", "Statistical adjustment", 
+    "Population on 31 December", "Population change"
+  ),
+  Meaning = c(
+    "The year of the demographic data.",
+    "The categorization of the citizenship status.",
+    "Gender category.",
+    "Age category.",
+    "Population count at the beginning of the year.",
+    "Number of births in the year.",
+    "Number of deaths in the year.",
+    "Change in the population due to births and deaths.",
+    "Number of immigrants, including change of population type.",
+    "Number of emigrations.",
+    "Net migration count, including change of population type.",
+    "Change in the categorization of the population.",
+    "Number of individuals who acquired Swiss citizenship.",
+    "Number of gender changes registered (entry).",
+    "Number of gender changes registered (exit).",
+    "Adjustments made to the data for accuracy.",
+    "Population count at the end of the year.",
+    "Change in population over the year."
+  )
+)
+
+# Display the table using kableExtra
+variable_table %>%
+  kbl() %>%
+  kable_styling(position = "center")
+```
+
+
 * source
 
 ### 2.1.4 Google trend data
+
+```{r}
+
+```
 
 * description
 
@@ -56,15 +151,6 @@ New registrations of road vehicles by vehicle group and type Results by canton, 
 
 ## 2.2 Data Wrangling
 
-```{r}
-# Reading the data
-vehicle_data_2005_2008 <- read.csv("../data/road_vehicle_CH_2005-2008.csv")
-vehicle_data_2009_2022 <- read.csv("../data/road_vehicle_CH_2009-2022.csv")
-google_trends_data <- read.csv("../data/google_trend_EV_2004-2023.csv")
-oil_prices_data <- read.csv("../data/BrentOilPrices.csv")
-demographic_data <- read.csv("../data/demographic.csv")
-france_v <- read_excel("../data/parc_vp_france_2022.xlsx",sheet = 2)
-```
 
 ## 2.2.1 Data Wrangling : Oil clean
 
@@ -128,10 +214,30 @@ head(oil_df)
 
 ## 2.2.2 Data Wrangling : Google trend clean
 ```{r}
-# For this one, we only need to remove the dates from the index
-google_trends_data <- google_trends_data %>%
+head(google_trends_data)
+
+# For this one, we need to remove the dates from the index
+google_trends_data <- google_trends_data |>
   rownames_to_column(var = "Date")
 
+# Remove the first row using slice
+google_trends_data <- slice(google_trends_data, -1)
+
+#check for NA
+sum(is.na(google_trends_data$Date))
+sum(is.na(google_trends_data$Catégorie...Toutes.catégories))
+
+#renaming col
+colnames(google_trends_data)[2] <- "SearchCount"
+
+#convert to numeric
+google_trends_data$SearchCount <- as.numeric(google_trends_data$SearchCount)
+
+
+# Convert the column to date with the desired format
+google_trends_data$Date <- as.Date(paste(google_trends_data$Date, "01", sep = "-"))
+
+#Display dataset
 head(google_trends_data)
 ```
 ### Cleaning of demographic_data
@@ -182,56 +288,6 @@ filtered_demographic <- filtered_demographic %>%
 head(filtered_demographic)
 ```
 
-
-### Cleaning of parc_vp_france_2022.xlsx
-
-# This dataset will be used to compare our data in Switzerland with a bordering country (FR)
-
-It is important to note that this data set contains all registered vehicles in a given year (vs. all new registered cars for our Swiss data)
-We will only keep the vehicles used for personal use (not the ones for professional use), to match our Swiss dataset
-
-We decided to remove some anecdotal observations (i.e Hydrogen, Unknown, etc.) as their production / use is marginal. Moreover, we have decided to regroup the different kind of hybrid motors into a single "Hybrid" category.
-```{r}
-
-# the first three rows are empty
-france_v <- france_v[- c(1,2,3),]
-
-# Only taking the private cars from this data
-france_private <- france_v[25:37,]
-
-
-# pivoting to match the Swiss data set and correctly setting the column names
-france_private <- t(france_private)
-colnames(france_private) <- france_private[1,]
-france_private <- france_private[-1,]
-
-# Removing "Particulier" ( =aggregate of all categories), "Gaz" (<1% of cars), "Unknown" (muddies the data), "Hydrogen (anecdotal observations)
-france_private <- as_tibble(france_private)
-
-france_private <- france_private %>%
-  select(-c("Particulier", "Gaz", "Gaz HNR", "Gaz HR", "Hydrogène et autre ZE", "Inconnu"))
-
-# Add info about the year
-france_private <- france_private %>%
-  mutate(Year = 2011:2022)
-
-# Removing the decimals due to previous manipulations
-print(france_private)
-for (i in 1:(ncol(france_private) - 2)) {  # Exclude the last two columns (Year and Hybrid)
-  france_private[12, i] <- as.character(floor(as.numeric(france_private[12, i])))
-}
-
-# Creating the Hybrid category (aggregating the different kinds of hybrid) and removing the aggregated columns
-france_private <- france_private %>%
-  mutate(Hybrid = as.numeric(`Diesel HNR`) + as.numeric(`Diesel HR`) + as.numeric(`Essence HNR`) + as.numeric(`Essence HR`))
-
-france_private <- france_private %>%
-  select(Diesel, Essence, Hybrid, Electrique, Year)
-
-head(france_private)
-
-```
-=======
 ## 2.2.3 Data Wrangling : Swiss vehicle clean
 
 ### Cleaning of road_vehicle_CH_2009-2022.csv
@@ -328,6 +384,7 @@ df_v <- df_v |>
 
 
 ```{r}
+head(df_v)
 #count nbr of vehicle for a paticular year and 
 vehicle_count_2022 <- df_v |>
   filter(Location == "Switzerland", year(Date) == 2023, VehicleType == "Passenger car") |>
@@ -340,9 +397,54 @@ vehicle_count_2022 <- df_v |>
 #### Rows with 0
 Retaining rows with a Count of 0 ensures the completeness of our dataset, indicating periods when specific vehicle types or fuel categories had no registrations. This not only provides a holistic view of vehicle adoption trends over time but also aids in generating continuous time series visualizations without gaps, offering a true representation of the data.
 
-- **Handling Missing Values**: Some datasets contained missing values which were either filled using appropriate imputation methods or dropped based on their significance.
-- **Data Type Conversions**: Ensuring that all data columns were of the correct type (e.g., converting date strings to date objects).
 
 
+## 2.2.4 Data wrangling French vehicle clean
 
+This dataset will be used to compare our data in Switzerland with a bordering country (FR)
+
+It is important to note that this data set contains all registered vehicles in a given year (vs. all new registered cars for our Swiss data)
+We will only keep the vehicles used for personal use (not the ones for professional use), to match our Swiss dataset
+
+We decided to remove some anecdotal observations (i.e Hydrogen, Unknown, etc.) as their production / use is marginal. Moreover, we have decided to regroup the different kind of hybrid motors into a single "Hybrid" category.
+
+```{r}
+
+# the first three rows are empty
+france_v <- france_v[- c(1,2,3),]
+
+# Only taking the private cars from this data
+france_private <- france_v[25:37,]
+
+
+# pivoting to match the Swiss data set and correctly setting the column names
+france_private <- t(france_private)
+colnames(france_private) <- france_private[1,]
+france_private <- france_private[-1,]
+
+# Removing "Particulier" ( =aggregate of all categories), "Gaz" (<1% of cars), "Unknown" (muddies the data), "Hydrogen (anecdotal observations)
+france_private <- as_tibble(france_private)
+
+france_private <- france_private %>%
+  select(-c("Particulier", "Gaz", "Gaz HNR", "Gaz HR", "Hydrogène et autre ZE", "Inconnu"))
+
+# Add info about the year
+france_private <- france_private %>%
+  mutate(Year = 2011:2022)
+
+# Removing the decimals due to previous manipulations
+for (i in 1:(ncol(france_private) - 2)) {  # Exclude the last two columns (Year and Hybrid)
+  france_private[12, i] <- as.character(floor(as.numeric(france_private[12, i])))
+}
+
+# Creating the Hybrid category (aggregating the different kinds of hybrid) and removing the aggregated columns
+france_private <- france_private %>%
+  mutate(Hybrid = as.numeric(`Diesel HNR`) + as.numeric(`Diesel HR`) + as.numeric(`Essence HNR`) + as.numeric(`Essence HR`))
+
+france_private <- france_private %>%
+  select(Diesel, Essence, Hybrid, Electrique, Year)
+
+head(france_private)
+
+```
 
