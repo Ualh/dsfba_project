@@ -454,7 +454,7 @@ france_private <- france_private %>%
          Hybrid_delta = Hybrid - lag(Hybrid),
          Electrique_delta = Electrique - lag(Electrique))
 
-# Removing the NAs I've created with the lag function
+# Removing the NAs I've created with the lag function (2011 deltas were NA because we don't have data for 2010)
 france_private <- france_private[-1,]
 
 # Ordering the columns for more clarity
