@@ -134,8 +134,55 @@ google_trends_data <- google_trends_data %>%
 
 head(google_trends_data)
 ```
+### Cleaning of demographic_data
 
-<<<<<<< HEAD
+This dataset regroups the demographic data in Switzerland since 1971.
+```{r}
+# We only keep the data from 2005-2022 (time frame of our analysis)
+
+demographic_data <- demographic_data[-c(1:31212),]
+
+# We do not differentiate Male-Female for the purpose of this analysis -> we only keep the "total" rows
+filtered_demographic <- demographic_data %>%
+  filter(grepl("total",demographic_data$Sex))
+
+# We do not differentiate Swiss citizenship - Foreign citizenship for the purpose of this analysis -> we only keep the "total" rows
+filtered_demographic <- filtered_demographic %>%
+  filter(grepl("total", filtered_demographic$Citizenship..category.))
+
+# People under 18 cannot drive -> We remove summary rows +  people under 18 + people 99 and above (anecdotal observations)
+filtered_demographic <- filtered_demographic %>%
+  filter(
+    !grepl("total",filtered_demographic$Age),
+    between(as.numeric(gsub(" years","",filtered_demographic$Age)), 18, 98)
+  )
+
+# We keep the interesting columns
+filtered_demographic <- filtered_demographic %>%
+  select(c("Year","Age","Population.on.1.January"))
+
+## To perform meaningful analyses on the data, we group the ages by generations
+
+# remove " years" from the age column
+filtered_demographic$Age <- as.numeric(gsub(" years", "",filtered_demographic$Age))
+
+# Create bins with the different generations:
+filtered_demographic$Generation <- cut(filtered_demographic$Age,
+                                       breaks = c(17, 26, 42, 58, Inf),
+                                       labels = c("Generation Z", "Millenials","Generation X", "Baby Boomers"),
+                                       include.lowest = TRUE)
+# we format the table wider
+filtered_demographic <- filtered_demographic %>%
+  select(-"Age")
+  
+filtered_demographic <- filtered_demographic %>%
+  pivot_wider(names_from = Generation, values_from = Population.on.1.January, values_fn = sum)
+
+
+head(filtered_demographic)
+```
+
+
 ### Cleaning of parc_vp_france_2022.xlsx
 
 # This dataset will be used to compare our data in Switzerland with a bordering country (FR)
@@ -169,6 +216,7 @@ france_private <- france_private %>%
   mutate(Year = 2011:2022)
 
 # Removing the decimals due to previous manipulations
+print(france_private)
 for (i in 1:(ncol(france_private) - 2)) {  # Exclude the last two columns (Year and Hybrid)
   france_private[12, i] <- as.character(floor(as.numeric(france_private[12, i])))
 }
