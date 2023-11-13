@@ -128,10 +128,30 @@ head(oil_df)
 
 ## 2.2.2 Data Wrangling : Google trend clean
 ```{r}
-# For this one, we only need to remove the dates from the index
-google_trends_data <- google_trends_data %>%
+head(google_trends_data)
+
+# For this one, we need to remove the dates from the index
+google_trends_data <- google_trends_data |>
   rownames_to_column(var = "Date")
 
+# Remove the first row using slice
+google_trends_data <- slice(google_trends_data, -1)
+
+#check for NA
+sum(is.na(google_trends_data$Date))
+sum(is.na(google_trends_data$Catégorie...Toutes.catégories))
+
+#renaming col
+colnames(google_trends_data)[2] <- "SearchCount"
+
+#convert to numeric
+google_trends_data$SearchCount <- as.numeric(google_trends_data$SearchCount)
+
+
+# Convert the column to date with the desired format
+google_trends_data$Date <- as.Date(paste(google_trends_data$Date, "01", sep = "-"))
+
+#Display dataset
 head(google_trends_data)
 ```
 
@@ -231,6 +251,7 @@ df_v <- df_v |>
 
 
 ```{r}
+head(df_v)
 #count nbr of vehicle for a paticular year and 
 vehicle_count_2022 <- df_v |>
   filter(Location == "Switzerland", year(Date) == 2023, VehicleType == "Passenger car") |>

@@ -116,4 +116,11 @@ ggplot(fuel_type_trends, aes(x = Date, y = Count, color = Fuel)) +
 
 ```
 
+## Google Trend
+```{r}
+ggplot(google_trends_data, aes(x = Date, y = SearchCount)) +
+  geom_line(color = "blue", size = 1) +
+  labs(x = "X-axis", y = "Y-axis", title = "Line Plot")
+```
+
 
