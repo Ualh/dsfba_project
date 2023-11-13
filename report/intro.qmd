@@ -26,7 +26,7 @@ In essence, our research is not merely an academic exercise; it is a proactive r
 
 ## 1.2 Related Work 
 
-We also came accross this article: https://www.hivepower.tech/blog/electric-vehicles-evs-in-switzerland-what-you-should-know
+We also came accross this [article](https://www.hivepower.tech/blog/electric-vehicles-evs-in-switzerland-what-you-should-know)
 
 Which gave us further incetive to dive deeper into the topic.
 

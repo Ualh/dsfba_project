@@ -11,21 +11,6 @@ __TO DO's__
 * Multivariate visualizations
 * Summary tables
 
-
-```{r}
-str(df_v)
-unique(df_v$Location)
-unique(df_v$VehicleType)
-unique(df_v$Fuel)
-unique(df_v$Date)
-
-str(demographic_data)
-
-str(oil_prices_data)
-
-str(google_trends_data)
-```
-
 ## 3.1 Discovery of data from 2005 to 2022
 ### 3.1.1 sesonality
 ```{r}
@@ -122,7 +107,7 @@ ggplot(fuel_type_trends, aes(x = Date, y = Count, color = Fuel)) +
 
 ## 3.2 Google Trend
 ```{r}
-ggplot(google_trends_data, aes(x = Date, y = SearchCount)) +
+ggplot(df_gtrends, aes(x = Date, y = SearchRatio)) +
   geom_line(color = "blue", size = 1) +
   labs(x = "X-axis", y = "Y-axis", title = "Line Plot")
 ```

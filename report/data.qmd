@@ -26,7 +26,14 @@ The datasets encompass:
 # Reading the data
 vehicle_data_2005_2008 <- read.csv("../data/road_vehicle_CH_2005-2008.csv")
 vehicle_data_2009_2022 <- read.csv("../data/road_vehicle_CH_2009-2022.csv")
-google_trends_data <- read.csv("../data/google_trend_EV_2004-2023.csv")
+google_trends_data1 <- read.csv("../data/googletrends_auto-elettrica_2005-2022.csv")
+google_trends_data2 <- read.csv("../data/googletrends_elektro-auto_2005-2022.csv")
+google_trends_data3 <- read.csv("../data/googletrends_elektrofahrzeug_2005-2022.csv")
+google_trends_data4 <- read.csv("../data/googletrends_elektromobil_2005-2022.csv")
+google_trends_data5 <- read.csv("../data/googletrends_eletric-car_2005-2022.csv")
+google_trends_data6 <- read.csv("../data/googletrends_EV_2005-2022.csv")
+google_trends_data7 <- read.csv("../data/googletrends_vehicule-electrique_2005-2022.csv")
+google_trends_data8 <- read.csv("../data/googletrends_voiture-electrique_2005-2022.csv")
 oil_prices_data <- read.csv("../data/BrentOilPrices.csv")
 demographic_data <- read.csv("../data/demographic.csv")
 france_v <- read_excel("../data/parc_vp_france_2022.xlsx",sheet = 2)
@@ -137,7 +144,33 @@ variable_table %>%
 ### 2.1.4 Google trend data
 
 ```{r}
-
+# Create a tibble with variable descriptions
+variable_table_google_trend <- tibble(
+  Variables = c("Month", 
+                "Search Term: Voiture électrique", 
+                "Search Term: Véhicule électrique", 
+                "Search Term: EV", 
+                "Search Term: Electric Car", 
+                "Search Term: Elektromobil", 
+                "Search Term: Elektrofahrzeug", 
+                "Search Term: Elektro Auto", 
+                "Search Term: Auto Elettrica"),
+  Meaning = c(
+    "The month of the data",
+    "Google Trends data for 'Voiture électrique: (Suisse)'",
+    "Google Trends data for 'Véhicule électrique: (Suisse)'",
+    "Google Trends data for 'EV: (Suisse)'",
+    "Google Trends data for 'Electric car: (Suisse)'",
+    "Google Trends data for 'Elektromobil: (Suisse)'",
+    "Google Trends data for 'Elektrofahrzeug: (Suisse)'",
+    "Google Trends data for 'Elektro Auto: (Suisse)'",
+    "Google Trends data for 'Auto Elettrica: (Suisse)'"
+  )
+)
+# Display the table using kableExtra
+variable_table_google_trend %>%
+  kbl() %>%
+  kable_styling(position = "center")
 ```
 
 * description
@@ -217,33 +250,81 @@ head(oil_df)
 ```
 
 ### 2.2.2 Data Wrangling : Google trend clean
+
+Comprehending Google Trends information involves understanding the contextualization of the provided figures. The data is standardi
+
+The crucial element for effective narration lies in utilizing the normalized Trends data. This normalization indicates that when observing search interest trends over time, it is interpreted as a ratio relative to all searches conducted on all topics on Google during that specific period and location. Likewise, when assessing regional search interest for a specific topic, it is construed as the search interest for that particular topic in a given region relative to all searches on all topics on Google in that same place and time.
+
+[Source](https://medium.com/google-news-lab/what-is-google-trends-data-and-what-does-it-mean-b48f07342ee8)
+
+
 ```{r}
-head(google_trends_data)
+dataset_names <- c(
+  "googletrends_auto-elettrica_2005-2022.csv",
+  "googletrends_elektro-auto_2005-2022.csv",
+  "googletrends_elektrofahrzeug_2005-2022.csv",
+  "googletrends_elektromobil_2005-2022.csv",
+  "googletrends_eletric-car_2005-2022.csv",
+  "googletrends_EV_2005-2022.csv",
+  "googletrends_vehicule-electrique_2005-2022.csv",
+  "googletrends_voiture-electrique_2005-2022.csv"
+)
 
-# For this one, we need to remove the dates from the index
-google_trends_data <- google_trends_data |>
-  rownames_to_column(var = "Date")
+# Function to process each dataset
+process_dataset <- function(file_path) {
+  # Read the dataset
+  google_trends_data <- read.csv(file_path)
 
-# Remove the first row using slice
-google_trends_data <- slice(google_trends_data, -1)
+  # Remove the dates from the index
+  google_trends_data <- google_trends_data |> rownames_to_column(var = "Date")
 
-#check for NA
-sum(is.na(google_trends_data$Date))
-sum(is.na(google_trends_data$Catégorie...Toutes.catégories))
+  # Remove the first row using slice
+  google_trends_data <- slice(google_trends_data, -1)
 
-#renaming col
-colnames(google_trends_data)[2] <- "SearchCount"
+  # Check for NA
+  cat("NA count for", file_path, ": ", sum(is.na(google_trends_data$Date)), "\n")
+  cat("NA count for SearchCount in", file_path, ": ", sum(is.na(google_trends_data$Catégorie...Toutes.catégories)), "\n")
 
-#convert to numeric
-google_trends_data$SearchCount <- as.numeric(google_trends_data$SearchCount)
+  # Rename col
+  colnames(google_trends_data)[2] <- "SearchCount"
+
+  # Convert to numeric
+  google_trends_data$SearchCount <- as.numeric(google_trends_data$SearchCount)
+
+  # Convert the column to date with the desired format
+  google_trends_data$Date <- as.Date(paste(google_trends_data$Date, "01", sep = "-"))
+
+  return(google_trends_data)
+}
+
+# Process each dataset and store in a list
+processed_datasets <- list()
+
+for (dataset_name in dataset_names) {
+  file_path <- file.path("../data", dataset_name)
+  processed_dataset <- process_dataset(file_path)
+  processed_datasets[[dataset_name]] <- processed_dataset
+}
+
+# Merge datasets based on the "Date" column
+merged_data <- reduce(processed_datasets, left_join, by = "Date")
+
+# Sum the values for each search term for a given date
+df_summed <- merged_data %>%
+  rowwise() %>%
+  mutate(Sum_SearchCount = sum(c_across(starts_with("SearchCount"))))
+
+# Normalize the Sum_SearchCount values between 1 and 100
+df_summed$SearchRatio <- df_summed$Sum_SearchCount / 8
+
+# Print the result
+df_gtrends <- df_summed[,-(2:10)]
+df_gtrends
 
 
-# Convert the column to date with the desired format
-google_trends_data$Date <- as.Date(paste(google_trends_data$Date, "01", sep = "-"))
-
-#Display dataset
-head(google_trends_data)
 ```
+
+
 ### 2.2.3 Cleaning of demographic_data
 
 This dataset regroups the demographic data in Switzerland since 1971.
