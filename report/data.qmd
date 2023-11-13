@@ -31,6 +31,7 @@ oil_prices_data <- read.csv("../data/BrentOilPrices.csv")
 demographic_data <- read.csv("../data/demographic.csv")
 france_v <- read_excel("../data/parc_vp_france_2022.xlsx",sheet = 2)
 ```
+For this part of the project, we decided to present the different datasets in a table form and to do that, we used the function kablefrom the package kableExtra. This gives us a table with each variable and its definition. **a modifier c'est du copy paste !!!!!!**
 
 ### 2.1.1 Swiss Vehicle Registration Dataset
 
@@ -71,7 +72,7 @@ some text about the dataset
 variable_table <- tibble(
   Variables = c("Date", "Price"),
   Meaning = c(
-    "The date when the price was recorded. It seems to be in a day-month-short_year format.",
+    "The date when the price was recorded. In a day-month-year format.",
     "The price of Brent Oil on the given date."
   )
 )
@@ -146,13 +147,16 @@ variable_table %>%
 ### 2.1.5 French vehicle registration data
 
 * description
+```{r}
+
+```
 
 * source
 
 ## 2.2 Data Wrangling
 
 
-## 2.2.1 Data Wrangling : Oil clean
+### 2.2.1 Data Wrangling : Oil clean
 
 ```{r}
 # Change date column into Day
@@ -212,7 +216,7 @@ oil_df <- oil_df %>%
 head(oil_df)
 ```
 
-## 2.2.2 Data Wrangling : Google trend clean
+### 2.2.2 Data Wrangling : Google trend clean
 ```{r}
 head(google_trends_data)
 
@@ -240,7 +244,7 @@ google_trends_data$Date <- as.Date(paste(google_trends_data$Date, "01", sep = "-
 #Display dataset
 head(google_trends_data)
 ```
-### Cleaning of demographic_data
+### 2.2.3 Cleaning of demographic_data
 
 This dataset regroups the demographic data in Switzerland since 1971.
 ```{r}
@@ -288,9 +292,7 @@ filtered_demographic <- filtered_demographic %>%
 head(filtered_demographic)
 ```
 
-## 2.2.3 Data Wrangling : Swiss vehicle clean
-
-### Cleaning of road_vehicle_CH_2009-2022.csv
+### 2.2.4 Data Wrangling : Swiss vehicle clean
 
 #### Redundancy
 
@@ -399,7 +401,7 @@ Retaining rows with a Count of 0 ensures the completeness of our dataset, indica
 
 
 
-## 2.2.4 Data wrangling French vehicle clean
+### 2.2.4 Data wrangling French vehicle clean
 
 This dataset will be used to compare our data in Switzerland with a bordering country (FR)
 

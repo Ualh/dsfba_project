@@ -12,14 +12,23 @@ __TO DO's__
 
 ## 1.1 Background and Motivation
 
-With climatic challenges emerging as pivotal concerns of our times, understanding the dynamics 
-driving environmentally conscious consumer behaviors is paramount. Our team's keen interest in 
-environmental sustainability and the transition to electric vehicles in Switzerland spurs this research. 
-This dedication to deciphering the nuances of eco-friendly consumption patterns is the driving force 
-behind our topic selection
+In an era marked by unprecedented environmental challenges, our world is at a critical juncture where sustainable practices are no longer an option but a necessity. Climate change, driven by anthropogenic activities, poses an imminent threat to the delicate ecological balance. Recognizing the urgency of this global issue, we are compelled to investigate the specific context of Switzerland, the country we live in, and which has a lot of financial capacities to change rapidly.  
+
+The automotive sector plays a pivotal role in shaping the sustainability landscape, and our focus on electric vehicle adoption in Switzerland reflects a strategic choice to comprehend the intricate interplay of factors driving this transition. 
+
+The motivations underlying our research stem from a multifaceted perspective. Firstly, the automotive industry is undergoing a transformative shift globally, with electric vehicles emerging as a key solution to reduce carbon emissions. By narrowing our focus to Switzerland, we aim to provide nuanced insights into the factors influencing EV adoption, offering a unique perspective on the socio-economic, environmentally stable and financially comfortable Swiss context. The adoption of electric vehicles provides an insight into people's inclination to make efforts towards sustainability. This emphasizes the crucial role that electric vehicle adoption plays in gauging society's commitment to sustainable practices.
+
+Secondly, our commitment to environmental sustainability extends beyond a generic interest. The urgency of addressing climate change has never been more palpable, and our research seeks to contribute substantively to the discourse on sustainable mobility. 
+
+Moreover, we believe the future is encapsulated in our dedication to understanding the dynamics of environmentally conscious consumer behavior. By unraveling the complexities of EV adoption in Switzerland over the years (2005-2022), we aim to offer valuable insights that could guide policymakers, businesses, and consumers towards more informed and sustainable choices. 
+
+In essence, our research is not merely an academic exercise; it is a proactive response to the pressing challenges of our time. We believe that by comprehensively analyzing the impact of external factors on the adoption of electric vehicles in Switzerland, we can contribute meaningfully to the ongoing global efforts towards a more sustainable and resilient future. Through this research, we aspire to inspire positive change, foster innovation, and advocate for a paradigm shift towards eco-friendly practices in the automotive sector and beyond.
 
 ## 1.2 Related Work 
-TBD
+
+We also came accross this article: https://www.hivepower.tech/blog/electric-vehicles-evs-in-switzerland-what-you-should-know
+
+Which gave us further incetive to dive deeper into the topic.
 
 ## 1.3 Reseach Questions
 

@@ -11,6 +11,7 @@ __TO DO's__
 * Multivariate visualizations
 * Summary tables
 
+
 ```{r}
 str(df_v)
 unique(df_v$Location)
@@ -92,6 +93,7 @@ ggplot(passenger_cars, aes(x = as.numeric(format(YearMonth, "%m")), y = Count, g
        y = "Number of Passenger Cars Registered") +
   theme_minimal() +
   theme(axis.text.x = element_blank(), # This will remove the month labels
+        axis.text.y = element_blank(), # This will remove the month labels
         axis.ticks.x = element_blank(), # This will remove the ticks on the x-axis
         legend.position = "none") # Remove the legend to clean up the plot
 ```
@@ -116,11 +118,19 @@ ggplot(fuel_type_trends, aes(x = Date, y = Count, color = Fuel)) +
 
 ```
 
-## Google Trend
+*merge diesel and Petrol ? delete gas ? 
+
+## 3.2 Google Trend
 ```{r}
 ggplot(google_trends_data, aes(x = Date, y = SearchCount)) +
   geom_line(color = "blue", size = 1) +
   labs(x = "X-axis", y = "Y-axis", title = "Line Plot")
 ```
 
+## 3.3 Oil
+```{r}
+ggplot(oil_df, aes(x = Date , y = Price)) +
+  geom_line(color = "blue", size = 1) +
+  labs(x = "Date", y = "Price", title = "Oil Price")
+```
 
