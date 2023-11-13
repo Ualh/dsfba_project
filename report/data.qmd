@@ -22,17 +22,66 @@ The datasets encompass:
 - **Oil Prices**: Time-series data indicating Brent oil price fluctuations over the years.
 - **Demographics**: Indicators like population growth, immigration, emigration, gender statistics, and more, which can influence vehicle adoption patterns.
 
+```{r}
+# Reading the data
+vehicle_data_2005_2008 <- read.csv("../data/road_vehicle_CH_2005-2008.csv")
+vehicle_data_2009_2022 <- read.csv("../data/road_vehicle_CH_2009-2022.csv")
+google_trends_data <- read.csv("../data/google_trend_EV_2004-2023.csv")
+oil_prices_data <- read.csv("../data/BrentOilPrices.csv")
+demographic_data <- read.csv("../data/demographic.csv")
+france_v <- read_excel("../data/parc_vp_france_2022.xlsx",sheet = 2)
+```
+
 ### 2.1.1 Swiss Vehicle Registration Dataset
 
 * Description
 New registrations of road vehicles by vehicle group and type Results by canton, vehicle group, vehicle type, fuel, month and year
 
+```{r}
+# Create a tibble with variable descriptions
+variable_table_vehicle <- tibble(
+  Variables = c("Canton", "Vehicle group / type", "Fuel", "Month", "2009-2022"),
+  Meaning = c(
+    "The region in Switzerland.",
+    "Type or group of the vehicle.",
+    "Type of fuel used by the vehicle.",
+    "The month of the data.",
+    "Number of vehicles for each respective year. Each with it's own column"
+  )
+)
+
+# Display the table using kableExtra
+variable_table_vehicle %>%
+  kbl() %>%
+  kable_styling(position = "center")
+```
+
+
 * Source
  https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.24105892.html
+
 
 ### 2.1.2 Oil price Dataset
 
 * description
+some text about the dataset
+
+```{r}
+# Create a tibble with variable descriptions
+variable_table <- tibble(
+  Variables = c("Date", "Price"),
+  Meaning = c(
+    "The date when the price was recorded. It seems to be in a day-month-short_year format.",
+    "The price of Brent Oil on the given date."
+  )
+)
+
+# Display the table using kableExtra
+variable_table %>%
+  kbl() %>%
+  kable_styling(position = "center")
+```
+
 
 * source
 
@@ -40,9 +89,55 @@ New registrations of road vehicles by vehicle group and type Results by canton, 
 
 * description
 
+```{r}
+# Create a tibble with variable descriptions
+variable_table <- tibble(
+  Variables = c(
+    "Year", "Citizenship (category)", "Sex", "Age", "Population on 1 January", 
+    "Live birth", "Death", "Natural change", 
+    "Immigration incl. change of population type", "Emigration", 
+    "Net migration incl. change of population type", 
+    "Change of population type", "Acquisition of Swiss citizenship", 
+    "Gender change in the civil register (entry)", 
+    "Gender change in the civil register (exit)", "Statistical adjustment", 
+    "Population on 31 December", "Population change"
+  ),
+  Meaning = c(
+    "The year of the demographic data.",
+    "The categorization of the citizenship status.",
+    "Gender category.",
+    "Age category.",
+    "Population count at the beginning of the year.",
+    "Number of births in the year.",
+    "Number of deaths in the year.",
+    "Change in the population due to births and deaths.",
+    "Number of immigrants, including change of population type.",
+    "Number of emigrations.",
+    "Net migration count, including change of population type.",
+    "Change in the categorization of the population.",
+    "Number of individuals who acquired Swiss citizenship.",
+    "Number of gender changes registered (entry).",
+    "Number of gender changes registered (exit).",
+    "Adjustments made to the data for accuracy.",
+    "Population count at the end of the year.",
+    "Change in population over the year."
+  )
+)
+
+# Display the table using kableExtra
+variable_table %>%
+  kbl() %>%
+  kable_styling(position = "center")
+```
+
+
 * source
 
 ### 2.1.4 Google trend data
+
+```{r}
+
+```
 
 * description
 
@@ -56,15 +151,6 @@ New registrations of road vehicles by vehicle group and type Results by canton, 
 
 ## 2.2 Data Wrangling
 
-```{r}
-# Reading the data
-vehicle_data_2005_2008 <- read.csv("../data/road_vehicle_CH_2005-2008.csv")
-vehicle_data_2009_2022 <- read.csv("../data/road_vehicle_CH_2009-2022.csv")
-google_trends_data <- read.csv("../data/google_trend_EV_2004-2023.csv")
-oil_prices_data <- read.csv("../data/BrentOilPrices.csv")
-demographic_data <- read.csv("../data/demographic.csv")
-france_v <- read_excel("../data/parc_vp_france_2022.xlsx",sheet = 2)
-```
 
 ## 2.2.1 Data Wrangling : Oil clean
 
