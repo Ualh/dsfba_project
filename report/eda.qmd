@@ -11,7 +11,7 @@ __TO DO's__
 * Multivariate visualizations
 * Summary tables
 
-## 3.1 Discovery of data from 2005 to 2022
+## 3.1 Univariate Visualizations
 ### 3.1.1 sesonality
 ```{r}
 # Filter for only Passenger car vehicle type
@@ -27,7 +27,9 @@ ggplot(passenger_cars, aes(x = Date, y = Count)) +
        x = "Date",
        y = "Number of Passenger Cars Registered") +
   theme_minimal() +
-  scale_x_date(date_breaks = "1 year", date_labels = "%Y") # Set date breaks and labels
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") + 
+  geom_smooth(method = "loess", se = FALSE, color = "blue") +# Set date breaks and labels
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels by 45 degrees
 
 ```
 * seasonality
@@ -43,19 +45,19 @@ passenger_cars <- df_v %>%
 
 # Plotting the data with ggplot2, showing the trend within each year
 ggplot(passenger_cars, aes(x = Month, y = Count, group = Year, color = as.factor(Year))) +
-  geom_line() +
+  geom_line(stat = "smooth", se = FALSE, method = "loess", span = 0.5) +  # Smooth the existing lines
   labs(title = "Monthly Passenger Car Registrations by Year",
        x = "Month",
-       y = "Number of Passenger Cars Registered",
-       color = "Year") +
+       y = "Number of Passenger Cars Registered") +
   theme_minimal() +
-  theme(legend.position = "bottom") +
-  scale_x_discrete(limits = month.name)  # Ensure months are shown in order
+  scale_x_discrete(limits = month.name) +  # Ensure months are shown in order
+  scale_color_viridis_d() +  # Use viridis color scale
+  theme(legend.position = "bottom", axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels by 45 degrees)
 
 ```
 
 * This pattern suggests a seasonal trend with a mid-year peak and a year-end increase.
-
+*2020 covid year ?
 
 ```{r}
 # Filter for only Passenger car vehicle type
@@ -86,36 +88,62 @@ ggplot(passenger_cars, aes(x = as.numeric(format(YearMonth, "%m")), y = Count, g
 ### 3.1.2
 
 ```{r}
+# Filter df_v for specific fuel types and vehicle type
+filtered_df <- df_v %>%
+  filter(Fuel %in% c("Petrol", "Diesel", "Conventional hybrid", "Plug-in hybrid", "Electricity") &
+         VehicleType == "Passenger car")
+
 # Group by Date and Fuel type, and summarize the count
-fuel_type_trends <- df_v %>%
+fuel_type_trends <- filtered_df %>%
   group_by(Date, Fuel) %>%
-  summarise(Count = sum(Count, na.rm = TRUE)) %>%
+  summarize(Count = sum(Count, na.rm = TRUE)) %>%
   ungroup()
 
 # Plotting the trends over time by fuel type
 ggplot(fuel_type_trends, aes(x = Date, y = Count, color = Fuel)) +
-  geom_line() +
+  geom_line(stat = "smooth", se = FALSE, method = "loess", span = 0.1, size = 1) +
   labs(title = "Vehicle Registrations by Fuel Type Over Time",
        x = "Date",
        y = "Number of Vehicles Registered") +
   theme_minimal() +
   theme(legend.position = "bottom")
-
 ```
 
-*merge diesel and Petrol ? delete gas ? 
+*merge diesel and Petrol ?
+
 
 ## 3.2 Google Trend
 ```{r}
 ggplot(df_gtrends, aes(x = Date, y = SearchRatio)) +
-  geom_line(color = "blue", size = 1) +
-  labs(x = "X-axis", y = "Y-axis", title = "Line Plot")
+  geom_line(color = "darkgreen", size = 1, stat='smooth', se = FALSE, method = "loess", span = 0.1, size = 1) +
+  labs(x = "Date", y = "Google Search", title = "Google search About EV in Switzerland")
 ```
 
 ## 3.3 Oil
 ```{r}
 ggplot(oil_df, aes(x = Date , y = Price)) +
-  geom_line(color = "blue", size = 1) +
-  labs(x = "Date", y = "Price", title = "Oil Price")
+  geom_line(color = "darkred", size = 1) +
+  labs(x = "Date", y = "Price", title = "Oil Price Over Time")
 ```
+## 3.4 Demographics
+```{r}
+demographic_data <- df_demographic %>%
+  mutate(Population = `Generation Z` + `Millenials` + `Generation X` + `Baby Boomers`)
+
+head(df_demographic)
+# Plotting the data
+ggplot(demographic_data, aes(x = Year, y = Population)) +
+  geom_line(size = 1.5) +
+  labs(title = "Demographic Trends in Switzerland",
+       x = "Year",
+       y = "Population",
+       color = "Generation") +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  scale_color_manual(values = c("Generation Z" = "blue", "Millenials" = "red", "Generation X" = "green", "Baby Boomers" = "purple"))
+
+```
+
+## 3.2 Multivariate visualizations
+
 
