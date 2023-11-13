@@ -446,6 +446,21 @@ france_private <- france_private %>%
 france_private <- france_private %>%
   select(Diesel, Essence, Hybrid, Electrique, Year)
 
+# To match our Swiss data set, we need to deltas (change) between each years
+france_private <- france_private %>%
+  mutate(across(c(Diesel, Essence, Hybrid, Electrique), as.numeric),
+         Diesel_delta = Diesel - lag(Diesel),
+         Essence_delta = Essence - lag(Essence),
+         Hybrid_delta = Hybrid - lag(Hybrid),
+         Electrique_delta = Electrique - lag(Electrique))
+
+# Removing the NAs I've created with the lag function
+france_private <- france_private[-1,]
+
+# Ordering the columns for more clarity
+france_private <- france_private %>%
+  select(c("Year", "Diesel", "Diesel_delta", "Essence", "Essence_delta", "Hybrid", "Hybrid_delta", "Electrique", "Electrique_delta"))
+
 head(france_private)
 
 ```
