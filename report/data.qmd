@@ -36,6 +36,7 @@ google_trends_data7 <- read.csv("../data/googletrends_vehicule-electrique_2005-2
 google_trends_data8 <- read.csv("../data/googletrends_voiture-electrique_2005-2022.csv")
 oil_prices_data <- read.csv("../data/BrentOilPrices.csv")
 demographic_data <- read.csv("../data/demographic.csv")
+charging_station <- read.csv("../data/charging_station.csv")
 france_v <- read_excel("../data/parc_vp_france_2022.xlsx",sheet = 2)
 ```
 For this part of the project, we decided to present the different datasets in a table form and to do that, we used the function kablefrom the package kableExtra. This gives us a table with each variable and its definition. **a modifier c'est du copy paste !!!!!!**
@@ -549,7 +550,7 @@ Swiss data set accounts for new registration of cars for a given year and type.
 To be able to compare two data sets, we decided to format the French data set in the following way:
 
 - Remove categories that are not relevant for our analysis, and widely under-represented in the population (i.e Gaz, hydrogen)
-- Focus on the private use of cars (vs. professional), because the decision to use a certain type of cars for professional reasons are often explained by factors hard to capture in ouranalysis (i.e bundle deals, greenwashing). We therefore hypothesized that private use of a certain type of car better gives insights on population view.
+- Focus on the private use of cars (vs. professional), because the decision to use a certain type of cars for professional reasons are often explained by factors hard to capture in our analysis (i.e bundle deals, greenwashing). We therefore hypothesized that private use of a certain type of car better gives insights on population view.
 - The match our swiss data set (new registration per year), we computed the difference of total cars registered in France per years. Having only the data between 2011 and 2022, we have “lost” the insights for 2011. Indeed, when creating the deltas (difference) columns, 2011 deltas could not be computed (no data for 2010), we therefore decided to delete that year from our data
 
 ```{r}
@@ -581,19 +582,23 @@ for (i in 1:(ncol(france_private) - 2)) {  # Exclude the last two columns (Year 
   france_private[12, i] <- as.character(floor(as.numeric(france_private[12, i])))
 }
 
-# Creating the Hybrid category (aggregating the different kinds of hybrid) and removing the aggregated columns
+# To match swiss data set: creating the Conventional Hybrid and Plug-in Hybrid categories (aggregating the different kinds of hybrid) and removing the aggregated columns
 france_private <- france_private %>%
-  mutate(Hybrid = as.numeric(`Diesel HNR`) + as.numeric(`Diesel HR`) + as.numeric(`Essence HNR`) + as.numeric(`Essence HR`))
+  mutate(
+    Conventional_Hybrid = as.numeric(`Diesel HNR`)+ as.numeric(`Essence HNR`),
+    Plug_in_Hybrid = as.numeric(`Diesel HR`) + as.numeric(`Essence HR`)
+  )
 
 france_private <- france_private %>%
-  select(Diesel, Essence, Hybrid, Electrique, Year)
+  select(Diesel, Essence, Conventional_Hybrid, Plug_in_Hybrid, Electrique, Year)
 
 # To match our Swiss data set, we need to deltas (change) between each years
 france_private <- france_private %>%
-  mutate(across(c(Diesel, Essence, Hybrid, Electrique), as.numeric),
+  mutate(across(c(Diesel, Essence, Conventional_Hybrid, Plug_in_Hybrid, Electrique), as.numeric),
          Diesel_delta = Diesel - lag(Diesel),
          Essence_delta = Essence - lag(Essence),
-         Hybrid_delta = Hybrid - lag(Hybrid),
+         Conventional_Hybrid_delta = Conventional_Hybrid - lag(Conventional_Hybrid),
+         Plug_in_Hybrid_delta = Plug_in_Hybrid - lag(Plug_in_Hybrid),
          Electrique_delta = Electrique - lag(Electrique))
 
 # Removing the NAs I've created with the lag function (2011 deltas were NA because we don't have data for 2010)
@@ -601,12 +606,26 @@ france_private <- france_private[-1,]
 
 # Ordering the columns for more clarity
 df_v_fr <- france_private %>%
-  select(c("Year", "Diesel", "Diesel_delta", "Essence", "Essence_delta", "Hybrid", "Hybrid_delta", "Electrique", "Electrique_delta"))
+  select(c("Year", "Diesel", "Diesel_delta", "Essence", "Essence_delta", "Conventional_Hybrid", "Conventional_Hybrid_delta", "Plug_in_Hybrid", "Plug_in_Hybrid_delta", "Electrique", "Electrique_delta"))
 
 # Displayed clean data
 reactable(df_v_fr,
           sortable = TRUE, 
           searchable = TRUE)
+
+```
+
+### 2.2.5 Availability of charging stations
+
+This data set will be used to explore and analyze the effects of charging station availability on EVs adoption.
+
+However, two important points are to note.
+
+1. We were unable to find data before November 2020
+2. Charging station availability and EV in market are likely strongly reciprocally correlated.
+
+Moreover, it is important to keep standardized dates and locations
+```{r}
 
 ```
 
