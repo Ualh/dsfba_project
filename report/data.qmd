@@ -484,6 +484,14 @@ df_v$Location <- iconv(df_v$Location, from = "latin1", to = "UTF-8")
 # keep only the first name when multiple names are provided for cantons (separated by slashes)
 df_v$Location <- sapply(str_split(df_v$Location, " / "), `[`, 1)
 
+# Standardizing the cantons names:
+standard_names <- c("Switzerland" = "Switzerland", "Zürich" = "ZH", "Bern" = "BE", "Luzern" = "LU", "Uri" = "UR", "Schwyz" = "SZ",
+                    "Obwalden" = "OW", "Nidwalden" = "NW","Glarus" = "GL", "Zug" = "ZG", "Fribourg" = "FR", "Solothurn" = "SO",
+                    "Basel-Stadt" = "BS", "Basel-Landschaft" = "BL", "Schaffhausen" = "SH", "Appenzell Ausserrhoden" = "AR",
+                    "Appenzell Innerrhoden" = "AI", "St. Gallen" = "SG", "Graubünden" = "GR", "Aargau" = "AG", "Thurgau" = "TG",
+                    "Ticino" = "TI", "Vaud" = "VD", "Valais" = "VS", "Neuchâtel" = "NE", "Genève" = "GE", "Jura" = "JU",
+                    "Confederation" = "Confederation")
+df_v$Location <- standard_names[df_v$Location]
 
 #### Year ####
 #create date col
