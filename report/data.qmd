@@ -39,7 +39,7 @@ demographic_data <- read.csv("../data/demographic.csv")
 charging_station <- read.csv("../data/charging_station.csv")
 france_v <- read_excel("../data/parc_vp_france_2022.xlsx",sheet = 2)
 ```
-For this part of the project, we decided to present the different datasets in a table form and to do that, we used the function kablefrom the package kableExtra. This gives us a table with each variable and its definition. **a modifier c'est du copy paste !!!!!!**
+For this part of the project, we decided to present the different datasets in a table form and to do that, we used the function kablefrom the package `kableExtra`. This gives us a table with each variable and its definition. **a modifier c'est du copy paste !!!!!!**
 
 ### 2.1.1 Swiss Vehicle Registration Dataset
 
@@ -202,6 +202,50 @@ variable_table %>%
 
 * source
 
+### 2.1.6 Chargin Stations
+```{r}
+# Create a tibble with variable descriptions in English
+variable_table_charging <- tibble(
+  Variables = c("year",
+                "month",
+                "stations_CH_count",
+                "stations_XY_count",
+                "locations_CH_count",
+                "locations_XY_count",
+                "plugs_CH_count",
+                "plugs_XY_count",
+                "chargingPower_CH_sum",
+                "chargingPower_XY_sum",
+                "chargingPower_CH_count",
+                "chargingPower_XY_count",
+                "chargingPower_10kW_count",
+                "chargingPower_21kW_count",
+                "chargingPower_42kW_count"),
+  Meaning = c(
+    "Year of the key figures collection.",
+    "Month of the key figures collection. These are collected daily and published monthly.",
+    "Number of available charging stations in Switzerland. A station can have multiple charging points.",
+    "Number of charging stations per canton. A station can have multiple charging points. This attribute is available for all cantons, XY representing the official canton abbreviation.",
+    "Number of stations in Switzerland. A station can have multiple charging points.",
+    "Number of stations per canton. A station can have multiple charging points. This attribute is available for all cantons, XY representing the official canton abbreviation.",
+    "Number of charging plugs in Switzerland.",
+    "Number of charging plugs per plug type in Switzerland. This attribute is available for all plug types, XY corresponding to the plug type according to the Open Intercharge Protocol (OICP) version 2.2 (see below).",
+    "Total maximum charging power in kilowatts of recharge stations in Switzerland. Only charging points with known power are considered (see chargingPower_CH_count).",
+    "Total maximum charging power in kilowatts of recharge stations in a canton. Only charging points with known power are considered (see chargingPower_XY_count).",
+    "Number of recharge stations in Switzerland with known maximum charging power and for which the total maximum charging power has been taken into account (chargingPower_CH_sum).",
+    "Number of recharge stations per canton with known maximum charging power and for which the total maximum charging power has been taken into account (chargingPower_XY_sum).",
+    "Number of recharge stations in Switzerland with known maximum charging power delivering a maximum charging power of 10 kW.",
+    "Number of recharge stations in Switzerland with known maximum charging power ranging from over 10 kW to 21 kW.",
+    "Number of recharge stations in Switzerland with known maximum charging power ranging from over 21 kW to 42 kW."
+  )
+)
+
+# Display the table using kableExtra
+variable_table_charging %>%
+  kbl() %>%
+  kable_styling(position = "center")
+
+```
 
 ## 2.2 Data Wrangling
 ### 2.2.1 Data Wrangling : Oil clean
@@ -276,12 +320,13 @@ reactable(oil_df,
 
 ### 2.2.2 Data Wrangling : Google trend clean
 
-Comprehending Google Trends information involves understanding the contextualization of the provided figures. The data is standardi
+Comprehending Google Trends information involves understanding the contextualization of the provided figures. The data is standardized.
 
 The crucial element for effective narration lies in utilizing the normalized Trends data. This normalization indicates that when observing search interest trends over time, it is interpreted as a ratio relative to all searches conducted on all topics on Google during that specific period and location. Likewise, when assessing regional search interest for a specific topic, it is construed as the search interest for that particular topic in a given region relative to all searches on all topics on Google in that same place and time.
 
 [Source](https://medium.com/google-news-lab/what-is-google-trends-data-and-what-does-it-mean-b48f07342ee8)
 
+To clean and process eight Google Trends datasets related to different search terms, we created a function process_dataset() that reads each CSV file, removes date indices, excludes the first row, checks for missing values, renames columns, converts types, and standardizes the date format. Then, we iterated through each dataset, merged them based on the "Date" column, summed values for each search term per date, normalized these values between 1 and 100.
 
 ```{r}
 dataset_names <- c(
@@ -427,6 +472,8 @@ reactable(df_demographic,
 
 The dataset, representing new vehicle registrations in Switzerland from 2005 onwards, exhibited redundancy in its structure. For example, the data contained both main categories (like '> Passenger cars') and their respective sub-categories ('... Passenger car' and '.. Heavy passenger car'). On examination, it was observed that the counts under the main categories were simply aggregates of the counts of their sub-categories. Such redundancy could lead to double counting in analytical processes.
 
+We addressed this issue by removing main categories that were aggregates of their sub-categories, preventing potential double counting in analyses. For two subsets of data (2005 to 2008 and 2009 to 2022), We filtered out main categories, cleaned and standardized the column names, reshaped the dataset from wide to long format to facilitate analysis, and extracted and formatted the year information for each observation. This process allowed for a more granular and consistent dataset for further analysis and interpretation.
+
 ```{r}
 ##### 1st data 2005 to 2008 clean #####
 # remove the main categories to avoid  and to work with a more granular dataset.
@@ -467,16 +514,29 @@ v_2009_2022$Year <- gsub("X", "", v_2009_2022$Year)
 #### Merging and Joining
 As the vehicle data was split across multiple files, it was necessary to combine them for a holistic view.
 
+We used `bind_rows`to create df_v, then sorted the dataset by yearto ensure a structured chronological view of the data.
+
 ```{r}
 df_v <- bind_rows(v_2005_2008, v_2009_2022)
 df_v <- df_v |>
   arrange(df_v$Year)
 ```
 
-#### encoding, renaming, date col
+#### Refinement and Vehicle Classification Insights
 
-* Some of the canton names have special characters that haven't been encoded properly in the dataset, causing them to display as hexadecimal escape sequences.
-* We consolidated the 'Year' and 'Month' columns into a singular 'Date' column, converting them into a standard date format. This transformation streamlines time series analyses and provides a more intuitive representation of the data's temporal dimension.
+* Some of the canton names have special characters that haven't been encoded properly in the dataset, causing them to display as hexadecimal escape sequences. To address this, we used `iconv` to properly encode these characters from "latin1" to "UTF-8". Additionally, when multiple names were provided for cantons (separated by slashes), we retained only the first name using `sapply` and `str_split`. We standardized the canton names using a predefined list (`standard_names`).
+* We created a unified date column by combining 'Year' and 'Month' information. First, we matched month names to their corresponding numeric values, then merged this information with the year, and formatted it as "YYYY-MM-01" to generate a standard date format.This transformation streamlines time series analyses and provides a more intuitive representation of the data's temporal dimension.
+
+We simplified the classification of hybrid vehicles by merging different categories of conventional and plug-in hybrids into two main groups: "Conventional hybrid" and "Plug-in hybrid", respectively. This simplification aimed to streamline analysis by grouping similar types together.
+
+The "Gas" fuel type was renamed from "Gas (monovalent and bivalent)" for clarity and consistency in the dataset.
+
+Further context was provided on different *hybrid types*:
+
+Conventional Hybrids: These vehicles, powered by petrol or diesel **without** plug-in capability, might exhibit different adoption trends due to their longer existence in the market.Have been around longer and may have a different adoption trend compared to newer technologies.
+
+Plug-in Hybrids: With larger batteries and the ability to charge from an electric outlet, these vehicles enable all-electric operation for limited distances. The presence of charging infrastructure might impact their adoption differently, distinguishing them from conventional hybrids. Adoption might be reflected differently due to the need for charging infrastructure.
+
 ```{r}
 #### canton ####
 df_v$Location <- iconv(df_v$Location, from = "latin1", to = "UTF-8")
@@ -517,10 +577,6 @@ df_v <- df_v |>
   mutate(Fuel = if_else(Fuel == "Gas (monovalent and bivalent)", "Gas", Fuel))
 ```
 
-* Conventional hybrids (petrol-electricity or diesel-electricity without plug-in capability) have been around longer and may have a different adoption trend compared to newer technologies.
-
-* Plug-in hybrids have larger batteries and can be charged from an electric outlet, allowing for all-electric operation for limited distances, which might influence their adoption differently due to the need for charging infrastructure.
-
 
 ```{r}
 #count nbr of vehicle for a paticular year and 
@@ -542,7 +598,7 @@ Retaining rows with a Count of 0 ensures the completeness of our dataset, indica
 ```
 
 
-### 2.2.4 Data wrangling French vehicle clean
+### 2.2.5 Data wrangling French vehicle clean
 
 This dataset will be used to compare our data in Switzerland with a bordering country (FR)
 
@@ -623,7 +679,7 @@ reactable(df_v_fr,
 
 ```
 
-### 2.2.5 Availability of charging stations
+### 2.2.6 Availability of charging stations
 
 This data set will be used to explore and analyze the effects of charging station availability on EVs adoption.
 
@@ -633,7 +689,22 @@ However, two important points are to note.
 2. Charging station availability and EV in market are likely strongly reciprocally correlated.
 
 Moreover, it is important to keep standardized dates and locations
-```{r}
 
+We merges 'year' and 'month' columns to create a 'Date' column in the format "YYYY-MM-01", subsequently reorganizing the dataframe to position 'Date' as the first column and removing the original 'year' and 'month' columns.
+```{r}
+# Combine 'year' and 'month' columns to create a new 'Date' column
+charging_station$Date <- as.Date(paste(charging_station$year, charging_station$month, "01", sep = "-"))
+
+# Rearrange columns with 'Date' as the first column and drop 'year' and 'month'
+df_charging_station <- charging_station %>%
+  select(Date, everything()) %>%
+  select(-year, -month)
+```
+
+```{r}
+# Displayed clean data
+reactable(df_charging_station,
+          sortable = TRUE, 
+          searchable = TRUE)
 ```
 
