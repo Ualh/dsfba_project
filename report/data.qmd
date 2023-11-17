@@ -677,6 +677,16 @@ reactable(df_v_fr,
           sortable = TRUE, 
           searchable = TRUE)
 
+#convert date into datetime format
+# Assuming 'Year' is an integer column representing the year
+df_v_fr$Date <- as.Date(paste(df_v_fr$Year, "-01-01", sep = ""), format = "%Y-%m-%d")
+# Rearrange columns with 'Date' as the first column and drop 'year' and 'month'
+df_v_fr <- df_v_fr %>%
+  select(Date, everything()) %>%
+  select(-Year)
+head(df_v_fr)
+
+
 ```
 
 ### 2.2.6 Availability of charging stations
