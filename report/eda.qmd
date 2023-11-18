@@ -175,7 +175,8 @@ ggplot() +
 
 
 #### 3.1.4.2 Dynamic Map Rendering
-In the Shiny server function, render the map based on the selected fuel type and date. Use leaflet to plot the data. You'll need to use addPolygons() to add the canton boundaries and color them based on the TotalCount of registrations.
+
+
 
 ## 3.2 Google Trend
 ```{r}
