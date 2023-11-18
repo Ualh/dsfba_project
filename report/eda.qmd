@@ -181,7 +181,9 @@ ggplot(registration_data, aes(x = Date)) +
   labs(x = "Date", y = "Log-Scale Count", color = "Fuel Type") +
   theme_minimal()
 
+
 ```
+pierre
 # 3.5.2 Deltas evolution
 ```{r}
 # Plotting for total cars
