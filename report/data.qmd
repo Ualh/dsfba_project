@@ -672,10 +672,6 @@ france_private <- france_private[-1,]
 df_v_fr <- france_private %>%
   select(c("Year", "Diesel", "Diesel_delta", "Essence", "Essence_delta", "Conventional_Hybrid", "Conventional_Hybrid_delta", "Plug_in_Hybrid", "Plug_in_Hybrid_delta", "Electrique", "Electrique_delta"))
 
-# Displayed clean data
-reactable(df_v_fr,
-          sortable = TRUE, 
-          searchable = TRUE)
 
 #convert date into datetime format
 # Assuming 'Year' is an integer column representing the year
@@ -684,9 +680,11 @@ df_v_fr$Date <- as.Date(paste(df_v_fr$Year, "-01-01", sep = ""), format = "%Y-%m
 df_v_fr <- df_v_fr %>%
   select(Date, everything()) %>%
   select(-Year)
-head(df_v_fr)
 
-
+# Displayed clean data
+reactable(df_v_fr,
+          sortable = TRUE, 
+          searchable = TRUE)
 ```
 
 ### 2.2.6 Availability of charging stations

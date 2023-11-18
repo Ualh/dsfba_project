@@ -165,45 +165,41 @@ ggplot(demographic_data, aes(x = Year)) +
 ## 3.5 French vehicles
 # 3.5.1 Total vehicules evolution
 ```{r}
-# Preparing for plotting
-long_df_v_fr <- pivot_longer(df_v_fr[, c("Year", "Diesel", "Essence", "Conventional_Hybrid", "Plug_in_Hybrid", "Electrique")],
-                             cols = -Year,
-                             names_to = "Category",
-                             values_to = "Value")
+# Select relevant columns for plotting
+registration_data <- df_v_fr[, c("Date", "Diesel", "Essence", "Conventional_Hybrid", "Plug_in_Hybrid", "Electrique")]
 
-# plotting
-ggplot(long_df_v_fr, aes(x = Year, y = Value, color = Category)) +
-  geom_line(size = 1) +
-  labs(title = "Log Scale - Evolution of cars registered in France over the years by fuel type",
-       x = "Years",
-       y = "Logarithmic Scale of Value",
-       color = "Fuel Category") +
-  theme_minimal() +
-  scale_y_log10()
+# Plotting log-scale evolution of car registrations
+ggplot(registration_data, aes(x = Date)) +
+  geom_line(aes(y = log(Diesel), color = "Diesel")) +
+  geom_line(aes(y = log(Essence), color = "Essence")) +
+  geom_line(aes(y = log(Conventional_Hybrid), color = "Conventional Hybrid")) +
+  geom_line(aes(y = log(Plug_in_Hybrid), color = "Plug-in Hybrid")) +
+  geom_line(aes(y = log(Electrique), color = "Electrique")) +
+  scale_color_manual(values = c("Diesel" = "red", "Essence" = "blue", 
+                                 "Conventional Hybrid" = "green", "Plug-in Hybrid" = "purple", 
+                                 "Electrique" = "orange")) +
+  labs(x = "Date", y = "Log-Scale Count", color = "Fuel Type") +
+  theme_minimal()
 
 ```
 # 3.5.2 Deltas evolution
 ```{r}
-# Preparing total parc plotting (without the deltas)
-long_delta_df_V_fr <- pivot_longer(df_v_fr[,c("Year",
-                                              "Diesel_delta",
-                                              "Essence_delta",
-                                              "Conventional_Hybrid_delta",
-                                              "Plug_in_Hybrid_delta",
-                                              "Electrique_delta")],
-                                   cols = -Year,
-                                   names_to = "Category",
-                                   values_to = "Value")
-
-# plotting for total cars
-ggplot(long_delta_df_V_fr, aes(x = Year, y = Value, color = Category)) +
+# Plotting for total cars
+ggplot(df_v_fr, aes(x = Date, y = Diesel_delta, color = "Diesel")) +
   geom_line(size = 1) +
-  labs(title = "Evolution of cars registered in France over the years by fuel type",
+  geom_line(aes(y = Essence_delta, color = "Petrol"), size = 1) +
+  geom_line(aes(y = Conventional_Hybrid_delta, color = "Conventional hybrid"), size = 1) +
+  geom_line(aes(y = Plug_in_Hybrid_delta, color = "Plug-in hybrid"), size = 1) +
+  geom_line(aes(y = Electrique_delta, color = "Electricity"), size = 1) +
+  labs(title = "Evolution of cars registered in France over the years by fuel type (Deltas)",
        x = "Years",
        y = "Value",
        color = "Fuel Category") +
   theme_minimal() +
-  scale_y_continuous(labels = scales::label_number())
+  scale_color_manual(values = c("Diesel" = "red", "Petrol" = "blue", 
+                                 "Conventional hybrid" = "green", "Plug-in hybrid" = "purple",
+                                 "Electricity" = "orange"))
+
 ```
 
 
@@ -211,23 +207,8 @@ ggplot(long_delta_df_V_fr, aes(x = Year, y = Value, color = Category)) +
 Combined analysis
 
 ### 3.2.1 Swiss vs France
-#### Electric
-```{r}
-# Filtering Swiss data for Passenger cars
-swiss_passenger_electric <- df_v %>%
-  filter(Fuel == "Electricity") |>
-  filter(VehicleType == 'Passenger car') |>
-  filter(Location == 'Switzerland')
-
-# Plotting Swiss Passenger vs Electric cars and French Electrique data
-ggplot() +
-  geom_line(data = swiss_passenger_electric, aes(x = Date, y = Count, color = VehicleType))  +
-  geom_line(data = df_v_fr, aes(x = Date, y = Electrique, color = "French Electrique")) +
-  labs(x = "Date/Year", y = "Count", color = "Vehicle Type") +
-  theme_minimal()
-```
-#### Electric, Hybrid, Petrol
-Here we ompare and visualize specific vehicle fuel types between Swiss and French datasets.
+#### Electric vs Hybrid vs Petrol
+Here we compare and visualize specific vehicle fuel types between Swiss and French datasets.
 
 The thicker line are the for **Switzerland**, the others are for **France**. We standardized the counts in both the Swiss and French datasets for comparison purposes.
 ```{r}
@@ -275,7 +256,7 @@ ggplot() +
                      breaks = c("Diesel", "Electricity", "Conventional hybrid", "Plug-in hybrid")) +
   labs(x = "Date", y = "Standardized Count", color = "Fuel Type") +
   theme_minimal() +
-  geom_text(data = data.frame(x = as.Date("2021-01-01"), y = c(3, 2.5), label = c("Switzerland has", "the thickest line")), 
-            aes(x = x, y = y, label = label, color = label), size = 5, show.legend = FALSE)
+  geom_text(data = data.frame(x = as.Date("2021-01-01"), y = c(3, 2.8), label = c("Switzerland has", "the thickest line")), 
+            aes(x = x, y = y, label = label, color = label), size = 4, show.legend = FALSE)
 ```
 
