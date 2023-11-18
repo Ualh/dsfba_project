@@ -1,0 +1,10 @@
+name: dsfba_project
+title:
+username: dfsba
+account: dfsba
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10566390
+bundleId: 7942694
+url: https://dfsba.shinyapps.io/dsfba_project/
+version: 1

@@ -583,9 +583,6 @@ df_v <- df_v |>
 vehicle_count_2022 <- df_v |>
   filter(Location == "Switzerland", year(Date) == 2023, VehicleType == "Passenger car") |>
   summarize(TotalCount = sum(Count))
-
-#print(vehicle_count_2022)
-
 ```
 
 

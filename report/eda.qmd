@@ -11,7 +11,7 @@ __TO DO's__
 * Multivariate visualizations
 * Summary tables
 
-## 3.1 Univariate Visualizations
+## 3.1 Switzerland
 ### 3.1.1 sesonality
 ```{r}
 # Filter for only Passenger car vehicle type
@@ -85,7 +85,7 @@ ggplot(passenger_cars, aes(x = as.numeric(format(YearMonth, "%m")), y = Count, g
         legend.position = "none") # Remove the legend to clean up the plot
 ```
 
-### 3.1.2
+### 3.1.2 Vehicule Registration by Fuel time over time
 
 ```{r}
 # Filter df_v for specific fuel types and vehicle type
@@ -111,7 +111,7 @@ ggplot(fuel_type_trends, aes(x = Date, y = Count, color = Fuel)) +
 
 *merge diesel and Petrol ?
 
-# 3.1.3 Proportion par cantons
+### 3.1.3 Proportion par cantons
 ```{r}
 filter_for_canton <- df_v[df_v$VehicleType == "Passenger car" & 
                       df_v$Fuel %in% c("Petrol", "Diesel", "Conventional hybrid", "Plug-in hybrid", "Electricity") & 
@@ -128,6 +128,54 @@ ggplot(filter_for_canton, aes(x = Location, fill = Fuel)) +
   theme_minimal()
 ```
 
+
+### 3.1.4 Map
+
+`swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp` contains the boundaries of the cantons of Switzerland.
+```{r}
+df_v_map <- df_v |>
+  filter(!Location %in% c("Switzerland", "Confederation"))
+# Mapping between canton abbreviations and numbers
+# Define a vector of the abbreviation values in the desired order
+abbreviation_values <- c("ZH", "BE", "LU", "UR", "SZ", "OW", "NW", "GL", "ZG", "FR", "SO", "BS", "BL", "SH", "AR", "AI", "SG", "GR", "AG", "TG", "TI", "VD", "VS", "NE", "GE", "JU")
+
+# Use the match function to create the new column
+df_v_map$KANTONSNUM <- match(df_v_map$Location, abbreviation_values)
+
+swiss_cantons <- st_read("../data/CH_map/swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
+
+# Aggregate the data
+preprocessed_data <- df_v_map %>%
+  group_by(Fuel, VehicleType, Year = format(as.Date(Date), "%Y"), KANTONSNUM) %>%
+  summarize(Total = sum(Count), .groups = 'drop')
+
+```
+
+#### 3.1.4.1 Count of Electricity car Registration for all years per cantons
+```{r}
+# Ensure KANTONSNUM is correctly formatted in both datasets
+df_v_map$KANTONSNUM <- as.numeric(as.character(df_v_map$KANTONSNUM))
+swiss_cantons$KANTONSNUM <- as.numeric(as.character(swiss_cantons$KANTONSNUM))
+
+# Filter and aggregate df_v data
+filtered_data <- df_v_map %>%
+  filter(Fuel == "Electricity", VehicleType == "Passenger car") %>%
+  group_by(KANTONSNUM) %>%
+  summarize(Total = sum(Count))
+
+# Merge with shapefile data
+map_data <- merge(swiss_cantons, filtered_data, by = "KANTONSNUM")
+
+# Create a basic plot
+ggplot() +
+  geom_sf(data = map_data, aes(fill = Total), color = NA) +
+  scale_fill_viridis_c() +
+  theme_minimal()
+```
+
+
+#### 3.1.4.2 Dynamic Map Rendering
+In the Shiny server function, render the map based on the selected fuel type and date. Use leaflet to plot the data. You'll need to use addPolygons() to add the canton boundaries and color them based on the TotalCount of registrations.
 
 ## 3.2 Google Trend
 ```{r}
@@ -163,7 +211,7 @@ ggplot(demographic_data, aes(x = Year)) +
 
 ```
 ## 3.5 French vehicles
-# 3.5.1 Total vehicules evolution
+### 3.5.1 Total vehicules evolution France
 ```{r}
 # Select relevant columns for plotting
 registration_data <- df_v_fr[, c("Date", "Diesel", "Essence", "Conventional_Hybrid", "Plug_in_Hybrid", "Electrique")]
@@ -183,8 +231,8 @@ ggplot(registration_data, aes(x = Date)) +
 
 
 ```
-pierre
-# 3.5.2 Deltas evolution
+
+### 3.5.2 Deltas evolution
 ```{r}
 # Plotting for total cars
 ggplot(df_v_fr, aes(x = Date, y = Diesel_delta, color = "Diesel")) +
@@ -205,11 +253,8 @@ ggplot(df_v_fr, aes(x = Date, y = Diesel_delta, color = "Diesel")) +
 ```
 
 
-## 3.2 Multivariate visualizations
-Combined analysis
-
-### 3.2.1 Swiss vs France
-#### Electric vs Hybrid vs Petrol
+## 3.6 Swiss vs France
+### 3.7 Electric vs Hybrid vs Petrol
 Here we compare and visualize specific vehicle fuel types between Swiss and French datasets.
 
 The thicker line are the for **Switzerland**, the others are for **France**. We standardized the counts in both the Swiss and French datasets for comparison purposes.

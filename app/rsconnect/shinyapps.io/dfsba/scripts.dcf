@@ -1,0 +1,10 @@
+name: scripts
+title:
+username: dfsba
+account: dfsba
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 10566431
+bundleId: 7942729
+url: https://dfsba.shinyapps.io/scripts/
+version: 1
