@@ -227,8 +227,10 @@ ggplot() +
   theme_minimal()
 ```
 #### Electric, Hybrid, Petrol
+Here we ompare and visualize specific vehicle fuel types between Swiss and French datasets.
+
+The thicker line are the for **Switzerland**, the others are for **France**. We standardized the counts in both the Swiss and French datasets for comparison purposes.
 ```{r}
-unique(df_v$Fuel)
 # Filtering Swiss data for specific fuel types
 swiss_specific_fuel <- df_v %>%
   filter(Fuel %in% c("Diesel", "Electricity", "Conventional hybrid", "Plug-in hybrid", "Petrol")) %>%
@@ -263,17 +265,17 @@ french_specific_fuel_long <- french_specific_fuel_long %>%
 
 unique(swiss_specific_fuel$Fuel)
 # Define color palette for each fuel type
-fuel_colors <- c("Diesel" = "red", "Electricity" = "blue", "Conventional hybrid" = "green", "Plug-in hybrid" = "purple", "Petrol" = "black")
+fuel_colors <- c("Diesel" = "darkred", "Electricity" = "blue", "Conventional hybrid" = "green", "Plug-in hybrid" = "orange", "Petrol" = "black")
 
 # Plotting
 ggplot() +
-  geom_smooth(data = swiss_specific_fuel, aes(x = Date, y = Count, color = Fuel), method = "loess", se = FALSE, size = 1.5) +
-  geom_line(data = french_specific_fuel_long, aes(x = Date, y = Count, color = Fuel), alpha = 0.5, size = 1.5) +
+  geom_smooth(data = swiss_specific_fuel, aes(x = Date, y = Count, color = Fuel), method = "loess", se = FALSE, size = 1.8) +
+  geom_line(data = french_specific_fuel_long, aes(x = Date, y = Count, color = Fuel), alpha = 0.5, size = 0.8) +
   scale_color_manual(values = fuel_colors, labels = c("Diesel", "Electricity", "Conventional hybrid", "Plug-in hybrid"),
                      breaks = c("Diesel", "Electricity", "Conventional hybrid", "Plug-in hybrid")) +
   labs(x = "Date", y = "Standardized Count", color = "Fuel Type") +
   theme_minimal() +
-  geom_text(data = data.frame(x = as.Date("2014-01-01"), y = c(1, 0.5), label = c("Switzerland", "France")), 
+  geom_text(data = data.frame(x = as.Date("2021-01-01"), y = c(3, 2.5), label = c("Switzerland has", "the thickest line")), 
             aes(x = x, y = y, label = label, color = label), size = 5, show.legend = FALSE)
 ```
 
