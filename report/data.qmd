@@ -12,7 +12,6 @@ __TO DO's__
 * Spotting mistakes and missing data (could be part of EDA too) - TBD
 * Listing anomalies and outliers (could be part of EDA too) - TBD
 
-
 ## 2.1 Raw Datasets
 
 The datasets encompass:
