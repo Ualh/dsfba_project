@@ -27,7 +27,6 @@ For this phase of the project, our approach involves presenting diverse datasets
 
 ### 2.1.1 Swiss Vehicle Registration Dataset
 
-* Description
 This data set explains the new registrations of road vehicles by vehicle group, canton, vehicle type, fuel, month and year in Switzerland. This data set is essential to evaluate the EVs’ evolution within our chosen location. 
 
 ```{r}
@@ -56,7 +55,6 @@ variable_table_vehicle %>%
 
 ### 2.1.2 Oil price Dataset
 
-* description
 This data set explains the evolution of the price of brent oil over time. From this data set, we will be able to obtain precious information to compute our linear regressions concerning oil price and EVs adoptions.   
 
 ```{r}
@@ -81,7 +79,6 @@ https://www.kaggle.com/datasets/mabusalah/brent-oil-prices
 
 ### 2.1.3 Swiss Demographics Dataset
 
-* description
 While this dataset contains a substantial amount of information, only a fraction of it will be pertinent to our research. It explains the evolution of the Swiss population over time through variables given below.
 
 ```{r}
@@ -130,7 +127,6 @@ https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetd
 
 ### 2.1.4 Google trend data
 
-* Description
 This Data set shows the evolution of Google trends on 8 different terms. We chose these terms in all 3 different main Swiss national languages (French, Italian and German) to make sure we get the most accurate data possible. Those variables will help us highlight potential tendencies/trends.  
 
 ```{r}
@@ -175,7 +171,6 @@ https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Auto%20elettrica
 
 ### 2.1.5 French vehicle registration data
 
-* description
 We decided to add this data set to help us compare with another country. Indeed, France is an adjacent country which might imply potential similarities in the outcome. This data set is made of variables such as the Date of the French vehicle registration or whether it is from a professional user or not.  The information we are interested in concern the number of registered vehicles in the country by propulsion method over time.
 
 ```{r}
@@ -202,8 +197,8 @@ https://www.statistiques.developpement-durable.gouv.fr/donnees-sur-le-parc-de-ve
 
 ### 2.1.6 Chargin Stations
 
-* description
-This data set is meant to determine the number of charging stations per canton, per charging power, per month, per plug type in Switzerland since November 2020. It is important to mention that a station can have multiple charging points. These values will help us to obtain more information about the Swiss adaption to EVs and their potential effects on EVs adoption by the Swiss population  
+This data set is meant to determine the number of charging stations per canton, per charging power, per month, per plug type in Switzerland since November 2020. It is important to mention that a station can have multiple charging points. These values will help us to obtain more information about the Swiss adaption to EVs and their potential effects on EVs adoption by the Swiss population 
+
 ```{r}
 # Create a tibble with variable descriptions in English
 variable_table_charging <- tibble(
@@ -245,7 +240,6 @@ variable_table_charging <- tibble(
 variable_table_charging %>%
   kbl() %>%
   kable_styling(position = "center")
-
 ```
 
 * source
@@ -704,9 +698,7 @@ charging_station$Date <- as.Date(paste(charging_station$year, charging_station$m
 df_charging_station <- charging_station %>%
   select(Date, everything()) %>%
   select(-year, -month)
-```
 
-```{r}
 # Displayed clean data
 reactable(df_charging_station,
           sortable = TRUE, 
