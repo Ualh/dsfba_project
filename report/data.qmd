@@ -3,23 +3,8 @@
 ```{r, echo = FALSE, message = FALSE}
 source(here::here("scripts/setup.R"))
 ```
-__TO DO's__
-
-* Wrangling/cleaning
-* Sources - TBS
-* Description - In progress
-* Wrangling/cleaning - In progress
-* Spotting mistakes and missing data (could be part of EDA too) - TBD
-* Listing anomalies and outliers (could be part of EDA too) - TBD
 
 ## 2.1 Raw Datasets
-
-The datasets encompass:
-
-- **Vehicle Registrations**: Detailed regional breakdowns showing vehicle type, fuel type, and numbers across years.
-- **Google Trends**: Time-series data showcasing the interest in electric vehicles and environmental topics over time.
-- **Oil Prices**: Time-series data indicating Brent oil price fluctuations over the years.
-- **Demographics**: Indicators like population growth, immigration, emigration, gender statistics, and more, which can influence vehicle adoption patterns.
 
 ```{r}
 # Reading the data

@@ -266,7 +266,8 @@ swiss_specific_fuel <- df_v %>%
   filter(Fuel %in% c("Diesel", "Electricity", "Conventional hybrid", "Plug-in hybrid", "Petrol")) %>%
   filter(Location == 'Switzerland') |>
   filter(VehicleType == 'Passenger car') |>
-  filter(Date > as.Date('2012-01-01'))
+  filter(Date > as.Date('2012-01-01')) |>
+  filter(Date < as.Date('2021-12-31'))
 
 # Selecting equivalent columns from the French dataset
 french_specific_fuel <- df_v_fr %>%
@@ -294,12 +295,12 @@ french_specific_fuel_long <- french_specific_fuel_long %>%
   ))
 
 # Define color palette for each fuel type
-fuel_colors <- c("Diesel" = "darkred", "Electricity" = "blue", "Conventional hybrid" = "green", "Plug-in hybrid" = "orange", "Petrol" = "black")
+fuel_colors <- c("Diesel" = "black", "Electricity" = "green", "Conventional hybrid" = "purple", "Plug-in hybrid" = "blue", "Petrol" = "orange")
 
 # Plotting
 ggplot() +
-  geom_smooth(data = swiss_specific_fuel, aes(x = Date, y = Count, color = Fuel), method = "loess", se = FALSE, size = 1.8) +
-  geom_line(data = french_specific_fuel_long, aes(x = Date, y = Count, color = Fuel), alpha = 0.5, size = 0.8) +
+  geom_smooth(data = swiss_specific_fuel, aes(x = Date, y = Count, color = Fuel), method = "loess", se = FALSE, size = 1.5) +
+  geom_line(data = french_specific_fuel_long, aes(x = Date, y = Count, color = Fuel), alpha = 0.4, size = 0.8) +
   scale_color_manual(values = fuel_colors, labels = c("Diesel", "Electricity", "Conventional hybrid", "Plug-in hybrid", "Petrol"),
                      breaks = c("Diesel", "Electricity", "Conventional hybrid", "Plug-in hybrid", "Petrol")) +
   labs(x = "Date", y = "Standardized Count", color = "Fuel Type") +
@@ -309,42 +310,64 @@ ggplot() +
 ```
 
 ## 3.7 EV and Google Trends
+
 ```{r}
-# Filter electric vehicle data if needed
-df_v_electric <- df_v %>% filter(Fuel == "Electricity") |> filter (VehicleType == "Passenger car") # Assuming 'Electric' is the category
+df_electric_vehicles_agg <- df_v_electric %>% group_by(Date) %>% summarize(Count = sum(Count))
+# Resample both datasets to a monthly frequency using the first day of the month
 
-# Merge datasets on Date
-merged_df <- merge(df_v_electric, df_gtrends, by = "Date")
+# Merge datasets
+merged_df <- merge(df_electric_vehicles_agg, df_gtrends, by = "Date")
 
-# Define the transformation function for the secondary axis
-transformation_function <- function(x) x * max(merged_df$SearchRatio) / max(merged_df$Count)
-# Create a combined bar and line chart
-ggplot() +
-  geom_bar(data = merged_df, aes(x = Date, y = SearchRatio), stat = "identity", fill = "steelblue") +
-  geom_smooth(data = merged_df, aes(x = Date, y = Count), color = "green", method = "loess", span = 0.03) +
-  scale_y_continuous(name = "Electric Vehicle Count") +
-  labs(title = "Comparison of Electric Vehicle Count and Google Trends Data",
-       x = "Date",
-       y = "Electric Vehicle Count") +
+# Calculate the ratio for the secondary axis
+max_count <- max(df_merged$Count, na.rm = TRUE)
+max_search <- max(df_merged$Price, na.rm = TRUE)
+ratio <- max_count / max_search
+
+# Plotting with smoothing and color changes
+ggplot(merged_df, aes(x = Date)) +
+  geom_bar(data = merged_df, aes(x = Date, y = SearchRatio * ratio, color = "Google Trends"), stat = "identity") +
+  geom_smooth(aes(y = Count, color = "Electric Vehicles Smoothed"), method = "loess", span = 0.2) +
+  scale_y_continuous(
+    "Number of Electric Vehicles",
+    sec.axis = sec_axis(~ . / ratio, name = "Google Trends")
+  ) +
+  labs(title = "Comparison of Electric Vehicle Rise and Google Trends Over Time",
+       x = "Date", color = "Legend") +
+  scale_color_manual(values = c("Electric Vehicles Smoothed" = "blue", "Google Trends" = "darkred")) +
   theme_minimal()
-
 ```
+
 ## 3.8 EV and Oil Price
 ```{r}
-head(oil_df)
-merged_df <- merge(merged_df, oil_df, by = "Date", all = TRUE)
-merged_df
+df_oil_monthly <- oil_df %>% 
+                  mutate(Date = as.Date(format(Date, "%Y-%m-01"))) %>%
+                  group_by(Date) %>% 
+                  summarize(Price = mean(Price))
 
-# Create a combined line (for EV count and Oil Price) and bar (for Google Trends) chart with a secondary y-axis
-ggplot(merged_df, aes(x = Date)) +
-  geom_line(aes(y = Count), color = "red") + # Line for EV count
-  geom_line(aes(y = Price), color = "blue") + # Line for Oil Price
-  geom_bar(aes(y = SearchRatio), stat = "identity", fill = "steelblue", position = position_dodge()) + # Bar for Google Trends
-  scale_y_continuous(name = "Electric Vehicle Count / Oil Price", 
-                     sec.axis = sec_axis(~ ., name = "Google Trends Search Ratio", 
-                                         breaks = seq(0, 100, by = 20))) + # Secondary axis for Google Trends
-  labs(title = "Comparison of Electric Vehicle Count, Oil Prices, and Google Trends Data",
-       x = "Date") +
+df_electric_vehicles_monthly <- df_electric_vehicles_agg %>% 
+                               mutate(Date = as.Date(format(Date, "%Y-%m-01"))) %>%
+                               group_by(Date) %>% 
+                               summarize(Count = sum(Count))
+
+# Merge datasets
+df_merged <- full_join(df_electric_vehicles_monthly, df_oil_monthly, by = "Date")
+
+# Calculate the ratio for the secondary axis
+max_count <- max(df_merged$Count, na.rm = TRUE)
+max_price <- max(df_merged$Price, na.rm = TRUE)
+ratio <- max_count / max_price
+
+# Plotting with smoothing and color changes
+ggplot(df_merged, aes(x = Date)) +
+  geom_smooth(aes(y = Count, color = "Electric Vehicles Smoothed"), method = "loess", span = 0.2) +
+  geom_line(aes(y = Price * ratio, color = "Oil Price")) +
+  scale_y_continuous(
+    "Number of Electric Vehicles",
+    sec.axis = sec_axis(~ . / ratio, name = "Oil Price")
+  ) +
+  labs(title = "Comparison of Electric Vehicle Rise and Oil Prices Over Time",
+       x = "Date", color = "Legend") +
+  scale_color_manual(values = c("Electric Vehicles Smoothed" = "blue", "Oil Price" = "darkred")) +
   theme_minimal()
 ```
 

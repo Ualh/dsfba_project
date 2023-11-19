@@ -3,12 +3,6 @@
 ```{r, echo = FALSE, message = FALSE}
 source(here::here("scripts/setup.R"))
 ```
-__TO DO's__
-
-* Overview and Motivation - ✓
-* Related Work - TBD
-* Research questions - ✓
-
 
 ## 1.1 Background and Motivation
 
