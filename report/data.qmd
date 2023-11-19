@@ -145,6 +145,7 @@ variable_table %>%
 https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.26645079.html 
 
 ### 2.1.4 Google trend data
+
 * Description
 This Data set shows the evolution of Google trends on 8 different terms. We chose these terms in all 3 different main Swiss national languages (French, Italian and German) to make sure we get the most accurate data possible. Those variables will help us highlight potential tendencies/trends.  
 
@@ -270,13 +271,9 @@ https://www.bfe.admin.ch/bfe/fr/home/approvisionnement/statistiques-et-geodonnee
 ## 2.2 Data Wrangling
 ### 2.2.1 Data Wrangling : Oil clean
 
-First when trying to format the dataset, we realized that it created thousands of NAs. After further 
-exploring the data, we realized that there were 2 different date formats. First format: [DD- MMM –
-YYYY], second format: [MMM DD, YYYY]. Therefore, our first date formatting did not work.
-This forced us to clean both tables (one for each format), before joining them together.
-Then, another issue we encountered was to present the date in a standardized form across all our 
-data sets to perform time series analyses. For that, we had to change the abbreviated months names 
-(i.e. Jan, Feb, etc.) into numbers.
+Initially, while attempting to format the dataset, we discovered the generation of numerous NAs. Upon delving deeper into the data, we identified two distinct date formats: the first being [DD-MMM-YYYY] and the second [MMM DD, YYYY]. Consequently, the initial date formatting was ineffective. Therefore, we undertook the task of matching the two tables with the same date format.
+
+Another issue we encountered was to present the date in a standardized form across all our dataset to perform time series analyses. For that, we had to change the abbreviated months names (i.e. Jan, Feb, etc.) into numbers.  
 
 ```{r}
 # Change date column into Day
@@ -340,7 +337,7 @@ reactable(oil_df,
 
 ### 2.2.2 Data Wrangling : Google trend clean
 
-Comprehending Google Trends information involves understanding the contextualization of the provided figures. The data is standardized.
+Comprehending Google Trends information involves understanding the contextualization of the provided figures. The given data is standardized which limits the range of information we can obtain from it.
 
 The crucial element for effective narration lies in utilizing the normalized Trends data. This normalization indicates that when observing search interest trends over time, it is interpreted as a ratio relative to all searches conducted on all topics on Google during that specific period and location. Likewise, when assessing regional search interest for a specific topic, it is construed as the search interest for that particular topic in a given region relative to all searches on all topics on Google in that same place and time.
 
@@ -426,7 +423,7 @@ We then formulated to following hypothesizes:
 
 - Male and Female present the same attitude towards electric vehicles
 - Swiss and Foreign citizen living in Switzerland present the same attitude towards electric vehicles
-- Only people allowed to drive have an impact on electric vehicles use With these hypothesizes.
+- People who are not allowed to drive do not have any impact on electric vehicles use
 
 We then decided to do the following cleaning:
 
@@ -435,8 +432,7 @@ We then decided to do the following cleaning:
 - Only kept people aged between 18 and 99. (People aged over 99 account for 0.02% of the population)
 
 Then, instead of keeping a raw data set with all ages between 18 and 99, we decided to group them 
-in widely accepted age segments, namely Generation Z, Millennials, Generation X and Baby boomers, 
-to then be able to analyze if different generations have a different approach to their mobility.
+in widely accepted age segments, namely Generation Z, Millennials, Generation X and Baby boomers. This categorization will help us to analyse whether different generations have a different approach to their mobility or not.
 
 ```{r}
 # We only keep the data from 2005-2022 (time frame of our analysis)
@@ -492,7 +488,7 @@ reactable(df_demographic,
 
 The dataset, representing new vehicle registrations in Switzerland from 2005 onwards, exhibited redundancy in its structure. For example, the data contained both main categories (like '> Passenger cars') and their respective sub-categories ('... Passenger car' and '.. Heavy passenger car'). On examination, it was observed that the counts under the main categories were simply aggregates of the counts of their sub-categories. Such redundancy could lead to double counting in analytical processes.
 
-We addressed this issue by removing main categories that were aggregates of their sub-categories, preventing potential double counting in analyses. For two subsets of data (2005 to 2008 and 2009 to 2022), We filtered out main categories, cleaned and standardized the column names, reshaped the dataset from wide to long format to facilitate analysis, and extracted and formatted the year information for each observation. This process allowed for a more granular and consistent dataset for further analysis and interpretation.
+We addressed this issue by removing main categories that were aggregates of their sub-categories, preventing potential double counting in analyses. For two subsets of data (2005 to 2008 and 2009 to 2022), We filtered out main categories, cleaned and standardized the column names, reshaped the data set from wide to long format to facilitate analysis, and extracted and formatted the year information for each observation. This process allowed for a more granular and consistent data set for further analysis and interpretation.
 
 ```{r}
 ##### 1st data 2005 to 2008 clean #####
@@ -553,7 +549,7 @@ The "Gas" fuel type was renamed from "Gas (monovalent and bivalent)" for clarity
 
 Further context was provided on different *hybrid types*:
 
-Conventional Hybrids: These vehicles, powered by petrol or diesel **without** plug-in capability, might exhibit different adoption trends due to their longer existence in the market.Have been around longer and may have a different adoption trend compared to newer technologies.
+Conventional Hybrids: These vehicles, powered by petrol or diesel **without** plug-in capability, might exhibit different adoption trends due to their longer existence in the market.Indeed, they have been around for longer and may have a different adoption trend compared to newer technologies.
 
 Plug-in Hybrids: With larger batteries and the ability to charge from an electric outlet, these vehicles enable all-electric operation for limited distances. The presence of charging infrastructure might impact their adoption differently, distinguishing them from conventional hybrids. Adoption might be reflected differently due to the need for charging infrastructure.
 
@@ -622,7 +618,7 @@ This dataset will be used to compare our data in Switzerland with a bordering co
 It is important to note that this data set contains all registered vehicles in a given year (vs. all new registered cars for our Swiss data)
 We will only keep the vehicles used for personal use (not the ones for professional use), to match our Swiss dataset
 
-We decided to remove some anecdotal observations (i.e Hydrogen, Unknown, etc.) as their production / use is marginal. Moreover, we have decided to regroup the different kind of hybrid motors into a single "Hybrid" category.
+We decided to remove some anecdotal observations (i.e Hydrogen, Unknown, etc.) as their production / use is marginal. Moreover, we have decided to regroup the different kind of hybrid motors into two Hybrid categories. The 2 categories are the plugable hybrid vehicle HR (petrol or diesel) and the non-plugable hybrid vehicles HNR (petrol or diesel). This was done to match our Swiss data set.
 
 The main issue with this data set was to set it in a way where it is comparable to our Swiss cars data 
 set. Indeed, this dataset presents the total of all cars in France for a given year and type, while our 

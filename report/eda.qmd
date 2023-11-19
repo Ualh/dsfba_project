@@ -32,6 +32,8 @@ ggplot(passenger_cars, aes(x = Date, y = Count)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels by 45 degrees
 
 ```
+The blue line represents a smoothed trend, indicating an initial increase in car registrations until around 2014-2015, followed by a gradual decline. The black line shows the actual number of cars registered, with significant variability. We will call this variation seasonality which is better represented in the following graph. 
+
 * seasonality
 
 ```{r}
@@ -56,8 +58,8 @@ ggplot(passenger_cars, aes(x = Month, y = Count, group = Year, color = as.factor
 
 ```
 
-* This pattern suggests a seasonal trend with a mid-year peak and a year-end increase.
-*2020 covid year ?
+This pattern suggests a seasonal trend with a mid-year peak and a year-end increase. 2020 reacts differently than other years. We suggest that it is probably related to Covid policies. 
+
 
 ```{r}
 # Filter for only Passenger car vehicle type
@@ -85,6 +87,8 @@ ggplot(passenger_cars, aes(x = as.numeric(format(YearMonth, "%m")), y = Count, g
         legend.position = "none") # Remove the legend to clean up the plot
 ```
 
+This version of the graphs helps us visualizing the evolution of registration for each year individually. As mentioned above, 2020 is the only year which show a decreasing peak instead of an increasing one as it is presented for all other years. 
+
 ### 3.1.2 Vehicule Registration by Fuel time over time
 
 ```{r}
@@ -109,7 +113,9 @@ ggplot(fuel_type_trends, aes(x = Date, y = Count, color = Fuel)) +
   theme(legend.position = "bottom")
 ```
 
-*merge diesel and Petrol ?
+The graph above shows the vehicle registrations in Switzerland by fuel type from 2005 to 2023. 
+
+On the one hand, it highlights the recent decrease in new registrations of thermic vehicles since 2017. On the other hand, the three EVs named as Conventional and Plug-in hybrids along with electricity ones are gradually increasing since approximately the same period. (In fact, fully electric cars and Conventional hybrids have even reached a higher level of vehicle registration in the past years, spotlighting the EV tendency in recent years.) 
 
 ### 3.1.3 Proportion par cantons
 ```{r}
@@ -184,6 +190,8 @@ ggplot(df_gtrends, aes(x = Date, y = SearchRatio)) +
   geom_line(color = "darkgreen", size = 1, stat='smooth', se = FALSE, method = "loess", span = 0.1, size = 1) +
   labs(x = "Date", y = "Google Search", title = "Google search About EV in Switzerland")
 ```
+
+Another interesting point to look out is the Google search about EV engine in Switzerland. As we can see, it seems to have skyrocketed since 2016. This allows us to get an overview of the Swiss population interest concerning this topic and comfort us towards our initial predictions.  
 
 ## 3.3 Oil
 ```{r}
