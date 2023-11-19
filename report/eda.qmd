@@ -192,6 +192,8 @@ ggplot(oil_df, aes(x = Date , y = Price)) +
   geom_line(color = "darkred", size = 1) +
   labs(x = "Date", y = "Price", title = "Oil Price Over Time")
 ```
+The above chart represents the oil price evolution through the last two decades. We can observe a quite high degree of volatility concerning the oil valuation. Nevertheless, it seems important to highlight that this value has greatly increased since the past 3 years.
+
 ## 3.4 Demographics
 ```{r}
 demographic_data <- df_demographic %>%
@@ -212,6 +214,9 @@ ggplot(demographic_data, aes(x = Year)) +
   scale_color_manual(values = c("Generation Z" = "blue", "Millenials" = "red", "Generation X" = "green", "Baby Boomers" = "purple"))
 
 ```
+
+This graph concentrates on the demographic trends’ evolution for each segment of age abovementioned throughout the time. It points out the important overall rise of individuals living in Switzerland over the past two decades.
+
 ## 3.5 French vehicles
 ### 3.5.1 Total vehicules evolution France
 ```{r}
@@ -257,9 +262,10 @@ ggplot(df_v_fr, aes(x = Date, y = Diesel_delta, color = "Diesel")) +
 
 ## 3.6 Swiss vs France
 ### 3.7 Electric vs Hybrid vs Petrol
+
 Here we compare and visualize specific vehicle fuel types between Swiss and French datasets.
 
-The thicker line are the for **Switzerland**, the others are for **France**. We standardized the counts in both the Swiss and French datasets for comparison purposes.
+The thicker line are the for **Switzerland**, the others are for **France**. We standardized the counts in both the Swiss and French datas ets for comparison purposes.
 ```{r}
 # Filtering Swiss data for specific fuel types
 swiss_specific_fuel <- df_v %>%
