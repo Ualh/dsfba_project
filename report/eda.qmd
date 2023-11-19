@@ -308,10 +308,38 @@ ggplot() +
   geom_text(data = data.frame(x = as.Date("2021-01-01"), y = c(3, 2.8), label = c("Switzerland has", "the thickest line")), 
             aes(x = x, y = y, label = label, color = label), size = 4, show.legend = FALSE)
 ```
+```{r}
+p <- ggplot() +
+  geom_smooth(data = swiss_specific_fuel, aes(x = Date, y = Count, color = Fuel), 
+              method = "loess", se = FALSE, size = 1.5) +
+  geom_line(data = french_specific_fuel_long, aes(x = Date, y = Count, color = Fuel), 
+            alpha = 0.4, size = 0.8) +
+  scale_color_manual(values = fuel_colors, 
+                     labels = c("Diesel", "Electricity", "Conventional hybrid", 
+                                "Plug-in hybrid", "Petrol"),
+                     breaks = c("Diesel", "Electricity", "Conventional hybrid", 
+                                "Plug-in hybrid", "Petrol")) +
+  labs(x = "Date", y = "Standardized Count", color = "Fuel Type") +
+  theme_minimal() +
+  geom_text(data = data.frame(x = as.Date("2021-01-01"), y = c(3, 2.8), 
+                              label = c("Switzerland has", "the thickest line")), 
+            aes(x = x, y = y, label = label, color = label), 
+            size = 4, show.legend = FALSE)
+
+# Convert to interactive plot
+interactive_plot <- ggplotly(p)
+
+# Save the interactive plot to an HTML file
+htmlwidgets::saveWidget(interactive_plot, "interactive_plot.html")
+
+```
 
 ## 3.7 EV and Google Trends
 
 ```{r}
+df_v_electric <- df_v |>
+  filter(VehicleType == "Passenger car") |>
+  filter(Fuel == 'Electricity')
 df_electric_vehicles_agg <- df_v_electric %>% group_by(Date) %>% summarize(Count = sum(Count))
 # Resample both datasets to a monthly frequency using the first day of the month
 
@@ -319,8 +347,8 @@ df_electric_vehicles_agg <- df_v_electric %>% group_by(Date) %>% summarize(Count
 merged_df <- merge(df_electric_vehicles_agg, df_gtrends, by = "Date")
 
 # Calculate the ratio for the secondary axis
-max_count <- max(df_merged$Count, na.rm = TRUE)
-max_search <- max(df_merged$Price, na.rm = TRUE)
+max_count <- max(merged_df$Count, na.rm = TRUE)
+max_search <- max(merged_df$SearchRatio, na.rm = TRUE)
 ratio <- max_count / max_search
 
 # Plotting with smoothing and color changes
