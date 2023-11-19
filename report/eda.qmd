@@ -3,13 +3,6 @@
 ```{r, echo = FALSE, message = FALSE}
 source(here::here("scripts/setup.R"))
 ```
-__TO DO's__
-
-* Mapping out the underlying structure
-* Identifying the most important variables
-* Univariate visualizations
-* Multivariate visualizations
-* Summary tables
 
 ## 3.1 Switzerland
 ### 3.1.1 sesonality
@@ -53,7 +46,6 @@ ggplot(passenger_cars, aes(x = Month, y = Count, group = Year, color = as.factor
   scale_x_discrete(limits = month.name) +  # Ensure months are shown in order
   scale_color_viridis_d() +  # Use viridis color scale
   theme(legend.position = "bottom", axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels by 45 degrees)
-
 ```
 
 This pattern suggests a seasonal trend with a mid-year peak and a year-end increase. 2020 reacts differently than other years. We suggest that it is probably related to Covid policies. 
@@ -150,12 +142,16 @@ filtered_data <- df_v_map %>%
 # Merge with shapefile data
 map_data <- merge(swiss_cantons, filtered_data, by = "KANTONSNUM")
 
-# Create a basic map plot
-ggplot() +
+# Create a ggplot
+p <- ggplot() +
   geom_sf(data = map_data, aes(fill = Total), color = NA) +
   scale_fill_viridis_c() +
   theme_minimal()
+
+# Convert to interactive plotly plot
+ggplotly(p)
 ```
+
 ## 3.2 Google Trend
 ```{r}
 ggplot(df_gtrends, aes(x = Date, y = SearchRatio)) +
@@ -244,7 +240,7 @@ ggplot(df_v_fr, aes(x = Date, y = Diesel_delta, color = "Diesel")) +
 
 Here we compare and visualize specific vehicle fuel types between Swiss and French datasets.
 
-The thicker line are the for **Switzerland**, the others are for **France**. We standardized the counts in both the Swiss and French datas ets for comparison purposes.
+The thicker line are the for **Switzerland**, the others are for **France**. We standardized the counts in both the Swiss and French datas ets for comparison purposes. Please juggle with the interactive plot to make it more readable.
 ```{r}
 # Filtering Swiss data for specific fuel types
 swiss_specific_fuel <- df_v %>%
@@ -300,12 +296,13 @@ p <- ggplot() +
             size = 4, show.legend = FALSE)
 
 # Convert to interactive plot
-interactive_plot <- ggplotly(p, width = 800, height = 600)
+interactive_plot <- ggplotly(p, width = 600, height = 400)
 interactive_plot
 ```
 
 ## 3.7 EV and Google Trends
 
+All in all, the Google trend seems to be in adequation with the actual rise in EVs around Switzerland. 
 ```{r}
 df_v_electric <- df_v |>
   filter(VehicleType == "Passenger car") |>
@@ -336,6 +333,9 @@ ggplot(merged_df, aes(x = Date)) +
 ```
 
 ## 3.8 EV and Oil Price
+
+The results of the graphic comparing oil price and EVs evolution comforts us in our choice of oil price as an explicative variable. Indeed, the tendency is quite similar since 2020. In fact, the previous years refer to a period where EVs were not as commercialized as today. Obviously, we are aware of the numerous other variables explaining both oil price and EVs rise over time.   
+
 ```{r}
 df_oil_monthly <- oil_df %>% 
                   mutate(Date = as.Date(format(Date, "%Y-%m-01"))) %>%
