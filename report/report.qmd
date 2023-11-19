@@ -1,6 +1,10 @@
 ---
 title: "Energizing Change: Electric Vehicle Rise in Switzerland"
+<<<<<<< HEAD
 author: "Pierre Vernet, Alexis Jeanneret, Hugo, Urs Hurni"
+=======
+author: "Pierre Vernet, Alexis Jeanneret, Hugo Troendle, Urs Hurni"
+>>>>>>> c631cc7fee2ce1a9375d0de1e87f49e5bd563346
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 format:
   html:
