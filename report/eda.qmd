@@ -171,7 +171,7 @@ filtered_data <- df_v_map %>%
 # Merge with shapefile data
 map_data <- merge(swiss_cantons, filtered_data, by = "KANTONSNUM")
 
-# Create a basic plot
+# Create a basic map plot
 ggplot() +
   geom_sf(data = map_data, aes(fill = Total), color = NA) +
   scale_fill_viridis_c() +
@@ -327,11 +327,8 @@ p <- ggplot() +
             size = 4, show.legend = FALSE)
 
 # Convert to interactive plot
-interactive_plot <- ggplotly(p)
-
-# Save the interactive plot to an HTML file
-htmlwidgets::saveWidget(interactive_plot, "interactive_plot.html")
-
+interactive_plot <- ggplotly(p, width = 800, height = 600)
+interactive_plot
 ```
 
 ## 3.7 EV and Google Trends

@@ -1,6 +1,6 @@
 ---
 title: "Energizing Change: Electric Vehicle Rise in Switzerland"
-author: "Pierre Gasly, Alexis Jeannaret, Hugo, Urs Hurni"
+author: "Pierre Vernet, Alexis Jeanneret, Hugo, Urs Hurni"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 format:
   html:
