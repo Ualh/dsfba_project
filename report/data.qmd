@@ -308,7 +308,7 @@ oil_df <- oil_df %>%
 
 
 # Displayed clean data
-reactable(oil_df,
+reactable(head(oil_df, 100),
           sortable = TRUE, 
           searchable = TRUE)
 ```
@@ -386,7 +386,7 @@ df_summed$SearchRatio <- df_summed$Sum_SearchCount / 8
 df_gtrends <- df_summed[,-(2:10)]
 
 # Displayed clean data
-reactable(df_gtrends,
+reactable(head(df_gtrends, 100),
           sortable = TRUE, 
           searchable = TRUE)
 ```
@@ -455,7 +455,7 @@ df_demographic <- filtered_demographic %>%
 
 
 # Displayed clean data
-reactable(df_demographic,
+reactable(head(df_demographic, 100),
           sortable = TRUE, 
           searchable = TRUE)
 ```
@@ -585,7 +585,11 @@ Retaining rows with a Count of 0 ensures the completeness of our dataset, indica
 
 ```{r}
 # Displayed clean data
-#reactable(df_v, sortable = TRUE, searchable = TRUE)
+reactable(head(df_v,100), sortable = TRUE, searchable = TRUE)
+#str(df_v)
+#unique(df_v$Location)
+#unique(df_v$VehicleType)
+#unique(df_v$Fuel)
 ```
 
 
@@ -673,7 +677,7 @@ df_v_fr <- df_v_fr %>%
   select(-Year)
 
 # Displayed clean data
-reactable(df_v_fr,
+reactable(head(df_v_fr, 100),
           sortable = TRUE, 
           searchable = TRUE)
 ```
@@ -700,7 +704,7 @@ df_charging_station <- charging_station %>%
   select(-year, -month)
 
 # Displayed clean data
-reactable(df_charging_station,
+reactable(head(df_charging_station, 100),
           sortable = TRUE, 
           searchable = TRUE)
 ```
