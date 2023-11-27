@@ -163,7 +163,7 @@ Another interesting point to look out is the Google search about EV engine in Sw
 
 ## 3.3 Oil
 ```{r}
-ggplot(oil_df, aes(x = Date , y = Price)) +
+ggplot(df_oil, aes(x = Date , y = Price)) +
   geom_line(color = "darkred", size = 1) +
   labs(x = "Date", y = "Price", title = "Oil Price Over Time")
 ```
@@ -337,7 +337,7 @@ ggplot(merged_df, aes(x = Date)) +
 The results of the graphic comparing oil price and EVs evolution comforts us in our choice of oil price as an explicative variable. Indeed, the tendency is quite similar since 2020. In fact, the previous years refer to a period where EVs were not as commercialized as today. Obviously, we are aware of the numerous other variables explaining both oil price and EVs rise over time.   
 
 ```{r}
-df_oil_monthly <- oil_df %>% 
+df_oil_monthly <- df_oil %>% 
                   mutate(Date = as.Date(format(Date, "%Y-%m-01"))) %>%
                   group_by(Date) %>% 
                   summarize(Price = mean(Price))

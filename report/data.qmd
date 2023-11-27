@@ -6,24 +6,26 @@ source(here::here("scripts/setup.R"))
 
 ## 2.1 Raw Datasets
 
+Use a Loop for Similar Files.
+
+Check for Large Data: If any of our datasets are particularly large (like the `swiss_vehicle`), we used a more efficient data reading librariy `data.table` (with `fread`) to speed up the data loading process.
+
+We also added a common file path prefix ("../data/") to make the code cleaner and easier to change for any usage in the future.
+
 ```{r}
-# Reading the data
-vehicle_data_2005_2008 <- read.csv("../data/road_vehicle_CH_2005-2008.csv")
-vehicle_data_2009_2022 <- read.csv("../data/road_vehicle_CH_2009-2022.csv")
-google_trends_data1 <- read.csv("../data/googletrends_auto-elettrica_2005-2022.csv")
-google_trends_data2 <- read.csv("../data/googletrends_elektro-auto_2005-2022.csv")
-google_trends_data3 <- read.csv("../data/googletrends_elektrofahrzeug_2005-2022.csv")
-google_trends_data4 <- read.csv("../data/googletrends_elektromobil_2005-2022.csv")
-google_trends_data5 <- read.csv("../data/googletrends_eletric-car_2005-2022.csv")
-google_trends_data6 <- read.csv("../data/googletrends_EV_2005-2022.csv")
-google_trends_data7 <- read.csv("../data/googletrends_vehicule-electrique_2005-2022.csv")
-google_trends_data8 <- read.csv("../data/googletrends_voiture-electrique_2005-2022.csv")
-oil_prices_data <- read.csv("../data/BrentOilPrices.csv")
-demographic_data <- read.csv("../data/demographic.csv")
-charging_station <- read.csv("../data/charging_station.csv")
-france_v <- read_excel("../data/parc_vp_france_2022.xlsx",sheet = 2)
+library(data.table)
+file_path <- "../data/"
+google_trends_files <- paste0(file_path, "googletrends_", c("auto-elettrica", "elektro-auto", "elektrofahrzeug", "elektromobil", "eletric-car", "EV", "vehicule-electrique", "voiture-electrique"), "_2005-2022.csv")
+google_trends_data <- lapply(google_trends_files, fread)
+vehicle_data_2005_2008 <- fread(paste0(file_path, "road_vehicle_CH_2005-2008.csv"))
+vehicle_data_2009_2022 <- fread(paste0(file_path, "road_vehicle_CH_2009-2022.csv"))
+oil_prices_data <- fread(paste0(file_path, "BrentOilPrices.csv"))
+demographic_data <- fread(paste0(file_path, "demographic.csv"))
+charging_station <- fread(paste0(file_path, "charging_station.csv"))
+france_v <- read_excel(paste0(file_path, "parc_vp_france_2022.xlsx"), sheet = 2)
+
 ```
-For this phase of the project, our approach involves presenting diverse datasets in a table form. To achieve this, we used the kable function from the kableExtra package, resulting in a table that displays each variable along with its corresponding definition.
+For this phase of the project, our approach involves presenting diverse datasets in a table form. To achieve this, we used the `kable` function from the `kableExtra` package, resulting in a table that displays each variable along with its corresponding definition and also added some `bootstrap_otions` for different stlyles.
 
 ### 2.1.1 Swiss Vehicle Registration Dataset
 
@@ -32,25 +34,26 @@ This data set explains the new registrations of road vehicles by vehicle group, 
 ```{r}
 # Create a tibble with variable descriptions
 variable_table_vehicle <- tibble(
-  Variables = c("Canton", "Vehicle group / type", "Fuel", "Month", "2009-2022"),
-  Meaning = c(
+  Variable = c("Canton", "Vehicle Group / Type", "Fuel", "Month", "2009-2022"),
+  Description = c(
     "The region in Switzerland.",
     "Type or group of the vehicle.",
     "Type of fuel used by the vehicle.",
     "The month of the data.",
-    "Number of vehicles for each respective year. Each with it's own column"
+    "Number of vehicles for each respective year. Each with its own column"
   )
 )
 
 # Display the table using kableExtra
 variable_table_vehicle %>%
   kbl() %>%
-  kable_styling(position = "center")
+  kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover"))
 ```
 
 
-* Source
- https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.24105892.html
+
+Source
+- [bfs.admin.ch](https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.24105892.html)
 
 
 ### 2.1.2 Oil price Dataset
@@ -60,8 +63,8 @@ This data set explains the evolution of the price of brent oil over time. From t
 ```{r}
 # Create a tibble with variable descriptions
 variable_table <- tibble(
-  Variables = c("Date", "Price"),
-  Meaning = c(
+  Variable = c("Date", "Price"),
+  Description = c(
     "The date when the price was recorded. In a day-month-year format.",
     "The price of Brent Oil on the given date."
   )
@@ -70,12 +73,12 @@ variable_table <- tibble(
 # Display the table using kableExtra
 variable_table %>%
   kbl() %>%
-  kable_styling(position = "center")
+  kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover", "condensed"))
 ```
 
 
-* source
-https://www.kaggle.com/datasets/mabusalah/brent-oil-prices 
+Source
+- [Kaggle.com](https://www.kaggle.com/datasets/mabusalah/brent-oil-prices )
 
 ### 2.1.3 Swiss Demographics Dataset
 
@@ -84,7 +87,7 @@ While this dataset contains a substantial amount of information, only a fraction
 ```{r}
 # Create a tibble with variable descriptions
 variable_table <- tibble(
-  Variables = c(
+  Variable = c(
     "Year", "Citizenship (category)", "Sex", "Age", "Population on 1 January", 
     "Live birth", "Death", "Natural change", 
     "Immigration incl. change of population type", "Emigration", 
@@ -94,7 +97,7 @@ variable_table <- tibble(
     "Gender change in the civil register (exit)", "Statistical adjustment", 
     "Population on 31 December", "Population change"
   ),
-  Meaning = c(
+  Description = c(
     "The year of the demographic data.",
     "The categorization of the citizenship status.",
     "Gender category.",
@@ -119,20 +122,21 @@ variable_table <- tibble(
 # Display the table using kableExtra
 variable_table %>%
   kbl() %>%
-  kable_styling(position = "center")
+  kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover", "condensed"))
+
 ```
 
-* source
-https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.26645079.html 
+Source
+- [bfs.admin.ch](https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.26645079.html)
 
 ### 2.1.4 Google trend data
 
 This Data set shows the evolution of Google trends on 8 different terms. We chose these terms in all 3 different main Swiss national languages (French, Italian and German) to make sure we get the most accurate data possible. Those variables will help us highlight potential tendencies/trends.  
 
 ```{r}
-# Create a tibble with variable descriptions
+# Create a tibble with variable descriptions for Google Trends data
 variable_table_google_trend <- tibble(
-  Variables = c("Month", 
+  Variable = c("Month", 
                 "Search Term: Voiture électrique", 
                 "Search Term: Véhicule électrique", 
                 "Search Term: EV", 
@@ -141,7 +145,7 @@ variable_table_google_trend <- tibble(
                 "Search Term: Elektrofahrzeug", 
                 "Search Term: Elektro Auto", 
                 "Search Term: Auto Elettrica"),
-  Meaning = c(
+  Description = c(
     "The month of the data",
     "Google Trends data for 'Voiture électrique: (Suisse)'",
     "Google Trends data for 'Véhicule électrique: (Suisse)'",
@@ -153,31 +157,33 @@ variable_table_google_trend <- tibble(
     "Google Trends data for 'Auto Elettrica: (Suisse)'"
   )
 )
+
 # Display the table using kableExtra
 variable_table_google_trend %>%
   kbl() %>%
-  kable_styling(position = "center")
+  kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover", "condensed"))
+
 ```
 
-* source
-https://trends.google.fr/trends/explore?q=voiture%20%C3%A9lectrique&date=now%201-d&geo=CH&hl=fr  
-https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=v%C3%A9hicule%20%C3%A9lectrique&hl=fr  
-https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=EV&hl=fr  
-https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Electric%20car&hl=fr  
-https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Elektromobil&hl=fr  
-https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Elektrofahrzeug&hl=fr  
-https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Elektro%20Auto&hl=fr
-https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Auto%20elettrica&hl=fr  
-
+Sources for Google Trends Data:
+- [Voiture électrique Trends](https://trends.google.fr/trends/explore?q=voiture%20%C3%A9lectrique&date=now%201-d&geo=CH&hl=fr)
+- [Véhicule électrique Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=v%C3%A9hicule%20%C3%A9lectrique&hl=fr)
+- [EV Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=EV&hl=fr)
+- [Electric Car Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Electric%20car&hl=fr)
+- [Elektromobil Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Elektromobil&hl=fr)
+- [Elektrofahrzeug Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Elektrofahrzeug&hl=fr)
+- [Elektro Auto Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Elektro%20Auto&hl=fr)
+- [Auto Elettrica Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Auto%20elettrica&hl=fr)
+ 
 ### 2.1.5 French vehicle registration data
 
 We decided to add this data set to help us compare with another country. Indeed, France is an adjacent country which might imply potential similarities in the outcome. This data set is made of variables such as the Date of the French vehicle registration or whether it is from a professional user or not.  The information we are interested in concern the number of registered vehicles in the country by propulsion method over time.
 
 ```{r}
-# Create a tibble with variable descriptions
+# Create a tibble with variable descriptions for vehicle categorization data
 variable_table <- tibble(
-  Variables = c("Date", "Ensemble des voitures particulieres", "Professionnel", "Particulier", "Crit'Air"),
-  Meaning = c(
+  Variable = c("Date", "Ensemble des voitures particulieres", "Professionnel", "Particulier", "Crit'Air"),
+  Description = c(
     "The date, in year format, in which the observations are registered",
     "The sum of vehicle in every groups",
     "Category 'Professional' of vehicle",
@@ -189,20 +195,21 @@ variable_table <- tibble(
 # Display the table using kableExtra
 variable_table %>%
   kbl() %>%
-  kable_styling(position = "center")
+  kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover", "condensed"))
+
 ```
 
-* source
-https://www.statistiques.developpement-durable.gouv.fr/donnees-sur-le-parc-de-vehicules-en-circulation-au-1er-janvier-2022
+Source
+- [Auto Elettrica Trends](https://www.statistiques.developpement-durable.gouv.fr/donnees-sur-le-parc-de-vehicules-en-circulation-au-1er-janvier-2022)
 
 ### 2.1.6 Chargin Stations
 
 This data set is meant to determine the number of charging stations per canton, per charging power, per month, per plug type in Switzerland since November 2020. It is important to mention that a station can have multiple charging points. These values will help us to obtain more information about the Swiss adaption to EVs and their potential effects on EVs adoption by the Swiss population 
 
 ```{r}
-# Create a tibble with variable descriptions in English
+# Create a tibble with variable descriptions in English for charging station data
 variable_table_charging <- tibble(
-  Variables = c("year",
+  Variable = c("year",
                 "month",
                 "stations_CH_count",
                 "stations_XY_count",
@@ -217,7 +224,7 @@ variable_table_charging <- tibble(
                 "chargingPower_10kW_count",
                 "chargingPower_21kW_count",
                 "chargingPower_42kW_count"),
-  Meaning = c(
+  Description = c(
     "Year of the key figures collection.",
     "Month of the key figures collection. These are collected daily and published monthly.",
     "Number of available charging stations in Switzerland. A station can have multiple charging points.",
@@ -239,79 +246,69 @@ variable_table_charging <- tibble(
 # Display the table using kableExtra
 variable_table_charging %>%
   kbl() %>%
-  kable_styling(position = "center")
+  kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover", "condensed"))
 ```
-
-* source
-https://www.bfe.admin.ch/bfe/fr/home/approvisionnement/statistiques-et-geodonnees/geoinformation/geodonnees/mobilite/bornes-de-recharge-pour-la-mobilite-electrique.html 
+Source
+- [bfe.admin.ch](https://www.bfe.admin.ch/bfe/fr/home/approvisionnement/statistiques-et-geodonnees/geoinformation/geodonnees/mobilite/bornes-de-recharge-pour-la-mobilite-electrique.html)
 
 
 ## 2.2 Data Wrangling
 ### 2.2.1 Data Wrangling : Oil clean
 
-Initially, while attempting to format the dataset, we discovered the generation of numerous NAs. Upon delving deeper into the data, we identified two distinct date formats: the first being [DD-MMM-YYYY] and the second [MMM DD, YYYY]. Consequently, the initial date formatting was ineffective. Therefore, we undertook the task of matching the two tables with the same date format.
+Initially, while attempting to format the dataset, we discovered the generation of numerous `NAs`. Upon delving deeper into the data, we identified two distinct *date formats*: the first being [DD-MMM-YYYY] and the second [MMM DD, YYYY]. Consequently, the initial date formatting was ineffective. Therefore, we undertook the task of matching the two tables with the same date format.
 
 Another issue we encountered was to present the date in a standardized form across all our dataset to perform time series analyses. For that, we had to change the abbreviated months names (i.e. Jan, Feb, etc.) into numbers.  
 
 ```{r}
-# Change date column into Day
+# Format 1: DD-MMM-YYYY (e.g., 15-Apr-2020)
+oil_df_1 <- oil_prices_data[1:8360,] %>%
+  separate(Date, into = c("Day", "Month", "Year"), sep = "-") %>%
+  mutate(Date = dmy(paste(Day, Month, Year)))
 
-# Two types of format: one format before 22.04.2020,a different format after
+# Format 2: MMM DD, YYYY (e.g., Apr 22, 2020)
+# Handling the separator with space and comma
+oil_df_2 <- oil_prices_data[8361:nrow(oil_prices_data),] %>%
+  separate(Date, into = c("Month", "Day", "Year"), sep = " ", extra = "merge") %>%
+  mutate(Day = word(Day, 1),  # Extracts just the day part
+         Date = mdy(paste(Month, Day, Year)))
 
-# 22.04.2020 is on row 8361
-# Format 1: 15-Apr-2020
-oil_df_1 <- oil_prices_data[0:8360,] |>
-  separate(Date, into = c("Day", "Month", "Year"), sep = "-")
-
-# Format 2 : Apr 22, 2020
-oil_df_2 <- oil_prices_data[8361:nrow(oil_prices_data),] |>
-  separate(Date, into = c("Month", "Day", "Year"), sep = " |, ")
-
-# Check for NAs
-print(which(rowSums(is.na(oil_df_1)) > 0))
-print(which(rowSums(is.na(oil_df_2)) > 0))
-
-# We don't need dates before 2005
-oil_df_1 <- oil_df_1[4486:nrow(oil_df_1),]
-
-# Years in same format for both
-oil_df_1$Year <- paste0("20", oil_df_1$Year)
-
-# Change the order of both dataframes
-oil_df_1 <- oil_df_1 %>%
-  select("Year", "Month", "Day", "Price")
-
-oil_df_2 <- oil_df_2 %>%
-  select("Year", "Month", "Day", "Price")
-
-# Merging both dataframes together
-oil_df <- rbind(oil_df_1, oil_df_2)
-
-# We want all our data to have the same date format #YYYY-MM-DD
-
-# First we create a df to change the current month format to numbers
-months_numbers <- data.frame(
-  current_month_format = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"),
-  numbers = 1:12
-)
-
-# Then we update our oil_data
-oil_df <- oil_df %>%
-  left_join(months_numbers, by = c("Month" = "current_month_format")) %>%
-  select(Year, numbers, Day, Price) %>%
-  rename(Months = numbers)
-
-# Regroup the date in 1 column
-oil_df <- oil_df %>%
-  mutate(Date = as.Date(paste(Year, Months, Day, sep = "-"))) %>%
+# Merge and filter for dates after 2005
+df_oil <- rbind(oil_df_1, oil_df_2) %>%
+  filter(year(Date) >= 2005) %>%
   select(Date, Price)
 
-
-# Displayed clean data
-reactable(head(oil_df, 100),
-          sortable = TRUE, 
-          searchable = TRUE)
+# Display cleaned data
+reactable(
+  df_oil,  # Use your oil prices dataframe
+  columns = list(
+    Date = colDef(
+      align = "center",  # Center align the date column
+      minWidth = 150
+    ),
+    Price = colDef(
+      align = "right",  # Right align the price column
+      style = function(value) {
+        # Apply conditional formatting based on the price value
+        if (value > 120) {
+          color <- "green"  # Green for high prices
+        } else if (value < 30) {
+          color <- "red"    # Red for low prices
+        } else {
+          color <- "black"  # Default color for other values
+        }
+        list(color = color)
+      }
+    )
+  ),
+  highlight = TRUE,  # Highlight rows on hover
+  defaultPageSize = 10,  # Display 10 rows per page
+  paginationType = "numbers",  # Use numbers for page navigation
+  searchable = TRUE,  # Make the table searchable
+  sortable = TRUE,  # Allow sorting
+  resizable = TRUE  # Allow column resizing
+)
 ```
+
 
 ### 2.2.2 Data Wrangling : Google trend clean
 
@@ -321,7 +318,7 @@ The crucial element for effective narration lies in utilizing the normalized Tre
 
 [Source](https://medium.com/google-news-lab/what-is-google-trends-data-and-what-does-it-mean-b48f07342ee8)
 
-To clean and process eight Google Trends datasets related to different search terms, we created a function process_dataset() that reads each CSV file, removes date indices, excludes the first row, checks for missing values, renames columns, converts types, and standardizes the date format. Then, we iterated through each dataset, merged them based on the "Date" column, summed values for each search term per date, normalized these values between 1 and 100.
+To clean and process eight Google Trends datasets related to different search terms, we created a `function process_dataset()` that reads each CSV file, removes date indices, excludes the first row, checks for missing values, renames columns, converts types, and standardizes the date format. Then, we iterated through each dataset, merged them based on the "Date" column, summed values for each search term per date, and normalized these values between 1 and 100.
 
 ```{r}
 dataset_names <- c(
@@ -385,10 +382,35 @@ df_summed$SearchRatio <- df_summed$Sum_SearchCount / 8
 # Print the result
 df_gtrends <- df_summed[,-(2:10)]
 
-# Displayed clean data
-reactable(head(df_gtrends, 100),
-          sortable = TRUE, 
-          searchable = TRUE)
+#display cleaned data
+reactable(
+  df_gtrends,
+  columns = list(
+    Date = colDef(
+      align = "center",  # Center align the date column
+      minWidth = 150
+    ),
+    SearchRatio = colDef(
+      align = "right",  # Right align the SearchRatio column
+      style = function(value) {
+        if (value > 45) {
+          color <- "green"  # Green for values greater than 50
+        } else if (value < 5) {
+          color <- "red"    # Red for values less than 5
+        } else {
+          color <- "black"  # Default color for other values
+        }
+        list(color = color)
+      }
+    )
+  ),
+  highlight = TRUE,  # Highlight rows on hover
+  defaultPageSize = 10,  # Display 10 rows per page
+  paginationType = "numbers",  # Use numbers for page navigation
+  searchable = TRUE,  # Make the table searchable
+  sortable = TRUE,  # Allow sorting
+  resizable = TRUE  # Allow column resizing
+)
 ```
 
 
@@ -412,53 +434,71 @@ We then decided to do the following cleaning:
 Then, instead of keeping a raw data set with all ages between 18 and 99, we decided to group them 
 in widely accepted age segments, namely Generation Z, Millennials, Generation X and Baby boomers. This categorization will help us to analyse whether different generations have a different approach to their mobility or not.
 
+
 ```{r}
-# We only keep the data from 2005-2022 (time frame of our analysis)
-
-demographic_data <- demographic_data[-c(1:31212),]
-
-# We do not differentiate Male-Female for the purpose of this analysis -> we only keep the "total" rows
-filtered_demographic <- demographic_data %>%
-  filter(grepl("total",demographic_data$Sex))
-
-# We do not differentiate Swiss citizenship - Foreign citizenship for the purpose of this analysis -> we only keep the "total" rows
-filtered_demographic <- filtered_demographic %>%
-  filter(grepl("total", filtered_demographic$Citizenship..category.))
-
-# People under 18 cannot drive -> We remove summary rows +  people under 18 + people 99 and above (anecdotal observations)
-filtered_demographic <- filtered_demographic %>%
-  filter(
-    !grepl("total",filtered_demographic$Age),
-    between(as.numeric(gsub(" years","",filtered_demographic$Age)), 18, 98)
-  )
-
-# We keep the interesting columns
-filtered_demographic <- filtered_demographic %>%
-  select(c("Year","Age","Population.on.1.January"))
-
-## To perform meaningful analyses on the data, we group the ages by generations
-
-# remove " years" from the age column
-filtered_demographic$Age <- as.numeric(gsub(" years", "",filtered_demographic$Age))
-
-# Create bins with the different generations:
-filtered_demographic$Generation <- cut(filtered_demographic$Age,
-                                       breaks = c(17, 26, 42, 58, Inf),
-                                       labels = c("Generation Z", "Millenials","Generation X", "Baby Boomers"),
-                                       include.lowest = TRUE)
-# we format the table wider
-filtered_demographic <- filtered_demographic %>%
-  select(-"Age")
-  
-df_demographic <- filtered_demographic %>%
-  pivot_wider(names_from = Generation, values_from = Population.on.1.January, values_fn = sum)
+# Clean and process the demographic data
+df_demographic <- demographic_data %>%
+  filter(Year >= 2005, Year <= 2022) %>%
+  filter(str_detect(Sex, "total"), str_detect(`Citizenship (category)`, "total")) %>%
+  mutate(Age_clean = gsub(" years", "", Age)) %>%
+  filter(!str_detect(Age_clean, "total")) %>%
+  mutate(Age_num = as.numeric(Age_clean)) %>%
+  filter(!is.na(Age_num), Age_num >= 18, Age_num <= 98) %>%
+  select(Year, Age = Age_num, `Population on 1 January`) %>%
+  mutate(
+    Generation = cut(Age, breaks = c(17, 26, 42, 58, Inf), labels = c("Generation Z", "Millennials", "Generation X", "Baby Boomers"), include.lowest = TRUE)
+  ) %>%
+  group_by(Year, Generation) %>%
+  summarise(Population = sum(`Population on 1 January`, na.rm = TRUE)) %>%
+  pivot_wider(names_from = Generation, values_from = Population)
 
 
-# Displayed clean data
-reactable(head(df_demographic, 100),
-          sortable = TRUE, 
-          searchable = TRUE)
+reactable(
+  df_demographic, 
+  columns = list(
+    Year = colDef(
+      align = "center",  # Center align the year column
+      minWidth = 100
+    ),
+    `Generation Z` = colDef(
+      align = "right",  # Right align the population column
+      style = function(value) {
+        color <- ifelse(value > 860000, "green", "black")  # Green for population over 1 million
+        list(color = color)
+      }
+    ),
+    Millennials = colDef(
+      align = "right",
+      style = function(value) {
+        color <- ifelse(value > 1900000, "green", "black")
+        list(color = color)
+      }
+    ),
+    `Generation X` = colDef(
+      align = "right",
+      style = function(value) {
+        color <- ifelse(value > 2000000, "green", "black")
+        list(color = color)
+      }
+    ),
+    `Baby Boomers` = colDef(
+      align = "right",
+      style = function(value) {
+        color <- ifelse(value > 2300000, "green", "black")
+        list(color = color)
+      }
+    )
+  ),
+  highlight = TRUE,  # Highlight rows on hover
+  defaultPageSize = 10,  # Display 10 rows per page
+  paginationType = "numbers",  # Use numbers for page navigation
+  searchable = TRUE,  # Make the table searchable
+  sortable = TRUE,  # Allow sorting
+  resizable = TRUE  # Allow column resizing
+)
+
 ```
+
 
 ### 2.2.4 Data Wrangling : Swiss vehicle clean
 

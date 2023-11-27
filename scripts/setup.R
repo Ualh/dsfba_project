@@ -3,7 +3,10 @@
 #############################################
 
 # load the required packages
-packages <- c("here","tidyverse", "tidyr", "readxl","ggrepel", "gghighlight", "patchwork", "maps","dplyr","scales", "kableExtra", "reactable","sf", "shiny", "leaflet", "plotly", "rsconnect")
+packages <- c("here","tidyverse", "tidyr", "readxl","ggrepel",
+              "gghighlight", "patchwork", "maps","dplyr","scales",
+              "kableExtra", "reactable","sf", "shiny", "leaflet",
+              "plotly", "rsconnect")
 purrr::walk(packages, library, character.only = TRUE)
 
 ######################################################
