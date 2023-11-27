@@ -502,64 +502,78 @@ reactable(
 
 ### 2.2.4 Data Wrangling : Swiss vehicle clean
 
+```{r}
+# Define a function to process vehicle data, excluding the first row as it's not actual data
+process_vehicle_data <- function(vehicle_data, start_year, end_year) {
+  # the first row is a header or metadata and should be excluded
+  vehicle_data <- vehicle_data[-1, ]
+  
+  col_names <- c("Canton", "VehicleGroupType", "Fuel", "Month", paste0("X", start_year:end_year))
+  names(vehicle_data) <- col_names
+  
+  vehicle_data %>%
+    filter(!str_detect(trimws(VehicleGroupType), "^>")) %>%
+    rename(Location = Canton, VehicleType = VehicleGroupType) %>%
+    mutate(VehicleType = str_remove(VehicleType, "^\\.\\.\\.\\s*")) %>%
+    pivot_longer(cols = all_of(paste0("X", start_year:end_year)), names_to = "Year", values_to = "Count") %>%
+    mutate(Year = as.numeric(str_remove(Year, "X")),
+           MonthNum = match(Month, month.name),
+           Date = as.Date(paste(Year, ifelse(is.na(MonthNum), 1, MonthNum), "01", sep = "-"), format = "%Y-%m-%d")) %>%
+    select(-Month, -Year, -MonthNum)
+}
+
+# Process 2005 to 2008 and 2009 to 2022 data
+v_2005_2008 <- process_vehicle_data(vehicle_data_2005_2008, 2005, 2008)
+v_2009_2022 <- process_vehicle_data(vehicle_data_2009_2022, 2009, 2022)
+
+# Merge and arrange data
+df_v <- bind_rows(v_2005_2008, v_2009_2022) %>%
+  arrange(Date)
+
+# Canton and Fuel Type Standardization
+standard_names <- c(
+  "Switzerland" = "Switzerland", "Zürich" = "ZH", "Bern" = "BE", "Luzern" = "LU",
+  "Uri" = "UR", "Schwyz" = "SZ", "Obwalden" = "OW", "Nidwalden" = "NW",
+  "Glarus" = "GL", "Zug" = "ZG", "Fribourg" = "FR", "Solothurn" = "SO",
+  "Basel-Stadt" = "BS", "Basel-Landschaft" = "BL", "Schaffhausen" = "SH",
+  "Appenzell Ausserrhoden" = "AR", "Appenzell Innerrhoden" = "AI", 
+  "St. Gallen" = "SG", "Graubünden" = "GR", "Aargau" = "AG", 
+  "Thurgau" = "TG", "Ticino" = "TI", "Vaud" = "VD", "Valais" = "VS",
+  "Neuchâtel" = "NE", "Genève" = "GE", "Jura" = "JU", "Confederation" = "Confederation"
+)
+
+df_v <- df_v %>%
+  mutate(Location = iconv(Location, from = "latin1", to = "UTF-8")) %>%
+  mutate(Location = map_chr(str_split(Location, " / "), ~ .x[1])) %>%
+  mutate(Location = standard_names[Location],
+         Fuel = case_when(
+           Fuel %in% c("Petrol-electricity: conventional hybrid", "Diesel-electricity: conventional hybrid") ~ "Conventional hybrid",
+           Fuel %in% c("Petrol-electricity: plug-in hybrid", "Diesel-electricity: plug-in hybrid") ~ "Plug-in hybrid",
+           Fuel == "Gas (monovalent and bivalent)" ~ "Gas",
+           TRUE ~ Fuel))
+
+# Count number of vehicles for a particular year
+vehicle_count_2022 <- df_v %>%
+  filter(Location == "Switzerland", year(Date) == 2023, VehicleType == "Passenger car") %>%
+  summarize(TotalCount = sum(Count))
+```
+
+
 #### Redundancy
 
 The dataset, representing new vehicle registrations in Switzerland from 2005 onwards, exhibited redundancy in its structure. For example, the data contained both main categories (like '> Passenger cars') and their respective sub-categories ('... Passenger car' and '.. Heavy passenger car'). On examination, it was observed that the counts under the main categories were simply aggregates of the counts of their sub-categories. Such redundancy could lead to double counting in analytical processes.
 
 We addressed this issue by removing main categories that were aggregates of their sub-categories, preventing potential double counting in analyses. For two subsets of data (2005 to 2008 and 2009 to 2022), We filtered out main categories, cleaned and standardized the column names, reshaped the data set from wide to long format to facilitate analysis, and extracted and formatted the year information for each observation. This process allowed for a more granular and consistent data set for further analysis and interpretation.
 
-```{r}
-##### 1st data 2005 to 2008 clean #####
-# remove the main categories to avoid  and to work with a more granular dataset.
-# Filter out main categories (rows starting with '>')
-v_2005_2008 <- vehicle_data_2005_2008 |>
-  filter(!grepl("^>", trimws(Vehicle.group...type)))
-#rename the Vehicle.group...type column to VehicleType and clean the observations' names
-v_2005_2008 <- v_2005_2008 |>
-  rename(Location = Canton,
-         VehicleType = Vehicle.group...type) |>
-  mutate(VehicleType = str_remove(VehicleType, "^\\.\\.\\.\\s*"))
-
-
-# Year Extraction, Reshape the dataset from wide to long format
-v_2005_2008 <- v_2005_2008 |>
-  pivot_longer(cols = `X2005`:`X2008`, names_to = "Year", values_to = "Count")
-# Remove the "X" prefix from the Year column
-v_2005_2008$Year <- gsub("X", "", v_2005_2008$Year)
-
-
-##### 2nd data 2009 to 2022 clean #####
-# Filter out main categories (rows starting with '>')
-v_2009_2022 <- vehicle_data_2009_2022 |>
-  filter(!grepl("^>", trimws(Vehicle.group...type)))
-#rename the Vehicle.group...type column to VehicleType and clean the observations' names
-v_2009_2022 <- v_2009_2022 |>
-  rename(Location = Canton,
-         VehicleType = Vehicle.group...type) |>
-  mutate(VehicleType = str_remove(VehicleType, "^\\.\\.\\.\\s*"))
-
-# Year Extraction, Reshape the dataset from wide to long format
-v_2009_2022 <- v_2009_2022 |>
-  pivot_longer(cols = `X2009`:`X2022`, names_to = "Year", values_to = "Count")
-# Remove the "X" prefix from the Year column
-v_2009_2022$Year <- gsub("X", "", v_2009_2022$Year)
-```
-
 #### Merging and Joining
 As the vehicle data was split across multiple files, it was necessary to combine them for a holistic view.
 
-We used `bind_rows`to create df_v, then sorted the dataset by yearto ensure a structured chronological view of the data.
-
-```{r}
-df_v <- bind_rows(v_2005_2008, v_2009_2022)
-df_v <- df_v |>
-  arrange(df_v$Year)
-```
+We used `bind_rows`to create `df_v`, then sorted the dataset by year to ensure a structured chronological view of the data.
 
 #### Refinement and Vehicle Classification Insights
 
-* Some of the canton names have special characters that haven't been encoded properly in the dataset, causing them to display as hexadecimal escape sequences. To address this, we used `iconv` to properly encode these characters from "latin1" to "UTF-8". Additionally, when multiple names were provided for cantons (separated by slashes), we retained only the first name using `sapply` and `str_split`. We standardized the canton names using a predefined list (`standard_names`).
-* We created a unified date column by combining 'Year' and 'Month' information. First, we matched month names to their corresponding numeric values, then merged this information with the year, and formatted it as "YYYY-MM-01" to generate a standard date format.This transformation streamlines time series analyses and provides a more intuitive representation of the data's temporal dimension.
+* Some canton names in the dataset had special characters not properly encoded, displaying as hexadecimal escape sequences. To correct this, we used `iconv` to properly encode these characters from "latin1" to "UTF-8". Additionally, where multiple names were provided for cantons (separated by slashes), we retained only the first name. We standardized the canton names using a predefined list (`standard_names`).
+* We unified the date representation by combining 'Year' and 'Month' information, matching month names to their corresponding numeric values, then merged this information with the year, and formatted it as "YYYY-MM-DD" to generate a standard date format. This transformation streamlines time series analyses and provides a more intuitive representation of the data's temporal dimension.
 
 We simplified the classification of hybrid vehicles by merging different categories of conventional and plug-in hybrids into two main groups: "Conventional hybrid" and "Plug-in hybrid", respectively. This simplification aimed to streamline analysis by grouping similar types together.
 
@@ -571,65 +585,12 @@ Conventional Hybrids: These vehicles, powered by petrol or diesel **without** pl
 
 Plug-in Hybrids: With larger batteries and the ability to charge from an electric outlet, these vehicles enable all-electric operation for limited distances. The presence of charging infrastructure might impact their adoption differently, distinguishing them from conventional hybrids. Adoption might be reflected differently due to the need for charging infrastructure.
 
-```{r}
-#### canton ####
-df_v$Location <- iconv(df_v$Location, from = "latin1", to = "UTF-8")
-
-# keep only the first name when multiple names are provided for cantons (separated by slashes)
-df_v$Location <- sapply(str_split(df_v$Location, " / "), `[`, 1)
-
-# Standardizing the cantons names:
-standard_names <- c("Switzerland" = "Switzerland", "Zürich" = "ZH", "Bern" = "BE", "Luzern" = "LU", "Uri" = "UR", "Schwyz" = "SZ",
-                    "Obwalden" = "OW", "Nidwalden" = "NW","Glarus" = "GL", "Zug" = "ZG", "Fribourg" = "FR", "Solothurn" = "SO",
-                    "Basel-Stadt" = "BS", "Basel-Landschaft" = "BL", "Schaffhausen" = "SH", "Appenzell Ausserrhoden" = "AR",
-                    "Appenzell Innerrhoden" = "AI", "St. Gallen" = "SG", "Graubünden" = "GR", "Aargau" = "AG", "Thurgau" = "TG",
-                    "Ticino" = "TI", "Vaud" = "VD", "Valais" = "VS", "Neuchâtel" = "NE", "Genève" = "GE", "Jura" = "JU",
-                    "Confederation" = "Confederation")
-df_v$Location <- standard_names[df_v$Location]
-
-#### Year ####
-#create date col
-# Convert month names to month numbers
-df_v$MonthNum <- match(df_v$Month, month.name)
-# Combine Year, MonthNum, and "01" to create a date in the format "YYYY-MM-01"
-df_v$Date <- as.Date(paste(df_v$Year, df_v$MonthNum, "01", sep = "-"), format = "%Y-%m-%d")
-# Drop the Month, Year, and MonthNum columns
-df_v <- df_v %>% select(-Month, -Year, -MonthNum)
-
-
-#### renaming ####
-#renaming the 4 different hybrid name to only two
-df_v <- df_v |>
-  mutate(Fuel = case_when(
-    Fuel %in% c("Petrol-electricity: conventional hybrid", "Diesel-electricity: conventional hybrid") ~ "Conventional hybrid",
-    Fuel %in% c("Petrol-electricity: plug-in hybrid", "Diesel-electricity: plug-in hybrid") ~ "Plug-in hybrid",
-    TRUE ~ Fuel # Keeps all other fuel types as they are
-  ))
-
-#renaming fuel type: gas
-df_v <- df_v |>
-  mutate(Fuel = if_else(Fuel == "Gas (monovalent and bivalent)", "Gas", Fuel))
-```
-
-
-```{r}
-#count nbr of vehicle for a paticular year and 
-vehicle_count_2022 <- df_v |>
-  filter(Location == "Switzerland", year(Date) == 2023, VehicleType == "Passenger car") |>
-  summarize(TotalCount = sum(Count))
-```
-
-
 #### Rows with 0
 Retaining rows with a Count of 0 ensures the completeness of our dataset, indicating periods when specific vehicle types or fuel categories had no registrations. This not only provides a holistic view of vehicle adoption trends over time but also aids in generating continuous time series visualizations without gaps, offering a true representation of the data.
 
 ```{r}
-# Displayed clean data
-reactable(head(df_v,100), sortable = TRUE, searchable = TRUE)
-#str(df_v)
-#unique(df_v$Location)
-#unique(df_v$VehicleType)
-#unique(df_v$Fuel)
+# Display cleaned data
+reactable(head(df_v, 500), sortable = TRUE, searchable = TRUE)
 ```
 
 
@@ -653,73 +614,31 @@ To be able to compare two data sets, we decided to format the French data set in
 - The match our swiss data set (new registration per year), we computed the difference of total cars registered in France per years. Having only the data between 2011 and 2022, we have “lost” the insights for 2011. Indeed, when creating the deltas (difference) columns, 2011 deltas could not be computed (no data for 2010), we therefore decided to delete that year from our data
 
 ```{r}
-
-# the first three rows are empty
-france_v <- france_v[- c(1,2,3),]
-
-# Only taking the private cars from this data
-france_private <- france_v[25:37,]
-
-
-# pivoting to match the Swiss data set and correctly setting the column names
-france_private <- t(france_private)
-colnames(france_private) <- france_private[1,]
-france_private <- france_private[-1,]
-
-# Removing "Particulier" ( =aggregate of all categories), "Gaz" (<1% of cars), "Unknown" (muddies the data), "Hydrogen (anecdotal observations)
-france_private <- as_tibble(france_private)
-
-france_private <- france_private %>%
-  select(-c("Particulier", "Gaz", "Gaz HNR", "Gaz HR", "Hydrogène et autre ZE", "Inconnu"))
-
-# Add info about the year
-france_private <- france_private %>%
-  mutate(Year = 2011:2022)
-
-# Removing the decimals due to previous manipulations
-for (i in 1:(ncol(france_private) - 2)) {  # Exclude the last two columns (Year and Hybrid)
-  france_private[12, i] <- as.character(floor(as.numeric(france_private[12, i])))
-}
-
-# To match swiss data set: creating the Conventional Hybrid and Plug-in Hybrid categories (aggregating the different kinds of hybrid) and removing the aggregated columns
-france_private <- france_private %>%
+# Only taking the private cars from this data and transforming the data
+france_private <- france_v[25:37, ] %>%
+  t() %>%
+  as_tibble() %>%
+  setNames(.[1, ]) %>%
+  slice(-1) %>%
+  mutate(Year = 2011:2022) %>%
+  select(-c("Particulier", "Gaz", "Gaz HNR", "Gaz HR", "Hydrogène et autre ZE", "Inconnu")) %>%
+  mutate(across(-Year, ~ floor(as.numeric(.)))) %>%
   mutate(
-    Conventional_Hybrid = as.numeric(`Diesel HNR`)+ as.numeric(`Essence HNR`),
-    Plug_in_Hybrid = as.numeric(`Diesel HR`) + as.numeric(`Essence HR`)
-  )
+    Conventional_Hybrid = as.numeric(`Diesel HNR`) + as.numeric(`Essence HNR`),
+    Plug_in_Hybrid = as.numeric(`Diesel HR`) + as.numeric(`Essence HR`),
+    across(c(Diesel, Essence, Conventional_Hybrid, Plug_in_Hybrid, Electrique), as.numeric),
+    Diesel_delta = Diesel - lag(Diesel),
+    Essence_delta = Essence - lag(Essence),
+    Conventional_Hybrid_delta = Conventional_Hybrid - lag(Conventional_Hybrid),
+    Plug_in_Hybrid_delta = Plug_in_Hybrid - lag(Plug_in_Hybrid),
+    Electrique_delta = Electrique - lag(Electrique)
+  ) %>%
+  filter(!is.na(Diesel_delta)) %>%
+  select(Date = Year, Diesel, Diesel_delta, Essence, Essence_delta, Conventional_Hybrid, Conventional_Hybrid_delta, Plug_in_Hybrid, Plug_in_Hybrid_delta, Electrique, Electrique_delta) %>%
+  mutate(Date = as.Date(paste(Date, "-01-01", sep = ""), format = "%Y-%m-%d"))
 
-france_private <- france_private %>%
-  select(Diesel, Essence, Conventional_Hybrid, Plug_in_Hybrid, Electrique, Year)
-
-# To match our Swiss data set, we need to deltas (change) between each years
-france_private <- france_private %>%
-  mutate(across(c(Diesel, Essence, Conventional_Hybrid, Plug_in_Hybrid, Electrique), as.numeric),
-         Diesel_delta = Diesel - lag(Diesel),
-         Essence_delta = Essence - lag(Essence),
-         Conventional_Hybrid_delta = Conventional_Hybrid - lag(Conventional_Hybrid),
-         Plug_in_Hybrid_delta = Plug_in_Hybrid - lag(Plug_in_Hybrid),
-         Electrique_delta = Electrique - lag(Electrique))
-
-# Removing the NAs I've created with the lag function (2011 deltas were NA because we don't have data for 2010)
-france_private <- france_private[-1,]
-
-# Ordering the columns for more clarity
-df_v_fr <- france_private %>%
-  select(c("Year", "Diesel", "Diesel_delta", "Essence", "Essence_delta", "Conventional_Hybrid", "Conventional_Hybrid_delta", "Plug_in_Hybrid", "Plug_in_Hybrid_delta", "Electrique", "Electrique_delta"))
-
-
-#convert date into datetime format
-# Assuming 'Year' is an integer column representing the year
-df_v_fr$Date <- as.Date(paste(df_v_fr$Year, "-01-01", sep = ""), format = "%Y-%m-%d")
-# Rearrange columns with 'Date' as the first column and drop 'year' and 'month'
-df_v_fr <- df_v_fr %>%
-  select(Date, everything()) %>%
-  select(-Year)
-
-# Displayed clean data
-reactable(head(df_v_fr, 100),
-          sortable = TRUE, 
-          searchable = TRUE)
+# Display cleaned data
+reactable(head(france_private, 100), sortable = TRUE, searchable = TRUE)
 ```
 
 ### 2.2.6 Availability of charging stations
