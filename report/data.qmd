@@ -8,9 +8,13 @@ source(here::here("scripts/setup.R"))
 
 Use a Loop for Similar Files.
 
-Check for Large Data: If any of our datasets are particularly large (like the `swiss_vehicle`), we used a more efficient data reading librariy `data.table` (with `fread`) to speed up the data loading process.
+Check for Large Data: If any of our datasets are particularly large
+(like the `swiss_vehicle`), we used a more efficient data reading
+librariy `data.table` (with `fread`) to speed up the data loading
+process.
 
-We also added a common file path prefix ("../data/") to make the code cleaner and easier to change for any usage in the future.
+We also added a common file path prefix ("../data/") to make the code
+cleaner and easier to change for any usage in the future.
 
 ```{r}
 library(data.table)
@@ -25,11 +29,19 @@ charging_station <- fread(paste0(file_path, "charging_station.csv"))
 france_v <- read_excel(paste0(file_path, "parc_vp_france_2022.xlsx"), sheet = 2)
 
 ```
-For this phase of the project, our approach involves presenting diverse datasets in a table form. To achieve this, we used the `kable` function from the `kableExtra` package, resulting in a table that displays each variable along with its corresponding definition and also added some `bootstrap_otions` for different stlyles.
+
+For this phase of the project, our approach involves presenting diverse
+datasets in a table form. To achieve this, we used the `kable` function
+from the `kableExtra` package, resulting in a table that displays each
+variable along with its corresponding definition and also added some
+`bootstrap_otions` for different stlyles.
 
 ### 2.1.1 Swiss Vehicle Registration Dataset
 
-This data set explains the new registrations of road vehicles by vehicle group, canton, vehicle type, fuel, month and year in Switzerland. This data set is essential to evaluate the EVs’ evolution within our chosen location. 
+This data set explains the new registrations of road vehicles by vehicle
+group, canton, vehicle type, fuel, month and year in Switzerland. This
+data set is essential to evaluate the EVs' evolution within our chosen
+location.
 
 ```{r}
 # Create a tibble with variable descriptions
@@ -50,15 +62,15 @@ variable_table_vehicle %>%
   kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover"))
 ```
 
-
-
-Source
-- [bfs.admin.ch](https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.24105892.html)
-
+Source -
+[bfs.admin.ch](https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.24105892.html)
 
 ### 2.1.2 Oil price Dataset
 
-This data set explains the evolution of the price of brent oil over time. From this data set, we will be able to obtain precious information to compute our linear regressions concerning oil price and EVs adoptions.   
+This data set explains the evolution of the price of brent oil over
+time. From this data set, we will be able to obtain precious information
+to compute our linear regressions concerning oil price and EVs
+adoptions.
 
 ```{r}
 # Create a tibble with variable descriptions
@@ -76,13 +88,15 @@ variable_table %>%
   kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover", "condensed"))
 ```
 
-
-Source
-- [Kaggle.com](https://www.kaggle.com/datasets/mabusalah/brent-oil-prices )
+Source -
+[Kaggle.com](https://www.kaggle.com/datasets/mabusalah/brent-oil-prices)
 
 ### 2.1.3 Swiss Demographics Dataset
 
-While this dataset contains a substantial amount of information, only a fraction of it will be pertinent to our research. It explains the evolution of the Swiss population over time through variables given below.
+While this dataset contains a substantial amount of information, only a
+fraction of it will be pertinent to our research. It explains the
+evolution of the Swiss population over time through variables given
+below.
 
 ```{r}
 # Create a tibble with variable descriptions
@@ -126,12 +140,16 @@ variable_table %>%
 
 ```
 
-Source
-- [bfs.admin.ch](https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.26645079.html)
+Source -
+[bfs.admin.ch](https://www.bfs.admin.ch/bfs/en/home/statistics/catalogues-databases/data.assetdetail.26645079.html)
 
 ### 2.1.4 Google trend data
 
-This Data set shows the evolution of Google trends on 8 different terms. We chose these terms in all 3 different main Swiss national languages (French, Italian and German) to make sure we get the most accurate data possible. Those variables will help us highlight potential tendencies/trends.  
+This Data set shows the evolution of Google trends on 8 different terms.
+We chose these terms in all 3 different main Swiss national languages
+(French, Italian and German) to make sure we get the most accurate data
+possible. Those variables will help us highlight potential
+tendencies/trends.
 
 ```{r}
 # Create a tibble with variable descriptions for Google Trends data
@@ -165,19 +183,32 @@ variable_table_google_trend %>%
 
 ```
 
-Sources for Google Trends Data:
-- [Voiture électrique Trends](https://trends.google.fr/trends/explore?q=voiture%20%C3%A9lectrique&date=now%201-d&geo=CH&hl=fr)
-- [Véhicule électrique Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=v%C3%A9hicule%20%C3%A9lectrique&hl=fr)
-- [EV Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=EV&hl=fr)
-- [Electric Car Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Electric%20car&hl=fr)
-- [Elektromobil Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Elektromobil&hl=fr)
-- [Elektrofahrzeug Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Elektrofahrzeug&hl=fr)
-- [Elektro Auto Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Elektro%20Auto&hl=fr)
-- [Auto Elettrica Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Auto%20elettrica&hl=fr)
- 
+Sources for Google Trends Data: - [Voiture électrique
+Trends](https://trends.google.fr/trends/explore?q=voiture%20%C3%A9lectrique&date=now%201-d&geo=CH&hl=fr) -
+[Véhicule électrique
+Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=v%C3%A9hicule%20%C3%A9lectrique&hl=fr) -
+[EV
+Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=EV&hl=fr) -
+[Electric Car
+Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Electric%20car&hl=fr) -
+[Elektromobil
+Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Elektromobil&hl=fr) -
+[Elektrofahrzeug
+Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Elektrofahrzeug&hl=fr) -
+[Elektro Auto
+Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Elektro%20Auto&hl=fr) -
+[Auto Elettrica
+Trends](https://trends.google.fr/trends/explore?date=now%201-d&geo=CH&q=Auto%20elettrica&hl=fr)
+
 ### 2.1.5 French vehicle registration data
 
-We decided to add this data set to help us compare with another country. Indeed, France is an adjacent country which might imply potential similarities in the outcome. This data set is made of variables such as the Date of the French vehicle registration or whether it is from a professional user or not.  The information we are interested in concern the number of registered vehicles in the country by propulsion method over time.
+We decided to add this data set to help us compare with another country.
+Indeed, France is an adjacent country which might imply potential
+similarities in the outcome. This data set is made of variables such as
+the Date of the French vehicle registration or whether it is from a
+professional user or not. The information we are interested in concern
+the number of registered vehicles in the country by propulsion method
+over time.
 
 ```{r}
 # Create a tibble with variable descriptions for vehicle categorization data
@@ -199,12 +230,17 @@ variable_table %>%
 
 ```
 
-Source
-- [Auto Elettrica Trends](https://www.statistiques.developpement-durable.gouv.fr/donnees-sur-le-parc-de-vehicules-en-circulation-au-1er-janvier-2022)
+Source - [Auto Elettrica
+Trends](https://www.statistiques.developpement-durable.gouv.fr/donnees-sur-le-parc-de-vehicules-en-circulation-au-1er-janvier-2022)
 
 ### 2.1.6 Chargin Stations
 
-This data set is meant to determine the number of charging stations per canton, per charging power, per month, per plug type in Switzerland since November 2020. It is important to mention that a station can have multiple charging points. These values will help us to obtain more information about the Swiss adaption to EVs and their potential effects on EVs adoption by the Swiss population 
+This data set is meant to determine the number of charging stations per
+canton, per charging power, per month, per plug type in Switzerland
+since November 2020. It is important to mention that a station can have
+multiple charging points. These values will help us to obtain more
+information about the Swiss adaption to EVs and their potential effects
+on EVs adoption by the Swiss population
 
 ```{r}
 # Create a tibble with variable descriptions in English for charging station data
@@ -248,16 +284,25 @@ variable_table_charging %>%
   kbl() %>%
   kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover", "condensed"))
 ```
-Source
-- [bfe.admin.ch](https://www.bfe.admin.ch/bfe/fr/home/approvisionnement/statistiques-et-geodonnees/geoinformation/geodonnees/mobilite/bornes-de-recharge-pour-la-mobilite-electrique.html)
 
+Source -
+[bfe.admin.ch](https://www.bfe.admin.ch/bfe/fr/home/approvisionnement/statistiques-et-geodonnees/geoinformation/geodonnees/mobilite/bornes-de-recharge-pour-la-mobilite-electrique.html)
 
 ## 2.2 Data Wrangling
+
 ### 2.2.1 Data Wrangling : Oil clean
 
-Initially, while attempting to format the dataset, we discovered the generation of numerous `NAs`. Upon delving deeper into the data, we identified two distinct *date formats*: the first being [DD-MMM-YYYY] and the second [MMM DD, YYYY]. Consequently, the initial date formatting was ineffective. Therefore, we undertook the task of matching the two tables with the same date format.
+Initially, while attempting to format the dataset, we discovered the
+generation of numerous `NAs`. Upon delving deeper into the data, we
+identified two distinct *date formats*: the first being \[DD-MMM-YYYY\]
+and the second \[MMM DD, YYYY\]. Consequently, the initial date
+formatting was ineffective. Therefore, we undertook the task of matching
+the two tables with the same date format.
 
-Another issue we encountered was to present the date in a standardized form across all our dataset to perform time series analyses. For that, we had to change the abbreviated months names (i.e. Jan, Feb, etc.) into numbers.  
+Another issue we encountered was to present the date in a standardized
+form across all our dataset to perform time series analyses. For that,
+we had to change the abbreviated months names (i.e. Jan, Feb, etc.) into
+numbers.
 
 ```{r}
 # Format 1: DD-MMM-YYYY (e.g., 15-Apr-2020)
@@ -309,16 +354,31 @@ reactable(
 )
 ```
 
-
 ### 2.2.2 Data Wrangling : Google trend clean
 
-Comprehending Google Trends information involves understanding the contextualization of the provided figures. The given data is standardized which limits the range of information we can obtain from it.
+Comprehending Google Trends information involves understanding the
+contextualization of the provided figures. The given data is
+standardized which limits the range of information we can obtain from
+it.
 
-The crucial element for effective narration lies in utilizing the normalized Trends data. This normalization indicates that when observing search interest trends over time, it is interpreted as a ratio relative to all searches conducted on all topics on Google during that specific period and location. Likewise, when assessing regional search interest for a specific topic, it is construed as the search interest for that particular topic in a given region relative to all searches on all topics on Google in that same place and time.
+The crucial element for effective narration lies in utilizing the
+normalized Trends data. This normalization indicates that when observing
+search interest trends over time, it is interpreted as a ratio relative
+to all searches conducted on all topics on Google during that specific
+period and location. Likewise, when assessing regional search interest
+for a specific topic, it is construed as the search interest for that
+particular topic in a given region relative to all searches on all
+topics on Google in that same place and time.
 
 [Source](https://medium.com/google-news-lab/what-is-google-trends-data-and-what-does-it-mean-b48f07342ee8)
 
-To clean and process eight Google Trends datasets related to different search terms, we created a `function process_dataset()` that reads each CSV file, removes date indices, excludes the first row, checks for missing values, renames columns, converts types, and standardizes the date format. Then, we iterated through each dataset, merged them based on the "Date" column, summed values for each search term per date, and normalized these values between 1 and 100.
+To clean and process eight Google Trends datasets related to different
+search terms, we created a `function process_dataset()` that reads each
+CSV file, removes date indices, excludes the first row, checks for
+missing values, renames columns, converts types, and standardizes the
+date format. Then, we iterated through each dataset, merged them based
+on the "Date" column, summed values for each search term per date, and
+normalized these values between 1 and 100.
 
 ```{r}
 dataset_names <- c(
@@ -372,15 +432,15 @@ for (dataset_name in dataset_names) {
 merged_data <- reduce(processed_datasets, left_join, by = "Date")
 
 # Sum the values for each search term for a given date
-df_summed <- merged_data %>%
+df_gtrends <- merged_data %>%
   rowwise() %>%
   mutate(Sum_SearchCount = sum(c_across(starts_with("SearchCount"))))
 
 # Normalize the Sum_SearchCount values between 1 and 100
-df_summed$SearchRatio <- df_summed$Sum_SearchCount / 8
+df_gtrends$SearchRatio <- df_gtrends$Sum_SearchCount / 8
 
 # Print the result
-df_gtrends <- df_summed[,-(2:10)]
+df_gtrends <- df_gtrends[,-(2:10)]
 
 #display cleaned data
 reactable(
@@ -413,27 +473,32 @@ reactable(
 )
 ```
 
-
 ### 2.2.3 Cleaning of demographic_data
 
-The main issue with this data set was to transform it in a way that makes it useful for our analysis. We 
-first had to remove all rows containing category summaries in the middle of the data.
+The main issue with this data set was to transform it in a way that
+makes it useful for our analysis. We first had to remove all rows
+containing category summaries in the middle of the data.
 
 We then formulated to following hypothesizes:
 
-- Male and Female present the same attitude towards electric vehicles
-- Swiss and Foreign citizen living in Switzerland present the same attitude towards electric vehicles
-- People who are not allowed to drive do not have any impact on electric vehicles use
+-   Male and Female present the same attitude towards electric vehicles
+-   Swiss and Foreign citizen living in Switzerland present the same
+    attitude towards electric vehicles
+-   People who are not allowed to drive do not have any impact on
+    electric vehicles use
 
 We then decided to do the following cleaning:
 
-- Only kept the “Total” for the Male-Female category
-- Only kept the “Total” for the Swiss-Foreign category
-- Only kept people aged between 18 and 99. (People aged over 99 account for 0.02% of the population)
+-   Only kept the "Total" for the Male-Female category
+-   Only kept the "Total" for the Swiss-Foreign category
+-   Only kept people aged between 18 and 99. (People aged over 99
+    account for 0.02% of the population)
 
-Then, instead of keeping a raw data set with all ages between 18 and 99, we decided to group them 
-in widely accepted age segments, namely Generation Z, Millennials, Generation X and Baby boomers. This categorization will help us to analyse whether different generations have a different approach to their mobility or not.
-
+Then, instead of keeping a raw data set with all ages between 18 and 99,
+we decided to group them in widely accepted age segments, namely
+Generation Z, Millennials, Generation X and Baby boomers. This
+categorization will help us to analyse whether different generations
+have a different approach to their mobility or not.
 
 ```{r}
 # Clean and process the demographic data
@@ -499,7 +564,6 @@ reactable(
 
 ```
 
-
 ### 2.2.4 Data Wrangling : Swiss vehicle clean
 
 ```{r}
@@ -558,60 +622,127 @@ vehicle_count_2022 <- df_v %>%
   summarize(TotalCount = sum(Count))
 ```
 
-
 #### Redundancy
 
-The dataset, representing new vehicle registrations in Switzerland from 2005 onwards, exhibited redundancy in its structure. For example, the data contained both main categories (like '> Passenger cars') and their respective sub-categories ('... Passenger car' and '.. Heavy passenger car'). On examination, it was observed that the counts under the main categories were simply aggregates of the counts of their sub-categories. Such redundancy could lead to double counting in analytical processes.
+The dataset, representing new vehicle registrations in Switzerland from
+2005 onwards, exhibited redundancy in its structure. For example, the
+data contained both main categories (like '\> Passenger cars') and their
+respective sub-categories ('... Passenger car' and '.. Heavy passenger
+car'). On examination, it was observed that the counts under the main
+categories were simply aggregates of the counts of their sub-categories.
+Such redundancy could lead to double counting in analytical processes.
 
-We addressed this issue by removing main categories that were aggregates of their sub-categories, preventing potential double counting in analyses. For two subsets of data (2005 to 2008 and 2009 to 2022), We filtered out main categories, cleaned and standardized the column names, reshaped the data set from wide to long format to facilitate analysis, and extracted and formatted the year information for each observation. This process allowed for a more granular and consistent data set for further analysis and interpretation.
+We addressed this issue by removing main categories that were aggregates
+of their sub-categories, preventing potential double counting in
+analyses. For two subsets of data (2005 to 2008 and 2009 to 2022), We
+filtered out main categories, cleaned and standardized the column names,
+reshaped the data set from wide to long format to facilitate analysis,
+and extracted and formatted the year information for each observation.
+This process allowed for a more granular and consistent data set for
+further analysis and interpretation.
 
 #### Merging and Joining
-As the vehicle data was split across multiple files, it was necessary to combine them for a holistic view.
 
-We used `bind_rows`to create `df_v`, then sorted the dataset by year to ensure a structured chronological view of the data.
+As the vehicle data was split across multiple files, it was necessary to
+combine them for a holistic view.
+
+We used `bind_rows`to create `df_v`, then sorted the dataset by year to
+ensure a structured chronological view of the data.
 
 #### Refinement and Vehicle Classification Insights
 
-* Some canton names in the dataset had special characters not properly encoded, displaying as hexadecimal escape sequences. To correct this, we used `iconv` to properly encode these characters from "latin1" to "UTF-8". Additionally, where multiple names were provided for cantons (separated by slashes), we retained only the first name. We standardized the canton names using a predefined list (`standard_names`).
-* We unified the date representation by combining 'Year' and 'Month' information, matching month names to their corresponding numeric values, then merged this information with the year, and formatted it as "YYYY-MM-DD" to generate a standard date format. This transformation streamlines time series analyses and provides a more intuitive representation of the data's temporal dimension.
+-   Some canton names in the dataset had special characters not properly
+    encoded, displaying as hexadecimal escape sequences. To correct
+    this, we used `iconv` to properly encode these characters from
+    "latin1" to "UTF-8". Additionally, where multiple names were
+    provided for cantons (separated by slashes), we retained only the
+    first name. We standardized the canton names using a predefined list
+    (`standard_names`).
+-   We unified the date representation by combining 'Year' and 'Month'
+    information, matching month names to their corresponding numeric
+    values, then merged this information with the year, and formatted it
+    as "YYYY-MM-DD" to generate a standard date format. This
+    transformation streamlines time series analyses and provides a more
+    intuitive representation of the data's temporal dimension.
 
-We simplified the classification of hybrid vehicles by merging different categories of conventional and plug-in hybrids into two main groups: "Conventional hybrid" and "Plug-in hybrid", respectively. This simplification aimed to streamline analysis by grouping similar types together.
+We simplified the classification of hybrid vehicles by merging different
+categories of conventional and plug-in hybrids into two main groups:
+"Conventional hybrid" and "Plug-in hybrid", respectively. This
+simplification aimed to streamline analysis by grouping similar types
+together.
 
-The "Gas" fuel type was renamed from "Gas (monovalent and bivalent)" for clarity and consistency in the dataset.
+The "Gas" fuel type was renamed from "Gas (monovalent and bivalent)" for
+clarity and consistency in the dataset.
 
 Further context was provided on different *hybrid types*:
 
-Conventional Hybrids: These vehicles, powered by petrol or diesel **without** plug-in capability, might exhibit different adoption trends due to their longer existence in the market.Indeed, they have been around for longer and may have a different adoption trend compared to newer technologies.
+Conventional Hybrids: These vehicles, powered by petrol or diesel
+**without** plug-in capability, might exhibit different adoption trends
+due to their longer existence in the market.Indeed, they have been
+around for longer and may have a different adoption trend compared to
+newer technologies.
 
-Plug-in Hybrids: With larger batteries and the ability to charge from an electric outlet, these vehicles enable all-electric operation for limited distances. The presence of charging infrastructure might impact their adoption differently, distinguishing them from conventional hybrids. Adoption might be reflected differently due to the need for charging infrastructure.
+Plug-in Hybrids: With larger batteries and the ability to charge from an
+electric outlet, these vehicles enable all-electric operation for
+limited distances. The presence of charging infrastructure might impact
+their adoption differently, distinguishing them from conventional
+hybrids. Adoption might be reflected differently due to the need for
+charging infrastructure.
 
 #### Rows with 0
-Retaining rows with a Count of 0 ensures the completeness of our dataset, indicating periods when specific vehicle types or fuel categories had no registrations. This not only provides a holistic view of vehicle adoption trends over time but also aids in generating continuous time series visualizations without gaps, offering a true representation of the data.
+
+Retaining rows with a Count of 0 ensures the completeness of our
+dataset, indicating periods when specific vehicle types or fuel
+categories had no registrations. This not only provides a holistic view
+of vehicle adoption trends over time but also aids in generating
+continuous time series visualizations without gaps, offering a true
+representation of the data.
 
 ```{r}
 # Display cleaned data
 reactable(head(df_v, 500), sortable = TRUE, searchable = TRUE)
 ```
 
-
 ### 2.2.5 Data wrangling French vehicle clean
 
-This dataset will be used to compare our data in Switzerland with a bordering country (FR)
+This dataset will be used to compare our data in Switzerland with a
+bordering country (FR)
 
-It is important to note that this data set contains all registered vehicles in a given year (vs. all new registered cars for our Swiss data)
-We will only keep the vehicles used for personal use (not the ones for professional use), to match our Swiss dataset
+It is important to note that this data set contains all registered
+vehicles in a given year (vs. all new registered cars for our Swiss
+data) We will only keep the vehicles used for personal use (not the ones
+for professional use), to match our Swiss dataset
 
-We decided to remove some anecdotal observations (i.e Hydrogen, Unknown, etc.) as their production / use is marginal. Moreover, we have decided to regroup the different kind of hybrid motors into two Hybrid categories. The 2 categories are the plugable hybrid vehicle HR (petrol or diesel) and the non-plugable hybrid vehicles HNR (petrol or diesel). This was done to match our Swiss data set.
+We decided to remove some anecdotal observations (i.e Hydrogen, Unknown,
+etc.) as their production / use is marginal. Moreover, we have decided
+to regroup the different kind of hybrid motors into two Hybrid
+categories. The 2 categories are the plugable hybrid vehicle HR (petrol
+or diesel) and the non-plugable hybrid vehicles HNR (petrol or diesel).
+This was done to match our Swiss data set.
 
-The main issue with this data set was to set it in a way where it is comparable to our Swiss cars data 
-set. Indeed, this dataset presents the total of all cars in France for a given year and type, while our 
-Swiss data set accounts for new registration of cars for a given year and type.
+The main issue with this data set was to set it in a way where it is
+comparable to our Swiss cars data set. Indeed, this dataset presents the
+total of all cars in France for a given year and type, while our Swiss
+data set accounts for new registration of cars for a given year and
+type.
 
-To be able to compare two data sets, we decided to format the French data set in the following way:
+To be able to compare two data sets, we decided to format the French
+data set in the following way:
 
-- Remove categories that are not relevant for our analysis, and widely under-represented in the population (i.e Gaz, hydrogen)
-- Focus on the private use of cars (vs. professional), because the decision to use a certain type of cars for professional reasons are often explained by factors hard to capture in our analysis (i.e bundle deals, greenwashing). We therefore hypothesized that private use of a certain type of car better gives insights on population view.
-- The match our swiss data set (new registration per year), we computed the difference of total cars registered in France per years. Having only the data between 2011 and 2022, we have “lost” the insights for 2011. Indeed, when creating the deltas (difference) columns, 2011 deltas could not be computed (no data for 2010), we therefore decided to delete that year from our data
+-   Remove categories that are not relevant for our analysis, and widely
+    under-represented in the population (i.e Gaz, hydrogen)
+-   Focus on the private use of cars (vs. professional), because the
+    decision to use a certain type of cars for professional reasons are
+    often explained by factors hard to capture in our analysis (i.e
+    bundle deals, greenwashing). We therefore hypothesized that private
+    use of a certain type of car better gives insights on population
+    view.
+-   The match our swiss data set (new registration per year), we
+    computed the difference of total cars registered in France per
+    years. Having only the data between 2011 and 2022, we have "lost"
+    the insights for 2011. Indeed, when creating the deltas (difference)
+    columns, 2011 deltas could not be computed (no data for 2010), we
+    therefore decided to delete that year from our data
 
 ```{r}
 # Only taking the private cars from this data and transforming the data
@@ -643,28 +774,34 @@ reactable(head(france_private, 100), sortable = TRUE, searchable = TRUE)
 
 ### 2.2.6 Availability of charging stations
 
-This data set will be used to explore and analyze the effects of charging station availability on EVs adoption.
+This data set will be used to explore and analyze the effects of
+charging station availability on EVs adoption.
 
 However, two important points are to note.
 
-1. We were unable to find data before November 2020
-2. Charging station availability and EV in market are likely strongly reciprocally correlated.
+1.  We were unable to find data before November 2020
+2.  Charging station availability and EV in market are likely strongly
+    reciprocally correlated.
 
 Moreover, it is important to keep standardized dates and locations
 
-We merges 'year' and 'month' columns to create a 'Date' column in the format "YYYY-MM-01", subsequently reorganizing the dataframe to position 'Date' as the first column and removing the original 'year' and 'month' columns.
+We merges 'year' and 'month' columns to create a 'Date' column in the
+format "YYYY-MM-01", subsequently reorganizing the dataframe to position
+'Date' as the first column and removing the original 'year' and 'month'
+columns.
+
 ```{r}
 # Combine 'year' and 'month' columns to create a new 'Date' column
-charging_station$Date <- as.Date(paste(charging_station$year, charging_station$month, "01", sep = "-"))
+charging_station$Date <- as.Date(paste(charging_station$year, charging_station$month, "01", sep = "-"), format = "%Y-%m-%d")
 
 # Rearrange columns with 'Date' as the first column and drop 'year' and 'month'
 df_charging_station <- charging_station %>%
   select(Date, everything()) %>%
   select(-year, -month)
 
-# Displayed clean data
-reactable(head(df_charging_station, 100),
+# Display cleaned data
+reactable(df_charging_station,
           sortable = TRUE, 
           searchable = TRUE)
-```
 
+```
