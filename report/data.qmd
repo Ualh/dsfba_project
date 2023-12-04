@@ -831,8 +831,8 @@ reactable(df_charging_station,
           searchable = TRUE)
 
 ```
-<<<<<<< HEAD
-2.2.7 Political strength per canton
+
+### 2.2.7 Political strength per canton
 
 This data set will be used to explore and analyze the effects of political convictions on EVs adoption (per Canton).
 
@@ -943,7 +943,7 @@ for (i in seq_along(named_data_list)) {
   
 
 ```
-### 2.2.7 Swiss Population
+### 2.2.8 Swiss Population
 
 We chose to use the population data from the year 2022 to ensure the most current and relevant demographic context, providing a contemporary snapshot that aligns closely with the latest trends in electric vehicle registrations.
 
@@ -1032,6 +1032,5 @@ df_swisspop <- df_swisspop %>%
 reactable(df_swisspop,
           sortable = TRUE, 
           searchable = TRUE)
->>>>>>> 34e6abdf15e29439886b0d207bed0c4cacc8418c
 ```
 

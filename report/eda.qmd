@@ -313,18 +313,6 @@ animate(animated_plot, renderer = gganimate::gifski_renderer(), width = 600, hei
 ```
 
 ## 3.4 Demographics
-<<<<<<< HEAD
-```{r}
-demographic_data <- df_demographic %>%
-  mutate(Population = `Generation Z` + `Millennials` + `Generation X` + `Baby Boomers`)
-
-# Plotting the data
-ggplot(demographic_data, aes(x = Year)) +
-  geom_line(aes(y = `Generation Z`, color = "Generation Z"), size = 1) +
-  geom_line(aes(y = Millennials, color = "Millennials"), size = 1) +
-  geom_line(aes(y = `Generation X`, color = "Generation X"), size = 1) +
-  geom_line(aes(y = `Baby Boomers`, color = "Baby Boomers"), size = 1) +
-=======
 
 ```{r}
 demographic_data_long <- df_demographic %>%
@@ -337,7 +325,6 @@ demographic_data_long <- df_demographic %>%
 # Plotting the data with ggplot2
 p_demog <- ggplot(demographic_data_long, aes(x = Year, y = Population, color = Generation)) +
   geom_line(size = 1) +
->>>>>>> 34e6abdf15e29439886b0d207bed0c4cacc8418c
   labs(title = "Demographic Trends in Switzerland",
        x = "Year",
        y = "Population") +
