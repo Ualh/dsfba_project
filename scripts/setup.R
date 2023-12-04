@@ -6,7 +6,7 @@
 packages <- c("here","tidyverse", "tidyr", "readxl","ggrepel",
               "gghighlight", "patchwork", "maps","dplyr","scales",
               "kableExtra", "reactable","sf", "shiny", "leaflet",
-              "plotly", "rsconnect")
+              "plotly", "rsconnect", "gifski", "gganimate")
 purrr::walk(packages, library, character.only = TRUE)
 
 ######################################################

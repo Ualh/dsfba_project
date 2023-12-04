@@ -158,23 +158,39 @@ each Swiss canton since the beginning of the dataset's timeframe. This
 approach effectively captures the cumulative impact of electric vehicle
 adoption across the country.
 
-```{r}
-# Read the shapefile once
-swiss_cantons <- st_read("../data/CH_map/swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
+The process involved filtering vehicle registration data for electric
+passenger cars and summing up the total registrations for each Swiss
+canton. This data was then combined with population figures and
+geographic boundaries to calculate electric vehicle (EV) registrations
+per capita, providing a standardized comparison of EV adoption across
+cantons.
 
+```{r}
+# Read in the shapefile for Swiss cantons
+swiss_cantons <- st_read("../data/CH_map/swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
+# Define canton abbreviations for matching
 abbreviation_values <- c("ZH", "BE", "LU", "UR", "SZ", "OW", "NW", "GL", "ZG", "FR", "SO", "BS", "BL", "SH", "AR", "AI", "SG", "GR", "AG", "TG", "TI", "VD", "VS", "NE", "GE", "JU")
 
-# Prepare the data with the sum over all years
+# Prepare the EV data with sum over all years
 df_v_map <- df_v %>%
   filter(!Location %in% c("Switzerland", "Confederation"), 
          Fuel == "Electricity", VehicleType == "Passenger car") %>%
   mutate(KANTONSNUM = match(Location, abbreviation_values)) %>%
   group_by(KANTONSNUM) %>%
-  summarize(Total = sum(Count), .groups = 'drop')
+  summarize(TotalEV = sum(Count), .groups = 'drop')
 
-# Merge with shapefile data using left_join for efficiency
+# Merge EV data with population data
+df_v_map <- left_join(df_v_map, df_swisspop, by = c("KANTONSNUM" = "KANTONSNUM"))
+
+str(df_v_map)
+# Calculate EV registrations per capita
+df_v_map <- df_v_map %>%
+  mutate(EV_per_Capita = TotalEV / TotalPopulation)
+
+# Merge with shapefile data
 map_data <- left_join(swiss_cantons, df_v_map, by = "KANTONSNUM")
 
+# Ensure the geometries are valid and the CRS is set to WGS 84
 # Check if 'map_data' is already an sf object
 if (!inherits(map_data, "sf")) {
   map_data_sf <- st_as_sf(map_data, wkt = "geometry")
@@ -188,29 +204,66 @@ map_data_sf <- st_make_valid(map_data_sf)
 map_data_sf <- st_transform(map_data_sf, crs = 4326)
 
 
-# Create a color palette function for the 'Total' column
-color_palette <- colorNumeric(palette = "viridis", domain = map_data_sf$Total)
+# Create color palettes for the 'Total' and 'EV_per_Capita' columns
+color_palette_total <- colorNumeric(palette = "viridis", domain = map_data_sf$TotalEV)
+color_palette_per_capita <- colorNumeric(palette = "viridis", domain = map_data_sf$EV_per_Capita)
 
-# Create the leaflet map
-leaflet_map <- leaflet(map_data_sf) %>%
+# Create the leaflet maps
+leaflet_map_total <- leaflet(map_data_sf) %>%
   addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(
-    fillColor = ~color_palette(Total),
+    fillColor = ~color_palette_total(TotalEV),
     weight = 1,
     color = "#FFFFFF",
     fillOpacity = 0.7,
-    popup = ~paste(NAME, "<br>Total Registrations: ", Total)
+    popup = ~paste(NAME, "<br>Total EV Registrations: ", TotalEV)
   ) %>%
   addLegend(
-    pal = color_palette, 
-    values = ~Total, 
+    pal = color_palette_total, 
+    values = ~TotalEV, 
     opacity = 0.7, 
-    title = "Registrations",
+    title = "Total EV <br> Registrations",
     position = "topright"
   )
 
-# Print the map to view it
-leaflet_map
+leaflet_map_per_capita <- leaflet(map_data_sf) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~color_palette_per_capita(EV_per_Capita),
+    weight = 1,
+    color = "#FFFFFF",
+    fillOpacity = 0.7,
+    popup = ~paste(NAME, "<br>EV Registrations per Capita: ", 
+                   round(EV_per_Capita, 3))
+  ) %>%
+  addLegend(
+    pal = color_palette_per_capita, 
+    values = ~EV_per_Capita, 
+    opacity = 0.7, 
+    title = "EV Registrations <br> per Capita",
+    position = "topright"
+  )
+
+# Print the maps to view them
+leaflet_map_total
+```
+
+#### 3.1.4.2 Count of Electricity car Registration for all years per cantons Standardized
+
+For example, Zurich (ZH) has a relatively lower **`EV_per_Capita`**
+value (0.01870) despite a high total number of EV registrations
+(29,541), due to its large population (1,579,967). In contrast, Zug (ZG)
+shows a higher **`EV_per_Capita`** (0.04666) with fewer EV registrations
+(6,120) but a much smaller population (131,164), indicating a greater
+adoption rate when adjusted for population size.
+
+The limitation of this approach is that it considers the total
+population, not accounting for the segment of the population that is of
+driving age or interested in vehicle ownership, which could further
+refine the EV adoption rates.
+
+```{r}
+leaflet_map_per_capita
 ```
 
 ## 3.2 Google Trend
@@ -238,6 +291,26 @@ The above chart represents the oil price evolution through the last two
 decades. We can observe a quite high degree of volatility concerning the
 oil valuation. Nevertheless, it seems important to highlight that this
 value has greatly increased since the past 3 years.
+
+This code block will create the animated plot within the `.qmd` file.
+The `fig.show='animate'` option tells Quarto to render the plot as an
+animation.
+
+```{r, fig.show='animate'}
+# Assuming 'df_oil' is your data frame and it has 'Date' and 'Price' columns
+# Create a ggplot object with your data
+p <- ggplot(df_oil, aes(x = Date, y = Price, group = 1)) +
+  geom_line(color = "darkred", size = 1) +
+  labs(x = "Date", y = "Price", title = "Oil Price Over Time")
+
+# Animate the plot with gganimate, revealing the line over time
+animated_plot <- p +
+  transition_reveal(Date)
+
+# Render the animation
+animate(animated_plot, renderer = gganimate::gifski_renderer(), width = 600, height = 400, res = 96)
+
+```
 
 ## 3.4 Demographics
 
