@@ -770,7 +770,7 @@ data set in the following way:
 
 ```{r}
 # Only taking the private cars from this data and transforming the data
-france_private <- france_v[25:37, ] %>%
+df_v_fr <- france_v[25:37, ] %>%
   t() %>%
   as_tibble() %>%
   setNames(.[1, ]) %>%
@@ -793,7 +793,7 @@ france_private <- france_v[25:37, ] %>%
   mutate(Date = as.Date(paste(Date, "-01-01", sep = ""), format = "%Y-%m-%d"))
 
 # Display cleaned data
-reactable(head(france_private, 100), sortable = TRUE, searchable = TRUE)
+reactable(head(df_v_fr, 100), sortable = TRUE, searchable = TRUE)
 ```
 
 ### 2.2.6 Availability of charging stations

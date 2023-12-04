@@ -35,6 +35,7 @@ knitr::opts_chunk$set(
   out.width = "70%",
   fig.align = "center",
   fig.width = 6,
+  fig.height = 4,
   fig.asp = 0.618,
   fig.show = "hold",
   message = FALSE,
