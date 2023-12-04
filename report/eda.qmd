@@ -196,12 +196,12 @@ The above chart represents the oil price evolution through the last two decades.
 ## 3.4 Demographics
 ```{r}
 demographic_data <- df_demographic %>%
-  mutate(Population = `Generation Z` + `Millenials` + `Generation X` + `Baby Boomers`)
+  mutate(Population = `Generation Z` + `Millennials` + `Generation X` + `Baby Boomers`)
 
 # Plotting the data
 ggplot(demographic_data, aes(x = Year)) +
   geom_line(aes(y = `Generation Z`, color = "Generation Z"), size = 1) +
-  geom_line(aes(y = Millenials, color = "Millenials"), size = 1) +
+  geom_line(aes(y = Millennials, color = "Millennials"), size = 1) +
   geom_line(aes(y = `Generation X`, color = "Generation X"), size = 1) +
   geom_line(aes(y = `Baby Boomers`, color = "Baby Boomers"), size = 1) +
   labs(title = "Demographic Trends in Switzerland",

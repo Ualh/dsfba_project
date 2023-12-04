@@ -19,6 +19,7 @@ cleaner and easier to change for any usage in the future.
 ```{r}
 library(data.table)
 file_path <- "../data/"
+
 google_trends_files <- paste0(file_path, "googletrends_", c("auto-elettrica", "elektro-auto", "elektrofahrzeug", "elektromobil", "eletric-car", "EV", "vehicule-electrique", "voiture-electrique"), "_2005-2022.csv")
 google_trends_data <- lapply(google_trends_files, fread)
 vehicle_data_2005_2008 <- fread(paste0(file_path, "road_vehicle_CH_2005-2008.csv"))
@@ -27,7 +28,7 @@ oil_prices_data <- fread(paste0(file_path, "BrentOilPrices.csv"))
 demographic_data <- fread(paste0(file_path, "demographic.csv"))
 charging_station <- fread(paste0(file_path, "charging_station.csv"))
 france_v <- read_excel(paste0(file_path, "parc_vp_france_2022.xlsx"), sheet = 2)
-
+political_data_sheets_prep <- excel_sheets(paste0(file_path, "political_data.xlsx"))
 ```
 
 For this phase of the project, our approach involves presenting diverse
@@ -805,3 +806,114 @@ reactable(df_charging_station,
           searchable = TRUE)
 
 ```
+2.2.7 Political strength per canton
+
+This data set will be used to explore and analyze the effects of political convictions on EVs adoption (per Canton).
+
+The 2 main difficulties with this data set were the following:
+  1. Create a process (loop) general enough to clean all the Cantons at the same time, but specific enough for it to work
+  2. The Swiss political parties' names have evolved quite a bit over the years.
+  
+To use this data effectively in our analysis. We will group them in 5 categories.
+
+The 5 categories respond to the following question: "What is the political party's stance on sustainability / ecological measures?"
+  1. Against
+  2. Slightly Against
+  3. Neutral
+  4. Slightly in Favour
+  5. In Favour
+  
+We assigned each political parties in one of those categories based on their program.
+
+
+```{r}
+# We import each different sheets (one per canton) into a data set
+political_data_sheets <- lapply(setdiff(excel_sheets("../data/political_data.xlsx"), "Contenu"), 
+                                function(sheet) {
+                                  p_data <- suppressMessages(read_excel("../data/political_data.xlsx", sheet = sheet))
+                                  return(p_data)
+                                })
+
+sheet_names <- setdiff(political_data_sheets_prep, "Contenu")
+
+named_data_list <- setNames(political_data_sheets, sheet_names)
+
+# Now to the cleaning part
+for (i in seq_along(named_data_list)) {
+  # setting one dataset we work on
+  current_dataset <- named_data_list[[i]]
+  
+  # where is "taux de participation"
+  index_to_keep <- which(current_dataset[[1]] == "Taux de participation")[1]
+  
+  # keep only rows until "taux de participation" and delete the first one "force des partis"
+  named_data_list[[i]] <- current_dataset[2:index_to_keep-2, ]
+  
+  # remove columns 2 and 3 (they are all NAs)
+  named_data_list[[i]] <- named_data_list[[i]][ ,-c(2,3)]
+  
+  # transposing the data sets to have years in a single columns
+  transposed_data <- t(named_data_list[[i]])
+  named_data_list[[i]] <- as_tibble(transposed_data[-1, ])
+  
+  # set column names and change date as.Date
+  colnames(named_data_list[[i]]) <- transposed_data[1, ]
+  
+  named_data_list[[i]][[2]] <- as.Date(
+  paste(named_data_list[[i]][[2]], "-01-01", sep = ""), format = "%Y-%m-%d")
+  
+  # find the columns that are only NAs and remove them
+  named_data_list[[i]] <- named_data_list[[i]][, colSums(!is.na(named_data_list[[i]])) > 0, drop = FALSE]
+  
+  # Removing all non-numeric values
+  named_data_list[[i]][, -1] <- apply(named_data_list[[i]][, -1], 2, function(x) as.numeric(gsub("[^0-9.]", "", x)))
+  
+  # Setting the first column name as "Date"
+  colnames(named_data_list[[i]])[1] <- "Date"
+  
+  # Removing the rows before 01.01.1999
+  threshold_date <- as.Date("1999-01-01")
+  named_data_list[[i]] <- named_data_list[[i]][named_data_list[[i]]$Date >= threshold_date, ]
+}
+
+sustainability_mapping <- c(
+  "Against" = c("MCG (MCR)","PBD",	"PBD 1",	"PBD 2",	"UDC"),
+  "Slightly Against" = c("Lega","PDC",	"PDC 1",	"PDC 2",	"PLR",	"PLS",	"UDF"),
+  "Neutral" = c("Adl",	"DS",	"PdL",	"POCH",	"PSL",	"PST",	"Rép.",	"Sol.","Separ.", "Autres"),
+  "Slightly in Favour" = c("Il Centro", "Il Centro 1",	"Le Centre 1","Le Centre",	"Le Centre 2",	"PCS","PPD",	"PPD 1"),
+  "In Favour" = c("AVF",	"AVF 1",	"PEV", "PS",	"PSA",	"PVL","VERDI",	"VERDI 2","VERT-E-S  ",	"VERT-E-S 2",	"VERT-E-S 3")
+)
+
+for (i in seq_along(named_data_list)){
+  current_dataset <- named_data_list[[i]]
+  
+  for (party_name in names(current_dataset)[-1]) {
+    stance <- sapply(sustainability_mapping, function(x) party_name %in% x)
+    stance <- names(stance)[which(stance)]
+    
+    if (length(stance) > 0) {
+      # Ensure proper handling of column names
+      selected_columns <- intersect(c(party_name, stance), colnames(current_dataset))
+      
+      current_dataset[[stance]] <- rowSums(current_dataset[selected_columns], na.rm = TRUE)
+      current_dataset[[party_name]] <- NULL
+    }
+  }
+  named_data_list[[i]] <- current_dataset
+}
+
+for (i in seq_along(named_data_list)) {
+  tibble_name <- paste0("politic_", sheet_names[i])
+  assign(tibble_name, named_data_list[[i]])
+}
+
+  # Create new columns for "Against," "Slightly Against," "Neutral," "Slightly in Favour," and "In Favour"
+  #current_dataset <- current_dataset %>%
+   # group_by(Date) %>%
+    #summarise(
+     # Across(c("Against", "Slightly Against", "Neutral", "Slightly In Favour", "In Favour"), 
+      #       ~ sum(.x, na.rm = TRUE))
+    #)
+  
+```
+
