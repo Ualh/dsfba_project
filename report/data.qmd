@@ -423,8 +423,8 @@ process_dataset <- function(file_path) {
 processed_datasets <- list()
 
 for (dataset_name in dataset_names) {
-  file_path <- file.path("../data", dataset_name)
-  processed_dataset <- process_dataset(file_path)
+  file_path_gt <- file.path("../data", dataset_name)
+  processed_dataset <- process_dataset(file_path_gt)
   processed_datasets[[dataset_name]] <- processed_dataset
 }
 
@@ -617,9 +617,9 @@ df_v <- df_v %>%
            TRUE ~ Fuel))
 
 # Count number of vehicles for a particular year
-vehicle_count_2022 <- df_v %>%
-  filter(Location == "Switzerland", year(Date) == 2023, VehicleType == "Passenger car") %>%
-  summarize(TotalCount = sum(Count))
+#vehicle_count_2022 <- df_v %>%
+#  filter(Location == "Switzerland", year(Date) == 2023, VehicleType == "Passenger car") %>%
+#  summarize(TotalCount = sum(Count))
 ```
 
 #### Redundancy
