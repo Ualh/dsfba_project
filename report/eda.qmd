@@ -32,7 +32,7 @@ p_seaso_1 <- ggplot(passenger_cars_processed, aes(x = YearMonth, y = Count)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # Convert to an interactive plotly object
-interactive_plot_seaso_1 <- ggplotly(p_seaso_1)
+interactive_plot_seaso_1 <- ggplotly(p_seaso_1, width = 600, height = 400)
 
 # Display the interactive plot
 interactive_plot_seaso_1
@@ -57,7 +57,7 @@ p_seaso_2 <- ggplot(passenger_cars_processed, aes(x = Month, y = Count, group = 
   theme(legend.position = "bottom", axis.text.x = element_text(angle = 45, hjust = 1))
 
 # Convert to an interactive plotly object
-interactive_plot_seaso_2 <- ggplotly(p_seaso_2)
+interactive_plot_seaso_2 <- ggplotly(p_seaso_2, width = 600, height = 400)
 
 # Adjust plotly settings if needed, such as margins or layout
 interactive_plot_seaso_2 <- interactive_plot_seaso_2 %>%
@@ -89,7 +89,7 @@ p_seaso_3 <- ggplot(passenger_cars_processed, aes(x = Month, y = Count, group = 
         legend.position = "none") # Remove the legend to clean up the plot
 
 # Convert to an interactive plotly object
-interactive_plot_seaso_3 <- ggplotly(p_seaso_3) %>%
+interactive_plot_seaso_3 <- ggplotly(p_seaso_3, width = 600, height = 400) %>%
   layout(xaxis = list(tickmode = "array",
                       tickvals = 1:12,
                       ticktext = month.abb))
@@ -127,7 +127,7 @@ p_fuel_over_time <- ggplot(fuel_type_trends, aes(x = Date, y = Count, color = Fu
   theme(legend.position = "bottom")  # Adjust legend position to the bottom
 
 # Convert to an interactive plotly object
-interactive_plot_fuel_over_time <- ggplotly(p_fuel_over_time)
+interactive_plot_fuel_over_time <- ggplotly(p_fuel_over_time, width = 600, height = 400)
 # Adjust plotly settings 
 interactive_plot_fuel_over_time <- interactive_plot_fuel_over_time %>%
   layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
@@ -333,7 +333,7 @@ p_demog <- ggplot(demographic_data_long, aes(x = Year, y = Population, color = G
   scale_color_manual(values = c("Generation Z" = "blue", "Millennials" = "red", "Generation X" = "green", "Baby Boomers" = "purple"))
 
 # Convert the ggplot object to an interactive plotly object
-interactive_plot_demog <- ggplotly(p_demog)
+interactive_plot_demog <- ggplotly(p_demog, width = 600, height = 400)
 
 # Adjust plotly settings 
 interactive_plot_demog <- interactive_plot_demog%>%
@@ -367,7 +367,7 @@ p <- ggplot(long_registration_data, aes(x = Date, y = log(Count), color = Fuel_T
   theme_minimal()
 
 # Convert to interactive plot and adjust legend
-ggplotly(p) %>%
+ggplotly(p, width = 600, height = 400) %>%
   layout(legend = list(orientation = 'h', x = 0.5, xanchor = 'center', y = -0.15))
 
 
@@ -403,7 +403,7 @@ p <- ggplot(long_df_v_fr, aes(x = Date, y = Delta, color = Fuel_Type)) +
                                 "Electricity" = "orange"))
 
 # Convert to interactive plot and adjust legend
-ggplotly(p) %>%
+ggplotly(p, width = 600, height = 400) %>%
   layout(legend = list(orientation = 'h', x = 0.5, xanchor = 'center', y = -0.3))
 
 ```
@@ -474,7 +474,7 @@ p <- ggplot() +
             aes(x = x, y = y, label = label, color = label), 
             size = 4, show.legend = FALSE)
 
-interactive_plot <- ggplotly(p, tooltip = c("x", "y", "color"))
+interactive_plot <- ggplotly(p, width = 600, height = 400, tooltip = c("x", "y", "color"))
 interactive_plot <- interactive_plot %>%
   layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
 interactive_plot
@@ -500,7 +500,7 @@ p <- ggplot() +
   facet_wrap(~Fuel, scales = 'free_y', ncol = 1)
 
 # Convert to interactive plot
-interactive_plot <- ggplotly(p, tooltip = c("x", "y", "color"))
+interactive_plot <- ggplotly(p, width = 600, height = 600, tooltip = c("x", "y", "color"))
 interactive_plot <- interactive_plot %>%
   layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
 interactive_plot
@@ -546,7 +546,7 @@ p <- ggplot(merged_df, aes(x = Date)) +
   theme(legend.position = "bottom")
 
 # Convert to interactive plot
-interactive_plot <- ggplotly(p) %>%
+interactive_plot <- ggplotly(p, width = 600, height = 400) %>%
   layout(legend = list(orientation = "h", x = 0.5, xanchor = "center", y = -0.3))
 
 interactive_plot
@@ -600,7 +600,7 @@ p <- ggplot(df_merged, aes(x = Date)) +
   theme(legend.position = "bottom")
 
 # Convert to interactive plot
-interactive_plot <- ggplotly(p) %>%
+interactive_plot <- ggplotly(p, width = 600, height = 400) %>%
   layout(legend = list(orientation = "h", x = 0.5, xanchor = "center", y = -0.3))
 
 interactive_plot
