@@ -805,3 +805,10 @@ reactable(df_charging_station,
           searchable = TRUE)
 
 ```
+
+### 2.2.7 Swiss Population
+
+```{r}
+
+```
+
