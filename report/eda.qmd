@@ -284,7 +284,7 @@ concerning this topic and comfort us towards our initial predictions.
 
 ## 3.3 Oil
 
-The above chart represents the oil price evolution through the last two
+The chart below represents the oil price evolution through the last two
 decades. We can observe a quite high degree of volatility concerning the
 oil valuation. Nevertheless, it seems important to highlight that this
 value has greatly increased since the past 3 years.
@@ -407,10 +407,17 @@ ggplotly(p, width = 600, height = 400) %>%
   layout(legend = list(orientation = 'h', x = 0.5, xanchor = 'center', y = -0.3))
 
 ```
+## 3.6 Political Parties
 
-## 3.6 Swiss vs France
+Here, we have
+```{r}
 
-### 3.6.1 Electric vs Hybrid vs Petrol
+```
+
+
+## 3.7 Swiss vs France
+
+### 3.7.1 Electric vs Hybrid vs Petrol
 
 Here we compare and visualize specific vehicle fuel types between Swiss
 and French datasets.
@@ -506,7 +513,7 @@ interactive_plot <- interactive_plot %>%
 interactive_plot
 ```
 
-## 3.7 EV and Google Trends
+## 3.8 EV and Google Trends
 
 All in all, the Google trend seems to be in adequation with the actual
 rise in EVs around Switzerland.
@@ -553,7 +560,7 @@ interactive_plot
 
 ```
 
-## 3.8 EV and Oil Price
+## 3.9 EV and Oil Price
 
 The results of the graphic comparing oil price and EVs evolution
 comforts us in our choice of oil price as an explicative variable.

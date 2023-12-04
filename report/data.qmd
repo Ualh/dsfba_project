@@ -952,10 +952,15 @@ for (i in seq_along(named_data_list)) {
   named_data_list[[i]] <- result_dataset
 }
 
+# Storing the data sets into a list:
+list_politic <- list()
+
 for (i in seq_along(named_data_list)) {
   tibble_name <- paste0("politic_", sheet_names[i])
-  assign(tibble_name, named_data_list[[i]])
-}  
+  list_politic[[tibble_name]] <- named_data_list[[i]]
+}
+
+# Correcting a NA in politic_AI
 
 ```
 ### 2.2.8 Swiss Population
