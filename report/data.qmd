@@ -957,7 +957,32 @@ for (i in seq_along(named_data_list)) {
 }
 
 # Correcting a NA in politic_AI
+new_dates <- list_politic[["politic_VD"]]$Date
+list_politic[["politic_AI"]]$Date <- new_dates
 
+# Creating a data set per year for Switzerland
+political_combined_data <- bind_rows(list_politic, .id = "Canton")
+political_combined_data$Year <- as.integer(format(political_combined_data$Date, "%Y"))
+political_combined_data <- political_combined_data[, -which(names(political_combined_data) == "Date")]
+
+political_summarized_data <- political_combined_data %>%
+  group_by(Year, Canton) %>%
+  summarize(
+    Against = sum(Against),
+    `Slightly Against` = sum(`Slightly Against`),
+    Neutral = sum(Neutral),
+    `Slightly in Favour` = sum(`Slightly in Favour`),
+    `In Favour` = sum(`In Favour`)
+  )
+
+yearly_political_datasets <- list()
+unique_years <- unique(political_combined_data$Year)
+for (year in unique_years) {
+  year_political_dataset <- political_combined_data %>% filter(Year == year)
+  yearly_political_datasets[[as.character(year)]] <- year_political_dataset
+}
+
+# now accessible via ' political_yearly_data$Year '
 ```
 ### 2.2.8 Swiss Population
 
