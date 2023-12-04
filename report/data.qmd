@@ -832,7 +832,11 @@ reactable(df_charging_station,
 
 ```
 
+<<<<<<< HEAD
 2.2.7 Political strength per canton
+=======
+### 2.2.7 Political strength per canton
+>>>>>>> 5b28c2f81e9ec71329949db85fff201a5022407f
 
 This data set will be used to explore and analyze the effects of political convictions on EVs adoption (per Canton).
 
