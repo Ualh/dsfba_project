@@ -6,7 +6,7 @@
 packages <- c("here","tidyverse", "tidyr", "readxl","ggrepel",
               "gghighlight", "patchwork", "maps","dplyr","scales",
               "kableExtra", "reactable","sf", "shiny", "leaflet",
-              "plotly", "rsconnect")
+              "plotly", "rsconnect", "gifski", "gganimate")
 purrr::walk(packages, library, character.only = TRUE)
 
 ######################################################
@@ -35,6 +35,7 @@ knitr::opts_chunk$set(
   out.width = "70%",
   fig.align = "center",
   fig.width = 6,
+  fig.height = 4,
   fig.asp = 0.618,
   fig.show = "hold",
   message = FALSE,

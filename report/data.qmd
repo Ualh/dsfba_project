@@ -29,6 +29,7 @@ demographic_data <- fread(paste0(file_path, "demographic.csv"))
 charging_station <- fread(paste0(file_path, "charging_station.csv"))
 france_v <- read_excel(paste0(file_path, "parc_vp_france_2022.xlsx"), sheet = 2)
 political_data_sheets_prep <- excel_sheets(paste0(file_path, "political_data.xlsx"))
+df_swisspop <- read_excel(paste0(file_path, "swiss_pop.xlsx"), sheet = 1)
 ```
 
 For this phase of the project, our approach involves presenting diverse
@@ -289,6 +290,30 @@ variable_table_charging %>%
 Source -
 [bfe.admin.ch](https://www.bfe.admin.ch/bfe/fr/home/approvisionnement/statistiques-et-geodonnees/geoinformation/geodonnees/mobilite/bornes-de-recharge-pour-la-mobilite-electrique.html)
 
+### 2.2.7 Swiss Population
+```{r}
+# Create a tibble with variable descriptions for the Swiss population dataset
+variable_table_swiss_pop <- tibble(
+  Variable = c("Canton", "Total Population", "Age Groups", "Sex", "Citizenship", "Marital Status", "Typology: Area with urban character"),
+  Description = c(
+    "The name of the canton in Switzerland.",
+    "Total number of permanent residents in the canton.",
+    "Population broken down into age groups: 0–19, 20–64, 65 and over.",
+    "Population broken down by sex: Male and Female.",
+    "Population broken down by citizenship: Swiss and Foreigner.",
+    "Population broken down by marital status: Single, Married, Widowed, Divorced, Unmarried, In a registered partnership, Partnership dissolved.",
+    "Typology of the area based on urban character: Urban core, Area influenced by urban cores, Area beyond urban influence."
+  )
+)
+
+# Display the table using kableExtra
+variable_table_swiss_pop %>%
+  kbl() %>%
+  kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover"))
+```
+
+Source - [bfe.admin.ch](https://www.bfs.admin.ch/bfs/fr/home/statistiques/population.assetdetail.26565163.html)
+
 ## 2.2 Data Wrangling
 
 ### 2.2.1 Data Wrangling : Oil clean
@@ -424,8 +449,8 @@ process_dataset <- function(file_path) {
 processed_datasets <- list()
 
 for (dataset_name in dataset_names) {
-  file_path <- file.path("../data", dataset_name)
-  processed_dataset <- process_dataset(file_path)
+  file_path_gt <- file.path("../data", dataset_name)
+  processed_dataset <- process_dataset(file_path_gt)
   processed_datasets[[dataset_name]] <- processed_dataset
 }
 
@@ -618,9 +643,9 @@ df_v <- df_v %>%
            TRUE ~ Fuel))
 
 # Count number of vehicles for a particular year
-vehicle_count_2022 <- df_v %>%
-  filter(Location == "Switzerland", year(Date) == 2023, VehicleType == "Passenger car") %>%
-  summarize(TotalCount = sum(Count))
+#vehicle_count_2022 <- df_v %>%
+#  filter(Location == "Switzerland", year(Date) == 2023, VehicleType == "Passenger car") %>%
+#  summarize(TotalCount = sum(Count))
 ```
 
 #### Redundancy
@@ -747,7 +772,7 @@ data set in the following way:
 
 ```{r}
 # Only taking the private cars from this data and transforming the data
-france_private <- france_v[25:37, ] %>%
+df_v_fr <- france_v[25:37, ] %>%
   t() %>%
   as_tibble() %>%
   setNames(.[1, ]) %>%
@@ -770,7 +795,7 @@ france_private <- france_v[25:37, ] %>%
   mutate(Date = as.Date(paste(Date, "-01-01", sep = ""), format = "%Y-%m-%d"))
 
 # Display cleaned data
-reactable(head(france_private, 100), sortable = TRUE, searchable = TRUE)
+reactable(head(df_v_fr, 100), sortable = TRUE, searchable = TRUE)
 ```
 
 ### 2.2.6 Availability of charging stations
@@ -806,6 +831,7 @@ reactable(df_charging_station,
           searchable = TRUE)
 
 ```
+<<<<<<< HEAD
 2.2.7 Political strength per canton
 
 This data set will be used to explore and analyze the effects of political convictions on EVs adoption (per Canton).
@@ -915,5 +941,97 @@ for (i in seq_along(named_data_list)) {
       #       ~ sum(.x, na.rm = TRUE))
     #)
   
+
+```
+### 2.2.7 Swiss Population
+
+We chose to use the population data from the year 2022 to ensure the most current and relevant demographic context, providing a contemporary snapshot that aligns closely with the latest trends in electric vehicle registrations.
+
+Assuming the relevant data starts from row 5, canton names are in the first column, and the population figures for 2022 are in the second column.
+
+```{r}
+df_swisspop <- df_swisspop %>%
+  slice(-1:-4) %>%  # Remove the first 4 rows
+  select(Canton = 1, TotalPopulation = 2)  # Select only the canton names and population figures
+
+# Remove rows with NAs in the Canton column
+df_swisspop <- df_swisspop %>%
+  filter(!is.na(Canton))
+
+# Map Canton names to abbreviations
+df_swisspop <- df_swisspop %>%
+  mutate(CantonAbbreviation = case_when(
+    Canton == "Zurich" ~ "ZH",
+    Canton == "Bern" ~ "BE",
+    Canton == "Lucerne" ~ "LU",
+    Canton == "Uri" ~ "UR",
+    Canton == "Schwyz" ~ "SZ",
+    Canton == "Obwalden" ~ "OW",
+    Canton == "Nidwalden" ~ "NW",
+    Canton == "Glarus" ~ "GL",
+    Canton == "Zug" ~ "ZG",
+    Canton == "Fribourg" ~ "FR",
+    Canton == "Solothurn" ~ "SO",
+    Canton == "Basel-Stadt" ~ "BS",
+    Canton == "Basel-Landschaft" ~ "BL",
+    Canton == "Schaffhausen" ~ "SH",
+    Canton == "Appenzell A. Rh." ~ "AR",
+    Canton == "Appenzell I. Rh." ~ "AI",
+    Canton == "St. Gallen" ~ "SG",
+    Canton == "Graubünden" ~ "GR",
+    Canton == "Aargau" ~ "AG",
+    Canton == "Thurgau" ~ "TG",
+    Canton == "Ticino" ~ "TI",
+    Canton == "Vaud" ~ "VD",
+    Canton == "Valais" ~ "VS",
+    Canton == "Neuchâtel" ~ "NE",
+    Canton == "Geneva" ~ "GE",
+    Canton == "Jura" ~ "JU",
+    TRUE ~ NA_character_  # For unrecognized cantons
+  ))
+
+# Map Canton names to KANTONSNUM
+df_swisspop <- df_swisspop %>%
+  mutate(KANTONSNUM = case_when(
+    Canton == "Graubünden" ~ 18,
+    Canton == "Bern" ~ 2,
+    Canton == "Valais" ~ 23,
+    Canton == "Vaud" ~ 22,
+    Canton == "Ticino" ~ 21,
+    Canton == "St. Gallen" ~ 17,
+    Canton == "Zurich" ~ 1,
+    Canton == "Fribourg" ~ 10,
+    Canton == "Lucerne" ~ 3,
+    Canton == "Aargau" ~ 19,
+    Canton == "Uri" ~ 4,
+    Canton == "Thurgau" ~ 20,
+    Canton == "Schwyz" ~ 5,
+    Canton == "Jura" ~ 26,
+    Canton == "Neuchâtel" ~ 24,
+    Canton == "Solothurn" ~ 11,
+    Canton == "Glarus" ~ 8,
+    Canton == "Basel-Landschaft" ~ 13,
+    Canton == "Obwalden" ~ 6,
+    Canton == "Nidwalden" ~ 7,
+    Canton == "Geneva" ~ 25,
+    Canton == "Schaffhausen" ~ 14,
+    Canton == "Appenzell A. Rh." ~ 15,
+    Canton == "Zug" ~ 9,
+    Canton == "Appenzell I. Rh." ~ 16,
+    Canton == "Basel-Stadt" ~ 12,
+    TRUE ~ NA_integer_  # For unrecognized cantons
+  ))
+
+
+df_swisspop$TotalPopulation <- as.integer(df_swisspop$TotalPopulation)
+# Filter out rows where CantonAbbreviation is NA
+df_swisspop <- df_swisspop %>%
+  filter(!is.na(CantonAbbreviation))
+
+# Display cleaned data
+reactable(df_swisspop,
+          sortable = TRUE, 
+          searchable = TRUE)
+>>>>>>> 34e6abdf15e29439886b0d207bed0c4cacc8418c
 ```
 

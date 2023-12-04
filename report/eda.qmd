@@ -5,16 +5,23 @@ source(here::here("scripts/setup.R"))
 ```
 
 ## 3.1 Switzerland
-### 3.1.1 sesonality
-```{r}
-# Filter for only Passenger car vehicle type and summarize
-passenger_cars <- df_v %>%
-  filter(VehicleType == "Passenger car") %>%
-  group_by(Date) %>%
-  summarise(Count = sum(Count, na.rm = TRUE), .groups = 'drop')
 
-# Create the ggplot object
-p <- ggplot(passenger_cars, aes(x = Date, y = Count)) +
+### 3.1.1 seasonality
+
+```{r}
+#creating dataset for the three seasonality graphs
+passenger_cars_processed <- df_v %>%
+  filter(VehicleType == "Passenger car") %>%
+  mutate(YearMonth = floor_date(Date, "month")) %>%
+  group_by(YearMonth) %>%
+  summarise(Count = sum(Count, na.rm = TRUE)) %>%
+  ungroup() %>%
+  mutate(Year = year(YearMonth), 
+         Month = factor(month(YearMonth), levels = 1:12, labels = month.abb)) %>%
+  arrange(Year, Month)
+
+# plot1
+p_seaso_1 <- ggplot(passenger_cars_processed, aes(x = YearMonth, y = Count)) +
   geom_line(color = "darkblue", size = 0.5) +
   labs(title = "Passenger Car Adoption Over Time in Switzerland",
        x = "Date",
@@ -25,24 +32,21 @@ p <- ggplot(passenger_cars, aes(x = Date, y = Count)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 # Convert to an interactive plotly object
-interactive_plot <- ggplotly(p)
+interactive_plot_seaso_1 <- ggplotly(p_seaso_1, width = 600, height = 400)
 
 # Display the interactive plot
-interactive_plot
+interactive_plot_seaso_1
 ```
 
-The blue line represents a smoothed trend, indicating an initial increase in car registrations until around 2014-2015, followed by a gradual decline. The black line shows the actual number of cars registered, with significant variability. We will call this variation seasonality which is better represented in the following graph. 
+The blue line represents a smoothed trend, indicating an initial
+increase in car registrations until around 2014-2015, followed by a
+gradual decline. The black line shows the actual number of cars
+registered, with significant variability. We will call this variation
+seasonality which is better represented in the following graph.
 
 ```{r}
-# Filter for only Passenger car vehicle type and summarize by year and month
-passenger_cars <- df_v %>%
-  filter(VehicleType == "Passenger car") %>%
-  mutate(Year = year(Date), Month = factor(month(Date), levels = 1:12, labels = month.abb)) %>%  # Use abbreviated month names
-  group_by(Year, Month) %>%
-  summarise(Count = sum(Count, na.rm = TRUE), .groups = 'drop')
-
 # Plotting the data with ggplot2, showing the trend within each year
-p <- ggplot(passenger_cars, aes(x = Month, y = Count, group = Year, color = as.factor(Year))) +
+p_seaso_2 <- ggplot(passenger_cars_processed, aes(x = Month, y = Count, group = Year, color = as.factor(Year))) +
   geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 0.7) +
   labs(title = "Monthly Passenger Car Registrations by Year",
        x = "Month",
@@ -53,31 +57,24 @@ p <- ggplot(passenger_cars, aes(x = Month, y = Count, group = Year, color = as.f
   theme(legend.position = "bottom", axis.text.x = element_text(angle = 45, hjust = 1))
 
 # Convert to an interactive plotly object
-interactive_plot <- ggplotly(p)
+interactive_plot_seaso_2 <- ggplotly(p_seaso_2, width = 600, height = 400)
 
 # Adjust plotly settings if needed, such as margins or layout
-interactive_plot <- interactive_plot %>%
+interactive_plot_seaso_2 <- interactive_plot_seaso_2 %>%
   layout(margin = list(l = 40, r = 10, b = 40, t = 40), # Adjust margins
          legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2)) # Adjust legend position
 
 # Display the interactive plot
-interactive_plot
+interactive_plot_seaso_2
 ```
 
-This pattern suggests a seasonal trend with a mid-year peak and a year-end increase. 2020 reacts differently than other years. We suggest that it is probably related to Covid policies. 
-
+This pattern suggests a seasonal trend with a mid-year peak and a
+year-end increase. 2020 reacts differently than other years. We suggest
+that it is probably related to Covid policies.
 
 ```{r}
-# Filter for only Passenger car vehicle type and summarize by year and month
-passenger_cars <- df_v %>%
-  filter(VehicleType == "Passenger car") %>%
-  mutate(Year = year(Date), Month = month(Date)) %>%
-  group_by(Year, Month) %>%
-  summarise(Count = sum(Count, na.rm = TRUE), .groups = 'drop') %>%
-  mutate(Month = factor(Month, levels = 1:12, labels = month.abb))  # Convert Month to a factor to ensure proper ordering in the plot
-
 # Plotting the data with ggplot2, showing the trend within each year
-p <- ggplot(passenger_cars, aes(x = Month, y = Count, group = Year, color = as.factor(Year))) +
+p_seaso_3 <- ggplot(passenger_cars_processed, aes(x = Month, y = Count, group = Year, color = as.factor(Year))) +
   geom_line() +
   facet_wrap(~ Year, scales = "free_y") +  # Facet by year with free y scales
   labs(title = "Seasonal Trends in Passenger Car Registrations",
@@ -92,16 +89,19 @@ p <- ggplot(passenger_cars, aes(x = Month, y = Count, group = Year, color = as.f
         legend.position = "none") # Remove the legend to clean up the plot
 
 # Convert to an interactive plotly object
-interactive_plot <- ggplotly(p) %>%
+interactive_plot_seaso_3 <- ggplotly(p_seaso_3, width = 600, height = 400) %>%
   layout(xaxis = list(tickmode = "array",
                       tickvals = 1:12,
                       ticktext = month.abb))
 
 # Display the interactive plot
-interactive_plot
+interactive_plot_seaso_3
 ```
 
-This version of the graphs helps us visualizing the evolution of registration for each year individually. As mentioned above, 2020 is the only year which show a decreasing peak instead of an increasing one as it is presented for all other years. 
+This version of the graphs helps us visualizing the evolution of
+registration for each year individually. As mentioned above, 2020 is the
+only year which show a decreasing peak instead of an increasing one as
+it is presented for all other years.
 
 ### 3.1.2 Vehicule Registration by Fuel time over time
 
@@ -114,86 +114,206 @@ filtered_df <- df_v %>%
 # Group by Date and Fuel type, and summarize the count
 fuel_type_trends <- filtered_df %>%
   group_by(Date, Fuel) %>%
-  summarize(Count = sum(Count, na.rm = TRUE)) %>%
-  ungroup()
+  summarize(Count = sum(Count, na.rm = TRUE), .groups = 'drop')  # Use .groups = 'drop' to ungroup immediately
 
 # Plotting the trends over time by fuel type
-ggplot(fuel_type_trends, aes(x = Date, y = Count, color = Fuel)) +
-  geom_line(stat = "smooth", se = FALSE, method = "loess", span = 0.1, size = 1) +
+p_fuel_over_time <- ggplot(fuel_type_trends, aes(x = Date, y = Count, color = Fuel)) +
+  geom_line(alpha = 0.3) +  # Plot the actual lines
+  geom_smooth(aes(group = Fuel), se = FALSE, method = "loess", span = 0.1) +  # Add smoothed lines per fuel type
   labs(title = "Vehicle Registrations by Fuel Type Over Time",
        x = "Date",
        y = "Number of Vehicles Registered") +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom")  # Adjust legend position to the bottom
+
+# Convert to an interactive plotly object
+interactive_plot_fuel_over_time <- ggplotly(p_fuel_over_time, width = 600, height = 400)
+# Adjust plotly settings 
+interactive_plot_fuel_over_time <- interactive_plot_fuel_over_time %>%
+  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
+
+# Display the interactive plot
+interactive_plot_fuel_over_time
 ```
 
-The graph above shows the vehicle registrations in Switzerland by fuel type from 2005 to 2023. 
+The graph above shows the vehicle registrations in Switzerland by fuel
+type from 2005 to 2023.
 
-On the one hand, it highlights the recent decrease in new registrations of thermic vehicles since 2017. On the other hand, the three EVs named as Conventional and Plug-in hybrids along with electricity ones are gradually increasing since approximately the same period. (In fact, fully electric cars and Conventional hybrids have even reached a higher level of vehicle registration in the past years, spotlighting the EV tendency in recent years.) 
-
+On the one hand, it highlights the recent decrease in new registrations
+of thermic vehicles since 2017. On the other hand, the three EVs named
+as Conventional and Plug-in hybrids along with electricity ones are
+gradually increasing since approximately the same period. (In fact,
+fully electric cars and Conventional hybrids have even reached a higher
+level of vehicle registration in the past years, spotlighting the EV
+tendency in recent years.)
 
 ### 3.1.3 Map
+
 #### 3.1.4.1 Count of Electricity car Registration for all years per cantons
 
-`swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp` contains the boundaries of the cantons of Switzerland.
+`swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp` contains the boundaries of
+the cantons of Switzerland.
+
+The choice to display the sum of electric vehicle registrations over all
+years on the map was made to provide a comprehensive historical
+perspective, highlighting the total adoption of electric vehicles in
+each Swiss canton since the beginning of the dataset's timeframe. This
+approach effectively captures the cumulative impact of electric vehicle
+adoption across the country.
+
+The process involved filtering vehicle registration data for electric
+passenger cars and summing up the total registrations for each Swiss
+canton. This data was then combined with population figures and
+geographic boundaries to calculate electric vehicle (EV) registrations
+per capita, providing a standardized comparison of EV adoption across
+cantons.
+
 ```{r}
-df_v_map <- df_v |>
-  filter(!Location %in% c("Switzerland", "Confederation"))
-# Mapping between canton abbreviations and numbers
-# Define a vector of the abbreviation values in the desired order
+# Read in the shapefile for Swiss cantons
+swiss_cantons <- st_read("../data/CH_map/swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
+# Define canton abbreviations for matching
 abbreviation_values <- c("ZH", "BE", "LU", "UR", "SZ", "OW", "NW", "GL", "ZG", "FR", "SO", "BS", "BL", "SH", "AR", "AI", "SG", "GR", "AG", "TG", "TI", "VD", "VS", "NE", "GE", "JU")
 
-# Use the match function to create the new column
-df_v_map$KANTONSNUM <- match(df_v_map$Location, abbreviation_values)
-
-swiss_cantons <- st_read("../data/CH_map/swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
-
-# Aggregate the data
-preprocessed_data <- df_v_map %>%
-  group_by(Fuel, VehicleType, Year = format(as.Date(Date), "%Y"), KANTONSNUM) %>%
-  summarize(Total = sum(Count), .groups = 'drop')
-
-# Ensure KANTONSNUM is correctly formatted in both datasets
-df_v_map$KANTONSNUM <- as.numeric(as.character(df_v_map$KANTONSNUM))
-swiss_cantons$KANTONSNUM <- as.numeric(as.character(swiss_cantons$KANTONSNUM))
-
-# Filter and aggregate df_v data
-filtered_data <- df_v_map %>%
-  filter(Fuel == "Electricity", VehicleType == "Passenger car") %>%
+# Prepare the EV data with sum over all years
+df_v_map <- df_v %>%
+  filter(!Location %in% c("Switzerland", "Confederation"), 
+         Fuel == "Electricity", VehicleType == "Passenger car") %>%
+  mutate(KANTONSNUM = match(Location, abbreviation_values)) %>%
   group_by(KANTONSNUM) %>%
-  summarize(Total = sum(Count))
+  summarize(TotalEV = sum(Count), .groups = 'drop')
+
+# Merge EV data with population data
+df_v_map <- left_join(df_v_map, df_swisspop, by = c("KANTONSNUM" = "KANTONSNUM"))
+
+str(df_v_map)
+# Calculate EV registrations per capita
+df_v_map <- df_v_map %>%
+  mutate(EV_per_Capita = TotalEV / TotalPopulation)
 
 # Merge with shapefile data
-map_data <- merge(swiss_cantons, filtered_data, by = "KANTONSNUM")
+map_data <- left_join(swiss_cantons, df_v_map, by = "KANTONSNUM")
 
-# Create a ggplot
-p <- ggplot() +
-  geom_sf(data = map_data, aes(fill = Total), color = NA) +
-  scale_fill_viridis_c() +
-  theme_minimal()
+# Ensure the geometries are valid and the CRS is set to WGS 84
+# Check if 'map_data' is already an sf object
+if (!inherits(map_data, "sf")) {
+  map_data_sf <- st_as_sf(map_data, wkt = "geometry")
+} else {
+  map_data_sf <- map_data
+}
 
-# Convert to interactive plotly plot
-ggplotly(p)
+# Ensure the geometries are valid and the CRS is set
+map_data_sf <- st_make_valid(map_data_sf)
+# Reproject the data to WGS 84 (EPSG:4326)
+map_data_sf <- st_transform(map_data_sf, crs = 4326)
+
+
+# Create color palettes for the 'Total' and 'EV_per_Capita' columns
+color_palette_total <- colorNumeric(palette = "viridis", domain = map_data_sf$TotalEV)
+color_palette_per_capita <- colorNumeric(palette = "viridis", domain = map_data_sf$EV_per_Capita)
+
+# Create the leaflet maps
+leaflet_map_total <- leaflet(map_data_sf) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~color_palette_total(TotalEV),
+    weight = 1,
+    color = "#FFFFFF",
+    fillOpacity = 0.7,
+    popup = ~paste(NAME, "<br>Total EV Registrations: ", TotalEV)
+  ) %>%
+  addLegend(
+    pal = color_palette_total, 
+    values = ~TotalEV, 
+    opacity = 0.7, 
+    title = "Total EV <br> Registrations",
+    position = "topright"
+  )
+
+leaflet_map_per_capita <- leaflet(map_data_sf) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~color_palette_per_capita(EV_per_Capita),
+    weight = 1,
+    color = "#FFFFFF",
+    fillOpacity = 0.7,
+    popup = ~paste(NAME, "<br>EV Registrations per Capita: ", 
+                   round(EV_per_Capita, 3))
+  ) %>%
+  addLegend(
+    pal = color_palette_per_capita, 
+    values = ~EV_per_Capita, 
+    opacity = 0.7, 
+    title = "EV Registrations <br> per Capita",
+    position = "topright"
+  )
+
+# Print the maps to view them
+leaflet_map_total
+```
+
+#### 3.1.4.2 Count of Electricity car Registration for all years per cantons Standardized
+
+For example, Zurich (ZH) has a relatively lower **`EV_per_Capita`**
+value (0.01870) despite a high total number of EV registrations
+(29,541), due to its large population (1,579,967). In contrast, Zug (ZG)
+shows a higher **`EV_per_Capita`** (0.04666) with fewer EV registrations
+(6,120) but a much smaller population (131,164), indicating a greater
+adoption rate when adjusted for population size.
+
+The limitation of this approach is that it considers the total
+population, not accounting for the segment of the population that is of
+driving age or interested in vehicle ownership, which could further
+refine the EV adoption rates.
+
+```{r}
+leaflet_map_per_capita
 ```
 
 ## 3.2 Google Trend
+
 ```{r}
 ggplot(df_gtrends, aes(x = Date, y = SearchRatio)) +
   geom_line(color = "darkgreen", size = 1, stat='smooth', se = FALSE, method = "loess", span = 0.1, size = 1) +
   labs(x = "Date", y = "Google Search", title = "Google search About EV in Switzerland")
 ```
 
-Another interesting point to look out is the Google search about EV engine in Switzerland. As we can see, it seems to have skyrocketed since 2016. This allows us to get an overview of the Swiss population interest concerning this topic and comfort us towards our initial predictions.  
+Another interesting point to look out is the Google search about EV
+engine in Switzerland. As we can see, it seems to have skyrocketed since
+2016. This allows us to get an overview of the Swiss population interest
+concerning this topic and comfort us towards our initial predictions.
 
 ## 3.3 Oil
-```{r}
-ggplot(df_oil, aes(x = Date , y = Price)) +
+
+The above chart represents the oil price evolution through the last two
+decades. We can observe a quite high degree of volatility concerning the
+oil valuation. Nevertheless, it seems important to highlight that this
+value has greatly increased since the past 3 years.
+
+The `fig.show='animate'` option tells Quarto to render the plot as an
+animation.
+
+```{r, fig.show='animate'}
+## basic plot
+#ggplot(df_oil, aes(x = Date , y = Price)) +
+#  geom_line(color = "darkred", size = 1) +
+#  labs(x = "Date", y = "Price", title = "Oil Price Over Time")
+
+# Create a ggplot object with your data
+p <- ggplot(df_oil, aes(x = Date, y = Price, group = 1)) +
   geom_line(color = "darkred", size = 1) +
   labs(x = "Date", y = "Price", title = "Oil Price Over Time")
+
+# Animate the plot with gganimate, revealing the line over time
+animated_plot <- p +
+  transition_reveal(Date)
+
+# Render the animation
+animate(animated_plot, renderer = gganimate::gifski_renderer(), width = 600, height = 400, res = 96)
+
 ```
-The above chart represents the oil price evolution through the last two decades. We can observe a quite high degree of volatility concerning the oil valuation. Nevertheless, it seems important to highlight that this value has greatly increased since the past 3 years.
 
 ## 3.4 Demographics
+<<<<<<< HEAD
 ```{r}
 demographic_data <- df_demographic %>%
   mutate(Population = `Generation Z` + `Millennials` + `Generation X` + `Baby Boomers`)
@@ -204,67 +324,115 @@ ggplot(demographic_data, aes(x = Year)) +
   geom_line(aes(y = Millennials, color = "Millennials"), size = 1) +
   geom_line(aes(y = `Generation X`, color = "Generation X"), size = 1) +
   geom_line(aes(y = `Baby Boomers`, color = "Baby Boomers"), size = 1) +
+=======
+
+```{r}
+demographic_data_long <- df_demographic %>%
+  pivot_longer(
+    cols = c('Generation Z', 'Millennials', 'Generation X', 'Baby Boomers'),
+    names_to = "Generation",
+    values_to = "Population"
+  )
+
+# Plotting the data with ggplot2
+p_demog <- ggplot(demographic_data_long, aes(x = Year, y = Population, color = Generation)) +
+  geom_line(size = 1) +
+>>>>>>> 34e6abdf15e29439886b0d207bed0c4cacc8418c
   labs(title = "Demographic Trends in Switzerland",
        x = "Year",
-       y = "Population",
-       color = "Generation") +
+       y = "Population") +
   theme_minimal() +
   theme(legend.position = "bottom") +
-  scale_color_manual(values = c("Generation Z" = "blue", "Millenials" = "red", "Generation X" = "green", "Baby Boomers" = "purple"))
+  scale_color_manual(values = c("Generation Z" = "blue", "Millennials" = "red", "Generation X" = "green", "Baby Boomers" = "purple"))
 
+# Convert the ggplot object to an interactive plotly object
+interactive_plot_demog <- ggplotly(p_demog, width = 600, height = 400)
+
+# Adjust plotly settings 
+interactive_plot_demog <- interactive_plot_demog%>%
+  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
+
+# The interactive plot can be displayed in an R Markdown document or a Shiny app
+interactive_plot_demog
 ```
 
-This graph concentrates on the demographic trends’ evolution for each segment of age abovementioned throughout the time. It points out the important overall rise of individuals living in Switzerland over the past two decades.
+This graph concentrates on the demographic trends' evolution for each
+segment of age above mentioned throughout the time. It points out the
+important overall rise of individuals living in Switzerland over the
+past two decades.
 
 ## 3.5 French vehicles
-### 3.5.1 Total vehicules evolution France
-```{r}
-# Select relevant columns for plotting
-registration_data <- df_v_fr[, c("Date", "Diesel", "Essence", "Conventional_Hybrid", "Plug_in_Hybrid", "Electrique")]
 
-# Plotting log-scale evolution of car registrations
-ggplot(registration_data, aes(x = Date)) +
-  geom_line(aes(y = log(Diesel), color = "Diesel")) +
-  geom_line(aes(y = log(Essence), color = "Essence")) +
-  geom_line(aes(y = log(Conventional_Hybrid), color = "Conventional Hybrid")) +
-  geom_line(aes(y = log(Plug_in_Hybrid), color = "Plug-in Hybrid")) +
-  geom_line(aes(y = log(Electrique), color = "Electrique")) +
+### 3.5.1 Total vehicles evolution France
+
+```{r}
+# Reshape data to long format
+long_registration_data <- df_v_fr %>%
+  select(Date, Diesel, Essence, Conventional_Hybrid, Plug_in_Hybrid, Electrique) %>%
+  gather(key = "Fuel_Type", value = "Count", -Date)
+
+# Create ggplot
+p <- ggplot(long_registration_data, aes(x = Date, y = log(Count), color = Fuel_Type)) +
+  geom_line() +
   scale_color_manual(values = c("Diesel" = "red", "Essence" = "blue", 
-                                 "Conventional Hybrid" = "green", "Plug-in Hybrid" = "purple", 
-                                 "Electrique" = "orange")) +
+                                "Conventional_Hybrid" = "green", "Plug_in_Hybrid" = "purple", "Electrique" = "orange")) +
   labs(x = "Date", y = "Log-Scale Count", color = "Fuel Type") +
   theme_minimal()
+
+# Convert to interactive plot and adjust legend
+ggplotly(p, width = 600, height = 400) %>%
+  layout(legend = list(orientation = 'h', x = 0.5, xanchor = 'center', y = -0.15))
 
 
 ```
 
 ### 3.5.2 Deltas evolution
+
 ```{r}
-# Plotting for total cars
-ggplot(df_v_fr, aes(x = Date, y = Diesel_delta, color = "Diesel")) +
+# Reshape data to long format
+long_df_v_fr <- df_v_fr %>%
+  select(Date, Diesel_delta, Essence_delta, Conventional_Hybrid_delta, Plug_in_Hybrid_delta, Electrique_delta) %>%
+  gather(key = "Fuel_Type", value = "Delta", -Date)
+
+# Map Fuel_Type values to desired names
+long_df_v_fr$Fuel_Type <- recode(long_df_v_fr$Fuel_Type,
+  "Diesel_delta" = "Diesel",
+  "Essence_delta" = "Petrol",
+  "Conventional_Hybrid_delta" = "Conventional hybrid",
+  "Plug_in_Hybrid_delta" = "Plug-in hybrid",
+  "Electrique_delta" = "Electricity"
+)
+
+# Create ggplot
+p <- ggplot(long_df_v_fr, aes(x = Date, y = Delta, color = Fuel_Type)) +
   geom_line(size = 1) +
-  geom_line(aes(y = Essence_delta, color = "Petrol"), size = 1) +
-  geom_line(aes(y = Conventional_Hybrid_delta, color = "Conventional hybrid"), size = 1) +
-  geom_line(aes(y = Plug_in_Hybrid_delta, color = "Plug-in hybrid"), size = 1) +
-  geom_line(aes(y = Electrique_delta, color = "Electricity"), size = 1) +
   labs(title = "Evolution of cars registered in France over the years by fuel type (Deltas)",
        x = "Years",
        y = "Value",
        color = "Fuel Category") +
   theme_minimal() +
   scale_color_manual(values = c("Diesel" = "red", "Petrol" = "blue", 
-                                 "Conventional hybrid" = "green", "Plug-in hybrid" = "purple",
-                                 "Electricity" = "orange"))
+                                "Conventional hybrid" = "green", "Plug-in hybrid" = "purple",
+                                "Electricity" = "orange"))
+
+# Convert to interactive plot and adjust legend
+ggplotly(p, width = 600, height = 400) %>%
+  layout(legend = list(orientation = 'h', x = 0.5, xanchor = 'center', y = -0.3))
 
 ```
 
-
 ## 3.6 Swiss vs France
+
 ### 3.6.1 Electric vs Hybrid vs Petrol
 
-Here we compare and visualize specific vehicle fuel types between Swiss and French datasets.
+Here we compare and visualize specific vehicle fuel types between Swiss
+and French datasets.
 
-The thicker line are the for **Switzerland**, the others are for **France**. We standardized the counts in both the Swiss and French datas ets for comparison purposes. Please juggle with the interactive plot to make it more readable.
+The thicker line are the for **Switzerland**, the others are for
+**France**. We standardized the counts in both the Swiss and French
+datas ets for comparison purposes. Please juggle with the interactive
+plot to make it more readable.
+
 ```{r}
 # Filtering Swiss data for specific fuel types
 swiss_specific_fuel <- df_v %>%
@@ -319,15 +487,46 @@ p <- ggplot() +
             aes(x = x, y = y, label = label, color = label), 
             size = 4, show.legend = FALSE)
 
+interactive_plot <- ggplotly(p, width = 600, height = 400, tooltip = c("x", "y", "color"))
+interactive_plot <- interactive_plot %>%
+  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
+interactive_plot
+```
+
+```{r}
+# Plotting with faceting and improved axis text
+p <- ggplot() +
+  geom_smooth(data = swiss_specific_fuel, aes(x = Date, y = Count, color = Fuel), 
+              method = "loess", se = FALSE, size = 1.5) +
+  geom_line(data = french_specific_fuel_long, aes(x = Date, y = Count, color = Fuel), 
+            alpha = 0.4, size = 0.8) +
+  scale_color_manual(values = fuel_colors, labels = c("Switzerland", "France")) +
+  labs(x = "Date", y = "Standardized Count") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        strip.background = element_blank(),
+        strip.text.x = element_text(size = 10, angle = 0),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(size = 12, margin = margin(t = 10)),
+        axis.title.y = element_text(size = 12, margin = margin(r = 10))) +
+  facet_wrap(~Fuel, scales = 'free_y', ncol = 1)
+
 # Convert to interactive plot
-interactive_plot <- ggplotly(p, width = 600, height = 400)
+interactive_plot <- ggplotly(p, width = 600, height = 600, tooltip = c("x", "y", "color"))
+interactive_plot <- interactive_plot %>%
+  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
 interactive_plot
 ```
 
 ## 3.7 EV and Google Trends
 
-All in all, the Google trend seems to be in adequation with the actual rise in EVs around Switzerland. 
-```{r}
+All in all, the Google trend seems to be in adequation with the actual
+rise in EVs around Switzerland.
+
+```{r, fig.width=8, fig.height=4}
+
+
 df_v_electric <- df_v |>
   filter(VehicleType == "Passenger car") |>
   filter(Fuel == 'Electricity')
@@ -338,51 +537,71 @@ df_electric_vehicles_agg <- df_v_electric %>% group_by(Date) %>% summarize(Count
 merged_df <- merge(df_electric_vehicles_agg, df_gtrends, by = "Date")
 
 # Calculate the ratio for the secondary axis
-max_count <- max(merged_df$Count, na.rm = TRUE)
-max_search <- max(merged_df$SearchRatio, na.rm = TRUE)
-ratio <- max_count / max_search
+max_values <- merged_df |> summarize(max_count = max(Count, na.rm = TRUE), max_search = max(SearchRatio, na.rm = TRUE))
+ratio <- max_values$max_count / max_values$max_search
+
+# Add the ratio-adjusted SearchRatio to the merged dataset
+merged_df <- merged_df |> mutate(AdjustedSearchRatio = SearchRatio * ratio)
 
 # Plotting with smoothing and color changes
-ggplot(merged_df, aes(x = Date)) +
-  geom_bar(data = merged_df, aes(x = Date, y = SearchRatio * ratio, color = "Google Trends"), stat = "identity") +
+p <- ggplot(merged_df, aes(x = Date)) +
+  geom_bar(aes(y = AdjustedSearchRatio, fill = "Google Trends"), stat = "identity") +
   geom_smooth(aes(y = Count, color = "Electric Vehicles Smoothed"), method = "loess", span = 0.2) +
   scale_y_continuous(
     "Number of Electric Vehicles",
     sec.axis = sec_axis(~ . / ratio, name = "Google Trends")
   ) +
   labs(title = "Comparison of Electric Vehicle Rise and Google Trends Over Time",
-       x = "Date", color = "Legend") +
-  scale_color_manual(values = c("Electric Vehicles Smoothed" = "blue", "Google Trends" = "darkred")) +
-  theme_minimal()
+       x = "Date", fill = "Legend", color = "Legend") +
+  scale_fill_manual(values = c("Google Trends" = "darkred")) +
+  scale_color_manual(values = c("Electric Vehicles Smoothed" = "blue")) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+# Convert to interactive plot
+interactive_plot <- ggplotly(p, width = 600, height = 400) %>%
+  layout(legend = list(orientation = "h", x = 0.5, xanchor = "center", y = -0.3))
+
+interactive_plot
+
 ```
 
 ## 3.8 EV and Oil Price
 
-The results of the graphic comparing oil price and EVs evolution comforts us in our choice of oil price as an explicative variable. Indeed, the tendency is quite similar since 2020. In fact, the previous years refer to a period where EVs were not as commercialized as today. Obviously, we are aware of the numerous other variables explaining both oil price and EVs rise over time.   
+The results of the graphic comparing oil price and EVs evolution
+comforts us in our choice of oil price as an explicative variable.
+Indeed, the tendency is quite similar since 2020. In fact, the previous
+years refer to a period where EVs were not as commercialized as today.
+Obviously, we are aware of the numerous other variables explaining both
+oil price and EVs rise over time.
 
 ```{r}
+# Resample data to monthly frequency and calculate mean oil price
 df_oil_monthly <- df_oil %>% 
                   mutate(Date = as.Date(format(Date, "%Y-%m-01"))) %>%
                   group_by(Date) %>% 
-                  summarize(Price = mean(Price))
+                  summarize(Price = mean(Price), .groups = 'drop')
 
+# Resample electric vehicles data to monthly frequency and sum counts
 df_electric_vehicles_monthly <- df_electric_vehicles_agg %>% 
                                mutate(Date = as.Date(format(Date, "%Y-%m-01"))) %>%
                                group_by(Date) %>% 
-                               summarize(Count = sum(Count))
+                               summarize(Count = sum(Count), .groups = 'drop')
 
 # Merge datasets
 df_merged <- full_join(df_electric_vehicles_monthly, df_oil_monthly, by = "Date")
 
 # Calculate the ratio for the secondary axis
-max_count <- max(df_merged$Count, na.rm = TRUE)
-max_price <- max(df_merged$Price, na.rm = TRUE)
-ratio <- max_count / max_price
+max_values <- df_merged |> summarize(max_count = max(Count, na.rm = TRUE), max_price = max(Price, na.rm = TRUE))
+ratio <- max_values$max_count / max_values$max_price
+
+# Add the ratio-adjusted Price to the merged dataset
+df_merged <- df_merged |> mutate(AdjustedPrice = Price * ratio)
 
 # Plotting with smoothing and color changes
-ggplot(df_merged, aes(x = Date)) +
+p <- ggplot(df_merged, aes(x = Date)) +
   geom_smooth(aes(y = Count, color = "Electric Vehicles Smoothed"), method = "loess", span = 0.2) +
-  geom_line(aes(y = Price * ratio, color = "Oil Price")) +
+  geom_line(aes(y = AdjustedPrice, color = "Oil Price")) +
   scale_y_continuous(
     "Number of Electric Vehicles",
     sec.axis = sec_axis(~ . / ratio, name = "Oil Price")
@@ -390,6 +609,12 @@ ggplot(df_merged, aes(x = Date)) +
   labs(title = "Comparison of Electric Vehicle Rise and Oil Prices Over Time",
        x = "Date", color = "Legend") +
   scale_color_manual(values = c("Electric Vehicles Smoothed" = "blue", "Oil Price" = "darkred")) +
-  theme_minimal()
-```
+  theme_minimal() +
+  theme(legend.position = "bottom")
 
+# Convert to interactive plot
+interactive_plot <- ggplotly(p, width = 600, height = 400) %>%
+  layout(legend = list(orientation = "h", x = 0.5, xanchor = "center", y = -0.3))
+
+interactive_plot
+```
