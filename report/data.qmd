@@ -557,12 +557,12 @@ df_demographic <- demographic_data %>%
   filter(!is.na(Age_num), Age_num >= 18, Age_num <= 98) %>%
   select(Year, Age = Age_num, `Population on 1 January`) %>%
   mutate(
-    Generation = cut(Age, breaks = c(17, 26, 42, 58, Inf), labels = c("Generation Z", "Millennials", "Generation X", "Baby Boomers"), include.lowest = TRUE)
+    Generation = cut(Age, breaks = c(17, 26, 42, 58, Inf), labels = c("Generation Z", "Millennials", "Generation X", "Baby Boomers"), include.lowest = TRUE),
+    Year = ymd(paste(Year, "01", "01", sep = "-")) # Converting Year to Date format
   ) %>%
   group_by(Year, Generation) %>%
   summarise(Population = sum(`Population on 1 January`, na.rm = TRUE)) %>%
   pivot_wider(names_from = Generation, values_from = Population)
-
 
 reactable(
   df_demographic, 
@@ -607,7 +607,7 @@ reactable(
   sortable = TRUE,  # Allow sorting
   resizable = TRUE  # Allow column resizing
 )
-
+str(df_demographic)
 ```
 
 ### 2.2.4 Data Wrangling : Swiss vehicle clean
@@ -1136,5 +1136,11 @@ df_swisspop <- df_swisspop %>%
 reactable(df_swisspop,
           sortable = TRUE, 
           searchable = TRUE)
+```
+
+```{r}
+str(df_demographic)
+str(df_oil)
+str(political_combined_data)
 ```
 
