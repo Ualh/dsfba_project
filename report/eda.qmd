@@ -432,8 +432,10 @@ pol_cantons_1999 <- pol_cantons_1999[,-1]
 
 # Fit k-means with 7 clusters
 km.res <- kmeans(pol_cantons_1999, 5, nstart = 26)
+
 fviz_cluster(km.res, data = pol_cantons_1999) +
   ggtitle("Cluster Analysis of Cantons' stance on sustainability 1999")
+
 
 # Then the PCA:
 pca_cantons <- prcomp(pol_cantons_1999)
@@ -456,6 +458,7 @@ fviz_pca_var(pca_variables, col.var = "contrib",
              repel = TRUE) +
   ggtitle("PCA Plot for Variables")
 ```
+
 ```{r}
 # Now for 2023
 political_data_2023 <- political_combined_data[,-8] %>%
@@ -605,7 +608,6 @@ All in all, the Google trend seems to be in adequation with the actual
 rise in EVs around Switzerland.
 
 ```{r, fig.width=8, fig.height=4}
-
 
 df_v_electric <- df_v |>
   filter(VehicleType == "Passenger car") |>
