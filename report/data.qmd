@@ -290,6 +290,26 @@ variable_table_charging %>%
 Source -
 [bfe.admin.ch](https://www.bfe.admin.ch/bfe/fr/home/approvisionnement/statistiques-et-geodonnees/geoinformation/geodonnees/mobilite/bornes-de-recharge-pour-la-mobilite-electrique.html)
 
+### 2.2.8 Political strength per canton
+```{r}
+# Create a tibble with variable descriptions for the Swiss population dataset
+variable_table_politic <- tibble(
+  Variable = c("x", "y", "z"),
+  Description = c(
+    "xx",
+    "yy",
+    "zz"
+  )
+)
+
+# Display the table using kableExtra
+variable_table_politic %>%
+  kbl() %>%
+  kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover"))
+```
+Source -
+[nom de la source](copy_paste_link)
+
 ### 2.2.7 Swiss Population
 ```{r}
 # Create a tibble with variable descriptions for the Swiss population dataset
@@ -983,10 +1003,49 @@ for (year in unique_years) {
 }
 
 # now accessible via ' political_yearly_data$Year '
+political_combined_data <- political_combined_data %>%
+  mutate(
+    Canton = sub("politic_", "", Canton),  # Remove 'politic_' prefix
+    Year = ymd(paste(Year, "01", "01"))    # Convert Year to date type
+  )
+
+political_combined_data <- political_combined_data %>%
+  mutate(
+    KANTONSNUM = case_when(
+      Canton == "ZH" ~ 1,
+      Canton == "BE" ~ 2,
+      Canton == "LU" ~ 3,
+      Canton == "UR" ~ 4,
+      Canton == "SZ" ~ 5,
+      Canton == "OW" ~ 6,
+      Canton == "NW" ~ 7,
+      Canton == "GL" ~ 8,
+      Canton == "ZG" ~ 9,
+      Canton == "FR" ~ 10,
+      Canton == "SO" ~ 11,
+      Canton == "BS" ~ 12,
+      Canton == "BL" ~ 13,
+      Canton == "SH" ~ 14,
+      Canton == "AR" ~ 15,
+      Canton == "AI" ~ 16,
+      Canton == "SG" ~ 17,
+      Canton == "GR" ~ 18,
+      Canton == "AG" ~ 19,
+      Canton == "TG" ~ 20,
+      Canton == "TI" ~ 21,
+      Canton == "VD" ~ 22,
+      Canton == "VS" ~ 23,
+      Canton == "NE" ~ 24,
+      Canton == "GE" ~ 25,
+      Canton == "JU" ~ 26
+    )
+  )
+
 # Display cleaned data
 reactable(political_combined_data,
           sortable = TRUE, 
           searchable = TRUE)
+str(political_combined_data)
 ```
 ### 2.2.8 Swiss Population
 
