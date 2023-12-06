@@ -431,7 +431,7 @@ rownames(pol_cantons_1999) <- pol_cantons_1999$Canton
 pol_cantons_1999 <- pol_cantons_1999[,-1]
 
 # Fit k-means with 7 clusters
-km.res <- kmeans(pol_cantons_1999, 7, nstart = 26)
+km.res <- kmeans(pol_cantons_1999, 5, nstart = 26)
 fviz_cluster(km.res, data = pol_cantons_1999)
 
 ```
@@ -564,7 +564,6 @@ All in all, the Google trend seems to be in adequation with the actual
 rise in EVs around Switzerland.
 
 ```{r, fig.width=8, fig.height=4}
-
 
 df_v_electric <- df_v |>
   filter(VehicleType == "Passenger car") |>
