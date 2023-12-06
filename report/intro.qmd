@@ -6,28 +6,93 @@ source(here::here("scripts/setup.R"))
 
 ## 1.1 Background and Motivation
 
-In an era marked by unprecedented environmental challenges, our world is at a critical juncture where sustainable practices are no longer an option but a necessity. Climate change, driven by anthropogenic activities, poses an imminent threat to the delicate ecological balance. Recognizing the urgency of this global issue, we are compelled to investigate the specific context of Switzerland, the country we live in, and which has a lot of financial capacities to change rapidly.  
+In an era marked by unprecedented environmental challenges, our world is
+at a critical juncture where sustainable practices are no longer an
+option but a necessity. Climate change, driven by anthropogenic
+activities, poses an imminent threat to the delicate ecological balance.
+Recognizing the urgency of this global issue, we are compelled to
+investigate the specific context of Switzerland, the country we live in,
+and which has a lot of financial capacities to change rapidly.
 
-The automotive sector plays a pivotal role in shaping the a sustainable world, and our focus on electric vehicle adoption in Switzerland reflects a strategic choice to comprehend the intricate interplay of factors driving this transition. 
+The automotive sector plays a pivotal role in shaping the a sustainable
+world, and our focus on electric vehicle adoption in Switzerland
+reflects a strategic choice to comprehend the intricate interplay of
+factors driving this transition.
 
-The motivations underlying our research stem from a multifaceted perspective. Firstly, the automotive industry is undergoing a transformative shift globally, with electric vehicles emerging as a key solution to reduce carbon emissions. By narrowing our focus to Switzerland, we aim to provide nuanced insights into the factors influencing EV adoption, offering a unique perspective on the socio-economic, environmentally stable and financially comfortable Swiss context. The adoption of electric vehicles provides an insight into people's inclination to make efforts towards sustainability. This emphasizes the crucial role that electric vehicle adoption plays in evaluating society's commitment to sustainable practices.
+The motivations underlying our research stem from a multifaceted
+perspective. Firstly, the automotive industry is undergoing a
+transformative shift globally, with electric vehicles emerging as a key
+solution to reduce carbon emissions. By narrowing our focus to
+Switzerland, we aim to provide nuanced insights into the factors
+influencing EV adoption, offering a unique perspective on the
+socio-economic, environmentally stable and financially comfortable Swiss
+context. The adoption of electric vehicles provides an insight into
+people's inclination to make efforts towards sustainability. This
+emphasizes the crucial role that electric vehicle adoption plays in
+evaluating society's commitment to sustainable practices.
 
-Secondly, our commitment to environmental sustainability extends beyond a generic interest. The urgency of addressing climate change has never been more palpable, and our research seeks to contribute to the discussion on sustainable mobility. 
+Secondly, our commitment to environmental sustainability extends beyond
+a generic interest. The urgency of addressing climate change has never
+been more palpable, and our research seeks to contribute to the
+discussion on sustainable mobility.
 
-Moreover, we believe the future is encapsulated in our dedication to understanding the dynamics of environmentally conscious consumer behavior. By unraveling the complexities of EV adoption in Switzerland over the years (2005-2022), we aim to offer valuable insights that could guide policymakers, businesses, and consumers towards more informed and sustainable choices. 
+Moreover, we believe the future is encapsulated in our dedication to
+understanding the dynamics of environmentally conscious consumer
+behavior. By unraveling the complexities of EV adoption in Switzerland
+over the years (2005-2022), we aim to offer valuable insights that could
+guide policymakers, businesses, and consumers towards more informed and
+sustainable choices.
 
-We believe that by comprehensively analyzing the impact of external factors on the adoption of electric vehicles in Switzerland, we can contribute meaningfully to the ongoing global efforts towards a more sustainable and resilient future. Through this project, we aspire to inspire positive change, foster innovation, and advocate for a paradigm shift towards eco-friendly practices in the automotive sector and beyond.
+We believe that by comprehensively analyzing the impact of external
+factors on the adoption of electric vehicles in Switzerland, we can
+contribute meaningfully to the ongoing global efforts towards a more
+sustainable and resilient future. Through this project, we aspire to
+inspire positive change, foster innovation, and advocate for a paradigm
+shift towards eco-friendly practices in the automotive sector and
+beyond.
 
-## 1.2 Related Work 
+## 1.2 Related Work
 
-We also came accross this [article](https://www.hivepower.tech/blog/electric-vehicles-evs-in-switzerland-what-you-should-know)
+We also came accross this
+[article](https://www.hivepower.tech/blog/electric-vehicles-evs-in-switzerland-what-you-should-know)
 
-The initial source contains a comprehensive overview of electric vehicles (EVs) in Switzerland, which gave us further incentive to dive deeper into the topic.[The second article](https://www.uvek-gis.admin.ch/BFE/storymaps/MO_Kennzahlen_Fahrzeuge/Ladeinfrastruktur_Elektromobilitaet/?lang=fr) presents essential statistical data relating to publicly accessible recharging infrastructure for electric mobility in Switzerland.
+The initial source contains a comprehensive overview of electric
+vehicles (EVs) in Switzerland, which gave us further incentive to dive
+deeper into the topic.[The second
+article](https://www.uvek-gis.admin.ch/BFE/storymaps/MO_Kennzahlen_Fahrzeuge/Ladeinfrastruktur_Elektromobilitaet/?lang=fr)
+presents essential statistical data relating to publicly accessible
+recharging infrastructure for electric mobility in Switzerland.
 
 ## 1.3 Reseach Questions
 
-- 1. Given fluctuations in oil prices, demographic shifts, and major policy, which of these factors have a direct causal impact on the shifts in the adoption of electric vehicles in Switzerland?
-- 2. Based on past electric vehicle adoption trends in Switzerland, can we forecast future adoption rates and pinpoint times of significant increases or decreases correlated with major events or policy changes?
-- 3. In comparing regions in Switzerland, which areas show higher or lower adoption of electric vehicles, and how does this regional adoption align or vary with external factors like oil price changes, political opinions, and demographic shifts?
-- 4. How has the growth of electric vehicles evolved in comparison to other countries such as France, and what factors might account for the differences in their evolution ? 
-- 5. To what extent does the evolution in the availability of charging stations exert an influence on the adoption of electric vehicles in Switzerland? 
+-   
+
+    1.  Given fluctuations in oil prices, demographic shifts, and major
+        policy, which of these factors have a direct causal impact on
+        the shifts in the adoption of electric vehicles in Switzerland?
+
+-   
+
+    2.  Based on past electric vehicle adoption trends in Switzerland,
+        can we forecast future adoption rates and pinpoint times of
+        significant increases or decreases correlated with major events
+        or policy changes?
+
+-   
+
+    3.  In comparing regions in Switzerland, which areas show higher or
+        lower adoption of electric vehicles, and how does this regional
+        adoption align or vary with external factors like oil price
+        changes, political opinions, and demographic shifts?
+
+-   
+
+    4.  How has the growth of electric vehicles evolved in comparison to
+        other countries such as France, and what factors might account
+        for the differences in their evolution ?
+
+-   
+
+    5.  To what extent does the evolution in the availability of
+        charging stations exert an influence on the adoption of electric
+        vehicles in Switzerland?

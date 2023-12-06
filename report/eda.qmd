@@ -459,7 +459,6 @@ km.res_2023 <- kmeans(pol_canton_2023, 6, nstart = 26)
 fviz_cluster(km.res_2023, data = pol_canton_2023)
 ```
 
-
 ## 3.7 Swiss vs France
 
 ### 3.7.1 Electric vs Hybrid vs Petrol

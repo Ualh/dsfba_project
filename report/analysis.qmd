@@ -14,7 +14,76 @@ __TO DO's__
 
 ## 4.2 RQ2
 
-## 4.3 RQ3 
+## 4.3 RQ3
+
+In comparing regions in Switzerland, which areas show higher or lower adoption of electric vehicles, and how does this regional adoption align or vary with external factors like oil price changes, political opinions, and demographic shifts?
+
+```{r}
+head(df_v_map)
+```
+
+
+```{r}
+# Assume you have two dataframes: ev_adoption_data and demographic_data
+# ev_adoption_data has columns 'Year' and 'EV_Count'
+# demographic_data has columns 'Year', 'GenerationZ', 'Millennials', 'GenerationX', 'BabyBoomers'
+
+# Summing up the total count of electric vehicles by year
+total_ev_count <- df_ele %>%
+                  group_by(Year) %>%
+                  summarise(Total_EV_Count = sum(EV_Count))
+
+# Calculating total population for each year in demographic data
+demographic_data <- demographic_data %>%
+                    mutate(Total_Population = GenerationZ + Millennials + GenerationX + BabyBoomers)
+
+# Merging EV adoption data with demographic data
+combined_data <- merge(total_ev_count, demographic_data, by = "Year")
+
+# Calculating EV adoption rate per capita
+combined_data$EV_Adoption_Rate_Per_Capita <- combined_data$Total_EV_Count / combined_data$Total_Population
+
+# View the combined data
+head(combined_data)
+
+```
+
+
+```{r}
+# Assuming 'combined_data' is your dataframe with the following columns: 'Year', 'Total Population', 'Total EV Count'
+combined_data$EV_Adoption_Rate_Per_Capita <- combined_data$Total_EV_Count / combined_data$Total_Population
+
+ggplot(combined_data, aes(x = Year, y = EV_Adoption_Rate_Per_Capita)) +
+  geom_line() +
+  theme_minimal() +
+  ggtitle("EV Adoption Rate Per Capita in Switzerland (2005-2009)") +
+  xlab("Year") +
+  ylab("EV Adoption Rate Per Capita")
+
+```
+
+
+```{r}
+library(reshape2)
+
+# Assuming 'combined_data' has columns for generational proportions and EV adoption rate
+# Let's say the relevant columns are 'GenZ_Proportion', 'Millennials_Proportion', 'GenX_Proportion', 'Boomers_Proportion', 'EV_Adoption_Rate_Per_Capita'
+
+correlation_data <- combined_data[, c('GenZ_Proportion', 'Millennials_Proportion', 'GenX_Proportion', 'Boomers_Proportion', 'EV_Adoption_Rate_Per_Capita')]
+correlation_matrix <- cor(correlation_data)
+
+melted_correlation_matrix <- melt(correlation_matrix)
+ggplot(data = melted_correlation_matrix, aes(Var1, Var2, fill = value)) + 
+  geom_tile() +
+  scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
+                       midpoint = 0, limit = c(-1,1), space = "Lab", 
+                       name="Pearson\nCorrelation") +
+  theme_minimal() +
+  ggtitle("Correlation Matrix between Generational Proportions and EV Adoption Rate Per Capita") +
+  xlab("") +
+  ylab("")
+
+```
 
 ## 4.4 RQç
 
