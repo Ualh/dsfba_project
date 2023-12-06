@@ -3,89 +3,423 @@
 ```{r, echo = FALSE, message = FALSE}
 source(here::here("scripts/setup.R"))
 ```
-__TO DO's__
 
-* Answers to the research questions
-* Different methods considered
-* Competing approaches
-* Justifications
+**TO DO's**
+
+-   Answers to the research questions
+-   Different methods considered
+-   Competing approaches
+-   Justifications
 
 ## 4.1 RQ1
 
 ## 4.2 RQ2
 
+### Simple Linear Regression
+
+#### With Oil
+
+Choosing Dependent Variable, sales or EV registrations
+
+Sales Data (from `df_sales_EV`):
+
+Pros: Directly reflects market demand and consumer purchasing behavior.
+Cons: Can be influenced by short-term factors such as promotions or
+subsidies, which might not indicate long-term adoption trends.
+
+Registration Data (from `df_v_electric`):
+
+Pros: Represents actual additions to the vehicle population and can be
+more indicative of long-term trends in EV adoption. Cons: Might lag
+behind sales data, as registration occurs post-purchase and can be
+influenced by administrative processes.
+
+interested in long-term trends in EV adoption and usage, registration
+data could be more appropriate.
+
+The decision to remove rows with missing values was justified as the
+number of missing values in the Price column was relatively small (28
+out of a larger dataset) and couldn't be reliably imputed, ensuring that
+the analysis was performed on a more complete and consistent dataset.
+
+```{r}
+str(df_v_electric)
+str(df_oil)
+```
+
+```{r}
+# Select the columns you want to keep in df_v_electric
+df_v_electric <- df_v_electric %>%
+  select(Location, Count, Date)
+
+# Merge df_oil_monthly with df_v_electric based on the common 'Date' column
+df_merged <- merge(df_v_electric, df_oil_monthly, by = "Date", all.x = TRUE)
+
+# Remove rows with missing values in the 'Price' column
+df_merged <- df_merged[complete.cases(df_merged), ]
+
+# View the first few rows of the merged dataset
+head(df_merged)
+# Check for missing values in df_merged
+sum(is.na(df_merged))
+# Check for missing values in each column of df_merged
+colSums(is.na(df_merged))
+```
+
+```{r}
+# Splitting the data into training and testing sets
+set.seed(123) # for reproducibility
+split_index <- sample(1:nrow(df_merged), 0.8 * nrow(df_merged))
+train_data <- df_merged[split_index, ]
+test_data <- df_merged[-split_index, ]
+
+# Fitting the linear model
+model <- lm(Count ~ Price, data = train_data)
+
+# Summary of the model to view coefficients and statistics
+summary(model)
+
+# Predicting with the test data
+predictions <- predict(model, test_data)
+
+# Evaluating the model
+# Calculating R-squared value
+r_squared <- cor(test_data$Count, predictions)^2
+cat("R-squared: ", r_squared, "\n")
+
+# Calculating RMSE (Root Mean Squared Error)
+rmse <- sqrt(mean((predictions - test_data$Count)^2))
+cat("RMSE: ", rmse, "\n")
+```
+
+The linear regression analysis results indicate that the Price variable
+has a very weak or negligible effect on explaining the variation in the
+Count variable. Specifically:
+
+The coefficient for Price is very close to zero (-0.00542), indicating
+that there is almost no linear relationship between Price and Count.
+
+The p-value for Price (0.97) is much greater than the common
+significance level of 0.05. This high p-value suggests that Price is not
+statistically significant in predicting Count, as it fails to reject the
+null hypothesis that the coefficient is zero.
+
+The R-squared value is very low (0.000523), indicating that the linear
+regression model explains only a negligible fraction of the variance in
+Count.
+
+The Root Mean Squared Error (RMSE) is relatively high (247), suggesting
+that the model's predictions have a substantial amount of error.
+
+In summary, based on these results, it appears that the Price variable
+does not have a meaningful impact on predicting the Count variable, and
+the linear regression model is not suitable for explaining the
+relationship between these two variables. Further exploration of the
+data and potentially considering other factors or modeling approaches
+may be necessary to improve predictive accuracy.
+
+#### with google trends
+
+```{r}
+# Merge the two datasets based on the common Date column
+df_merged <- merge(df_merged, df_gtrends, by = "Date")
+
+# View the first few rows of the merged dataset
+head(df_merged)
+# Check for missing values in df_merged
+sum(is.na(df_merged))
+# Check for missing values in each column of df_merged
+colSums(is.na(df_merged))
+```
+
+```{r}
+# Splitting the data into training and testing sets
+set.seed(123) # for reproducibility
+split_index <- sample(1:nrow(df_merged), 0.8 * nrow(df_merged))
+train_data <- df_merged[split_index, ]
+test_data <- df_merged[-split_index, ]
+
+# Fitting the linear model
+model <- lm(Count ~ SearchRatio, data = train_data)
+
+# Summary of the model to view coefficients and statistics
+summary(model)
+
+# Predicting with the test data
+predictions <- predict(model, test_data)
+
+# Evaluating the model
+# Calculating R-squared value
+r_squared <- cor(test_data$Count, predictions)^2
+cat("R-squared: ", r_squared, "\n")
+
+# Calculating RMSE (Root Mean Squared Error)
+rmse <- sqrt(mean((predictions - test_data$Count)^2))
+cat("RMSE: ", rmse, "\n")
+```
+
+Overall, while there is a statistically significant relationship between
+SearchRatio and Count, the model's R-squared value suggests that other
+factors not included in the model may also influence the Count variable.
+You may want to explore additional variables or more complex models to
+improve predictive accuracy.
+
+### Multivariable Regression
+#### with Demographic groups, Oil Price and Google Trend
+
+```{r}
+# Merge the data frames on the 'Year' column
+df_merged <- merge(df_merged, df_demographic, by.x = "Date", by.y = "Year")
+
+# Check the merged data
+head(df_merged)  # Display the first few rows to verify the merge
+
+```
+```{r}
+# Splitting the data into training and testing sets
+set.seed(123) # for reproducibility
+split_index <- sample(1:nrow(df_merged), 0.8 * nrow(df_merged))
+train_data <- df_merged[split_index, ]
+test_data <- df_merged[-split_index, ]
+
+# Fitting the multivariable linear model
+model <- lm(Count ~ SearchRatio + Price + `Generation Z` + Millennials + `Generation X` + `Baby Boomers`, data = df_merged)
+
+# Summary of the model to view coefficients and statistics
+summary(model)
+
+# Predicting with the test data (if applicable)
+# Replace test_data with your test dataset if you have one
+predictions <- predict(model, test_data)
+
+# Evaluating the model
+# Calculating R-squared value
+r_squared <- cor(test_data$Count, predictions)^2
+cat("R-squared: ", r_squared, "\n")
+
+# Calculating RMSE (Root Mean Squared Error)
+rmse <- sqrt(mean((predictions - test_data$Count)^2))
+cat("RMSE: ", rmse, "\n")
+
+```
+This multivariable linear regression model does not appear to have a strong explanatory power, as indicated by the low adjusted R-squared value and the relatively high RMSE. Additionally, only the Baby Boomers variable shows statistical significance in predicting the Count, while other variables do not appear to be significant in this context. You may want to consider further refining the model or exploring other variables to improve its predictive performance.
+
+#### Adding Political Parties
+```{r}
+df_merged
+```
+
+```{r}
+unique(df_merged$Location)
+unique(political_combined_data$Canton)
+str(political_combined_data)
+political_combined_data
+```
+Exclude 'Confederation' from the first dataset (df_merged).
+```{r}
+# Remove 'Confederation' from df_merged
+df_merged <- df_merged[df_merged$Location != 'Confederation', ]
+df_merged
+```
+
+Create a 'Switzerland' Observation in the second dataset (df_politic_ch.csv):
+For each year, sum the values of the 26 cantons to create a combined observation labeled "Switzerland".
+```{r}
+# Step 2: Aggregate data for 'Switzerland' in df2
+political_combined_data$Year <- year(ymd(political_combined_data$Year))
+df_politics <- political_combined_data %>%
+  group_by(Year) %>%
+  summarise(across(c(`Against`, `Slightly Against`, `Neutral`, `Slightly in Favour`, `In Favour`), sum, na.rm = TRUE)) %>%
+  mutate(Canton = 'Switzerland')
+df_politics
+# Append the new 'Switzerland' rows to df_politics
+df_politics <- bind_rows(political_combined_data, df_politics)
+df_politics
+```
+
+Align and Format the Date Columns:
+Convert the 'Date' column in the first dataset to just the year to match the 'Year' column in the second dataset.
+```{r}
+# Step 3: Align 'Date' in df_merged to 'Year' in df_politics
+df_merged$Year <- year(ymd(df_merged$Date))
+df_merged <- select(df_merged, -Date)
+df_merged
+```
+
+Merge the Datasets:
+Merge the datasets on the aligned 'Location/Canton' and 'Date/Year' columns.
+```{r}
+df_politics$Location <- df_politics$Canton 
+# Step 4: Merge the datasets on 'Canton' and 'Year'
+merged_df <- merge(df_merged, df_politics, by = c("Location", "Year"), all = FALSE)
+
+# View the first few rows of the merged dataset
+head(merged_df)
+merged_df
+
+# Reorder columns in a data frame
+merged_df <- merged_df %>%
+  select(Count, everything())
+
+merged_df
+```
+
+```{r}
+merged_df <- na.omit(merged_df)
+
+# Perform regression analysis without 'Location'
+full_model <- lm(Count ~ Year + Price + SearchRatio + `Generation Z` + Millennials + `Generation X` + `Baby Boomers` + Against + `Slightly Against` + Neutral + `Slightly in Favour` + `In Favour`, data = merged_df)
+
+# Perform backward elimination
+reduced_model <- step(full_model, direction = "backward")
+
+# View the summary of the reduced model
+summary(reduced_model)
+
+
+# Perform backward elimination
+reduced_model <- step(full_model, direction = "backward")
+
+# View the summary of the reduced model
+summary(reduced_model)
+
+```
+The final model resulting from the backward elimination process for predicting 'Count' (presumably EV registrations) includes two predictors: 'SearchRatio' and 'In Favour'. Let's interpret the model's output:
+
+1. **Coefficients**:
+   - **Intercept (-13.5135)**: This is the expected value of 'Count' when both 'SearchRatio' and 'In Favour' are zero. The negative intercept suggests that, in the absence of these predictors, the model predicts a negative count, which might not be meaningful in your context. It indicates that the model might not be fully capturing the underlying relationship at lower levels of these variables.
+   - **SearchRatio (0.8080)**: For each unit increase in 'SearchRatio', the 'Count' is expected to increase by approximately 0.8080 units, holding all else constant. This positive coefficient suggests a direct relationship between 'SearchRatio' and EV registrations.
+   - **In Favour (0.2369)**: For each unit increase in 'In Favour', the 'Count' is expected to increase by approximately 0.2369 units, holding all else constant. This implies that more favorable opinions (as captured by the 'In Favour' variable) are associated with higher EV registrations.
+
+2. **Statistical Significance**:
+   - All coefficients are statistically significant at the 0.05 level (as indicated by the asterisks and low p-values). This means there is a statistically significant relationship between 'SearchRatio', 'In Favour', and EV registrations.
+
+3. **Model Fit**:
+   - **Multiple R-squared (0.317)**: This value indicates that about 31.7% of the variability in 'Count' is explained by the model. While this is a moderate amount, it suggests that other factors not included in the model also play a significant role in explaining EV registrations.
+   - **Adjusted R-squared (0.303)**: This is a more accurate measure of model fit as it adjusts for the number of predictors. It suggests that after adjustment, about 30.3% of the variability in 'Count' is explained by the model.
+   - **F-statistic (23.4)**: This value, along with the very low p-value (4.35e-09), indicates that the model is statistically significant. This means that the model provides a better fit to the data than a model with no predictors.
+
+4. **Residuals**:
+   - The residuals have a range from -18.76 to 56.08, with the median closer to zero. However, the spread of residuals and the presence of relatively large maximum values suggest there might be outliers or that the relationship might not be perfectly linear.
+
+In summary, the model indicates that both 'SearchRatio' and 'In Favour' are significant predictors of EV registrations, with a positive association. However, the moderate R-squared value suggests that there are other factors affecting EV registrations that are not captured by this model. Additionally, the data might benefit from further exploration, such as investigating potential outliers or nonlinear relationships.
+
+
 ## 4.3 RQ3
 
-In comparing regions in Switzerland, which areas show higher or lower adoption of electric vehicles, and how does this regional adoption align or vary with external factors like oil price changes, political opinions, and demographic shifts?
+In comparing regions in Switzerland, which areas show higher or lower
+adoption of electric vehicles, and how does this regional adoption align
+or vary with external factors like oil price changes, political
+opinions, and demographic shifts?
 
 ```{r}
-head(df_v_map)
+df_demographic
+df_v_electric
 ```
 
+From the initial data:
+
+In 2005, the EV adoption rate per capita was approximately 0.000004,
+which means there were about 4 EVs per million people. By 2009, this
+rate increased to approximately 0.000018 EVs per million people.
+
+This approach will give us a general sense of EV adoption in relation to
+the overall population but won't provide regional demographic
+granularity.
+
+The merged data now includes the total population for each year in
+Switzerland and the total count of electric vehicles (EVs) for those
+years. We have also calculated the EV adoption rate per capita, which
+gives us an insight into how EV adoption scales with the population
+size.
+
+These figures show a growing trend in EV adoption in relation to the
+population size, albeit the numbers are still quite small relative to
+the total population.
+
+The trend shows a gradual increase in EV adoption relative to the
+population size, indicating a growing acceptance and usage of electric
+vehicles in Switzerland during this period.
 
 ```{r}
-# Assume you have two dataframes: ev_adoption_data and demographic_data
-# ev_adoption_data has columns 'Year' and 'EV_Count'
-# demographic_data has columns 'Year', 'GenerationZ', 'Millennials', 'GenerationX', 'BabyBoomers'
+# Extract year from the Date columns in both datasets
+df_demo <- df_demo %>% mutate(Year_Extracted = year(as.Date(Year)))
+df_v_electric <- df_v_electric %>% mutate(Year_Extracted = year(as.Date(Date)))
 
-# Summing up the total count of electric vehicles by year
-total_ev_count <- df_ele %>%
-                  group_by(Year) %>%
-                  summarise(Total_EV_Count = sum(EV_Count))
+# Aggregate EV counts in df_v_electric by extracted year
+ev_count_per_year <- df_v_electric %>%
+  group_by(Year_Extracted) %>%
+  summarize(Total_EV_Count = sum(Count))
 
-# Calculating total population for each year in demographic data
-demographic_data <- demographic_data %>%
-                    mutate(Total_Population = GenerationZ + Millennials + GenerationX + BabyBoomers)
+# Merge datasets and calculate EV adoption rate per capita
+merged_data <- merge(df_demo, ev_count_per_year, by = "Year_Extracted")
+merged_data$EV_Adoption_Rate_Per_Capita <- merged_data$Total_EV_Count / merged_data$Total_Population
 
-# Merging EV adoption data with demographic data
-combined_data <- merge(total_ev_count, demographic_data, by = "Year")
-
-# Calculating EV adoption rate per capita
-combined_data$EV_Adoption_Rate_Per_Capita <- combined_data$Total_EV_Count / combined_data$Total_Population
-
-# View the combined data
-head(combined_data)
-
-```
-
-
-```{r}
-# Assuming 'combined_data' is your dataframe with the following columns: 'Year', 'Total Population', 'Total EV Count'
-combined_data$EV_Adoption_Rate_Per_Capita <- combined_data$Total_EV_Count / combined_data$Total_Population
-
-ggplot(combined_data, aes(x = Year, y = EV_Adoption_Rate_Per_Capita)) +
+# Creating an interactive plot
+p <- ggplot(merged_data, aes(x = Year_Extracted, y = EV_Adoption_Rate_Per_Capita)) +
   geom_line() +
-  theme_minimal() +
-  ggtitle("EV Adoption Rate Per Capita in Switzerland (2005-2009)") +
-  xlab("Year") +
-  ylab("EV Adoption Rate Per Capita")
+  labs(title = "EV Adoption Rate Per Capita in Switzerland",
+       x = "Year",
+       y = "EV Adoption Rate Per Capita")
+
+# Convert to interactive plot and adjust legend
+ggplotly(p, width = 600, height = 400) %>%
+  layout(legend = list(orientation = 'h', x = 0.5, xanchor = 'center', y = -0.15))
 
 ```
 
+The correlation matrix below shows the relationships between the
+proportions of different generational groups (Generation Z, Millennials,
+Generation X, Baby Boomers) and the EV adoption rate per capita in
+Switzerland. The heatmap provides the following insights:
+
+The correlation coefficients indicate the strength and direction of the
+relationship between each pair of variables. Positive values suggest a
+positive correlation (as one increases, so does the other), while
+negative values suggest an inverse relationship.
+
+\*babyboomers !
 
 ```{r}
-library(reshape2)
+# Calculate proportions of each generation
+merged_data <- merged_data %>%
+  mutate(
+    Generation_Z_Prop = `Generation Z` / Total_Population,
+    Millennials_Prop = Millennials / Total_Population,
+    Generation_X_Prop = `Generation X` / Total_Population,
+    Baby_Boomers_Prop = `Baby Boomers` / Total_Population
+  )
 
-# Assuming 'combined_data' has columns for generational proportions and EV adoption rate
-# Let's say the relevant columns are 'GenZ_Proportion', 'Millennials_Proportion', 'GenX_Proportion', 'Boomers_Proportion', 'EV_Adoption_Rate_Per_Capita'
+# Selecting relevant columns for correlation
+correlation_data <- merged_data %>%
+  select(Generation_Z_Prop, Millennials_Prop, Generation_X_Prop, Baby_Boomers_Prop, EV_Adoption_Rate_Per_Capita)
 
-correlation_data <- combined_data[, c('GenZ_Proportion', 'Millennials_Proportion', 'GenX_Proportion', 'Boomers_Proportion', 'EV_Adoption_Rate_Per_Capita')]
-correlation_matrix <- cor(correlation_data)
+# Clean up the column names for a prettier output
+colnames(correlation_data) <- gsub("_", " ", colnames(correlation_data))
+colnames(correlation_data) <- gsub(" Prop", "", colnames(correlation_data))
 
-melted_correlation_matrix <- melt(correlation_matrix)
-ggplot(data = melted_correlation_matrix, aes(Var1, Var2, fill = value)) + 
+# Calculate the correlation matrix
+correlation_matrix <- cor(correlation_data, use = "complete.obs")
+
+# Melt the matrix for plotting
+correlation_melted <- melt(correlation_matrix)
+
+# Create a ggplot heatmap with shades of blue and text annotations
+p <- ggplot(data = correlation_melted, aes(x=Var2, y=Var1, fill=value)) +
   geom_tile() +
-  scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
-                       midpoint = 0, limit = c(-1,1), space = "Lab", 
-                       name="Pearson\nCorrelation") +
+  geom_text(aes(label=sprintf("%.2f", value)), color="white", size=3, vjust=1) +
+  scale_fill_gradientn(colors = c("#132B43", "#1D5174", "#3282BF", "#5FA8D3", "#B0D0F4"), name="Correlation") +
   theme_minimal() +
-  ggtitle("Correlation Matrix between Generational Proportions and EV Adoption Rate Per Capita") +
-  xlab("") +
-  ylab("")
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text.y = element_text(angle = 45, vjust = 1),
+        axis.title.x=element_blank(),
+        axis.title.y=element_blank()) +
+  labs(fill = "Correlation")
 
+# Convert to plotly for interactivity
+ggplotly(p)
 ```
 
 ## 4.4 RQç
 
 ## 4.5 RQ5
-
