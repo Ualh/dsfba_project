@@ -292,13 +292,14 @@ Source -
 
 ### 2.2.8 Political strength per canton
 ```{r}
-# Create a tibble with variable descriptions for the Swiss population dataset
+# Create a tibble with variable descriptions for the Swiss population data set
 variable_table_politic <- tibble(
-  Variable = c("x", "y", "z"),
+  Variable = c("Years 1971-2023", "Canton", "Political parties", "Taux de participation"),
   Description = c(
-    "xx",
-    "yy",
-    "zz"
+    "The years were elections to the Conseil National took place from 1971 to 2023",
+    "The name of the canton in Switzerland",
+    "The name of all political parties in Switzerland and their strength in a given Canton, (Canton's total = 100%), in a given   year",
+    "The participation rate to the elections of the Conseil National in a given year"
   )
 )
 

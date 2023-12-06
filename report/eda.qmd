@@ -409,9 +409,54 @@ ggplotly(p, width = 600, height = 400) %>%
 ```
 ## 3.6 Political Parties
 
-Here, we have
+Here, we have a cluster plot of the Swiss Cantons according to their political stance on sustainability in 1999 and in 2023
 ```{r}
+# Let's start with 1999
+political_data_1999 <- political_combined_data[,-8] %>%
+  filter(Year == as.Date("1999-01-01")) %>%
+  select(c("Canton", "Against", "Slightly Against", "Neutral", "Slightly in Favour", "In Favour"))
 
+# We will use the K-Means method
+# We start by looking for the right amount of clusters
+
+fviz_nbclust(political_data_1999[,-1], kmeans, method = "wss") +
+  geom_vline(xintercept = 7, linetype = 2)
+
+# We can see that 7 clusters seems to be the choice
+```
+```{r}
+# Changing my tibble
+pol_cantons_1999 <- as.data.frame(political_data_1999)
+rownames(pol_cantons_1999) <- pol_cantons_1999$Canton
+pol_cantons_1999 <- pol_cantons_1999[,-1]
+
+# Fit k-means with 7 clusters
+km.res <- kmeans(pol_cantons_1999, 7, nstart = 26)
+fviz_cluster(km.res, data = pol_cantons_1999)
+
+```
+```{r}
+# Now for 2023
+political_data_2023 <- political_combined_data[,-8] %>%
+  filter(Year == as.Date("2023-01-01")) %>%
+  select(c("Canton", "Against", "Slightly Against", "Neutral", "Slightly in Favour", "In Favour"))
+
+# Changing my tibble
+pol_canton_2023 <- as.data.frame(political_data_2023)
+row.names(pol_canton_2023) <- pol_canton_2023$Canton
+pol_canton_2023 <- pol_canton_2023[,-1]
+# We will use the K-Means method
+# We start by looking for the right amount of clusters
+
+fviz_nbclust(pol_canton_2023, kmeans, method = "wss") +
+  geom_vline(xintercept = 6, linetype = 2)
+
+# We can see that 6 clusters seems to be the choice
+```
+```{r}
+# Fit k-means with 6 clusters
+km.res_2023 <- kmeans(pol_canton_2023, 6, nstart = 26)
+fviz_cluster(km.res_2023, data = pol_canton_2023)
 ```
 
 
