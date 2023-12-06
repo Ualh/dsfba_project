@@ -114,7 +114,7 @@ filtered_df <- df_v %>%
 # Group by Date and Fuel type, and summarize the count
 fuel_type_trends <- filtered_df %>%
   group_by(Date, Fuel) %>%
-  summarize(Count = sum(Count, na.rm = TRUE), .groups = 'drop')  # Use .groups = 'drop' to ungroup immediately
+  summarize(Count = sum(Count, na.rm = TRUE), .groups = 'drop')
 
 # Plotting the trends over time by fuel type
 p_fuel_over_time <- ggplot(fuel_type_trends, aes(x = Date, y = Count, color = Fuel)) +
@@ -147,7 +147,49 @@ fully electric cars and Conventional hybrids have even reached a higher
 level of vehicle registration in the past years, spotlighting the EV
 tendency in recent years.)
 
-### 3.1.3 Map
+### 3.1.3 Availability of Charging station
+
+#### 3.1.3.1 Availability of Charging station in Switzerland
+
+```{r}
+p_charging_station <-ggplot(df_charge_number_CH, aes(x = year, y = value, group = powertrain, color = powertrain)) +
+  geom_line() +
+  labs(title = "Available charging station in Switzerland over the years",
+       x = "Year",
+       y = "Number of Charging Stations") +
+  theme_minimal()
+
+# Convert to an interactive plotly object
+interactive_plot_charging_station <- ggplotly(p_charging_station, width = 600, height = 400)
+# Adjust plotly settings 
+interactive_plot_charging_station <- interactive_plot_charging_station %>%
+  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
+
+# Display the interactive plot
+interactive_plot_charging_station
+```
+
+#### 3.1.3.2 Availability of Charging station in France
+```{r}
+p_charging_station_fr <-ggplot(df_charge_number_FR, aes(x = year, y = value, group = powertrain, color = powertrain)) +
+  geom_line() +
+  labs(title = "Available charging station in France over the years",
+       x = "Year",
+       y = "Number of Charging Stations") +
+  theme_minimal()
+
+# Convert to an interactive plotly object
+interactive_plot_charging_station_fr <- ggplotly(p_charging_station_fr, width = 600, height = 400)
+# Adjust plotly settings 
+interactive_plot_charging_station_fr <- interactive_plot_charging_station_fr %>%
+  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
+
+# Display the interactive plot
+interactive_plot_charging_station_fr
+```
+
+
+### 3.1.4 Map
 
 #### 3.1.4.1 Count of Electricity car Registration for all years per cantons
 

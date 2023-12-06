@@ -87,5 +87,96 @@ ggplot(data = melted_correlation_matrix, aes(Var1, Var2, fill = value)) +
 
 ## 4.4 RQç
 
-## 4.5 RQ5
+## 4.5  To what extent does the evolution in the availability of charging stations exert an influence on the adoption of electric     vehicles in Switzerland?
+```{r}
+# First, let's merge the df_v and df_charge_number_CH data sets, and we will look at Fuel: Electricity and Plug-in Hybrid
+
+df_v_electric_total_ch <- df_v %>%
+  filter(Fuel == c("Electricity", "Plug-in hybrid"), VehicleType == "Passenger car", Location == c("Switzerland","Confederation")) %>%
+  select(Date, Count)
+
+sum_by_year <- df_v_electric_total_ch %>%
+  group_by(Year = lubridate::year(Date)) %>%
+  summarise(Total_Count = sum(Count))
+
+
+# Convert year to a common format for merging
+sum_by_year <- sum_by_year %>%
+  mutate(year = as.Date(paste0(Year, "-01-01")))
+
+# Merge the datasets based on the "year" column
+merged_v_charge <- left_join(sum_by_year, df_charge_number_CH, by = c("year" = "year"))
+
+# cleaning merged data set
+merged_v_charge <- merged_v_charge %>%
+  filter(Year > "2011") %>%
+  select(Year, Total_Count, powertrain, value)
+
+names(merged_v_charge)[names(merged_v_charge) == "Total_count"] <- "EVs"
+colnames(merged_v_charge)[colnames(merged_v_charge) == "value"] <- "Charging station"
+
+# Summing Powertrain together
+merged_v_charge <- merged_v_charge %>%
+  group_by(Year, Total_Count) %>%
+  summarise(Count = sum(`Charging station`))
+
+# Checking the correlation
+corr_charge_ev <- cor(merged_v_charge$Total_Count, merged_v_charge$Count)
+
+# their correlation is 0.957, almost perfectly correlated (no suprise here)
+
+# Checking for lagged correlation
+
+lags_to_explore <- 1:3
+
+lagged_correlation <- function(data, lag) {
+  data %>%
+    mutate(Count_Lagged = lag(Count, n = lag, default = NA)) %>%
+    summarise(Correlation = cor(Total_Count, Count_Lagged, use = "complete.obs"))
+}
+
+# Calculate lagged correlations for each lag
+lagged_correlations_df <- data.frame(Lag = lags_to_explore) %>%
+  rowwise() %>%
+  mutate(Correlation = lagged_correlation(merged_v_charge[, -1], Lag)$Correlation)
+
+# Print the results
+print("Original Correlation:")
+print(corr_charge_ev)
+
+print("Lagged Correlations:")
+print(lagged_correlations_df)
+
+
+# Now we formulate the following Hypothesis
+
+# H0: new charging station increase EV adoption vs. H1: new charging station does not increase EV adoption
+
+# Check these hypotheses with a simple linear regression
+linear <- lm(Total_Count ~ Count, data = merged_v_charge)
+
+# Poisson Test
+poisson_model <- glm(Total_Count ~ Count, family = poisson, data = merged_v_charge)
+
+# Set up the layout using mfrow
+par(mfrow = c(1, 2))  # 1 row, 2 columns
+
+# Plotting for Simple Linear Regression
+plot(linear, 1, main = "LM Residuals vs Fitted")
+plot(linear, 2, main = "LM Normal Q-Q Plot")
+plot(linear, 3, main = "LM Scale-Location Plot")
+plot(linear, 5, main = "LM Residuals vs Leverage")
+
+# Plotting for Poisson Regression
+plot(poisson_model, which = 1, main = "Poisson Residuals vs Fitted")
+plot(poisson_model, which = 2, main = "Poisson Normal Q-Q Plot")
+plot(poisson_model, which = 3, main = "Poisson Scale-Location Plot")
+plot(poisson_model, which = 5, main = "Poisson Residuals vs Leverage")
+
+# Reset the layout
+par(mfrow = c(1, 1))
+```
+The year-on-year correlation is the highest, the lagged correlation diminishes. We could suggest hat the availability of charging stations and the new registration of EVs go hand-in-hand, and that the availability of new charging station does not create a demand of new EVs by itself. Correlation does not imply causation, while we see a relationship, we can't conclude that charging stations directly cause changes in electric vehicle adoption only with a Correlation analysis
+
+With both a linear regression and a Poisson-test. We find evidence of statistically significant relationship between the count of available charging station and the count of electric vehicles registered. We have Prediction variable/coefficient of 2.69 x 10^-4 and 3.34 respectively. And a p-val < 0.005 for both. However, it is important to remind ourselves that these variables have a bidirectional / mutual influence, beyond the scope of what our analysis shows. The relationship is not strictly unidirectional and therefore, it is hard to conclude anything without further domain-knowledge and context-specific information
 
