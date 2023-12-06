@@ -983,6 +983,10 @@ for (year in unique_years) {
 }
 
 # now accessible via ' political_yearly_data$Year '
+# Display cleaned data
+reactable(political_combined_data,
+          sortable = TRUE, 
+          searchable = TRUE)
 ```
 ### 2.2.8 Swiss Population
 
