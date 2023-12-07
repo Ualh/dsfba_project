@@ -249,6 +249,7 @@ df_merged
 Merge the Datasets:
 Merge the datasets on the aligned 'Location/Canton' and 'Date/Year' columns.
 ```{r}
+df_politics
 df_politics$Location <- df_politics$Canton 
 # Step 4: Merge the datasets on 'Canton' and 'Year'
 merged_df <- merge(df_merged, df_politics, by = c("Location", "Year"), all = FALSE)
@@ -343,7 +344,7 @@ vehicles in Switzerland during this period.
 
 ```{r}
 # Extract year from the Date columns in both datasets
-df_demo <- df_demo %>% mutate(Year_Extracted = year(as.Date(Year)))
+df_demographic <- df_demographic %>% mutate(Year_Extracted = year(as.Date(Year)))
 df_v_electric <- df_v_electric %>% mutate(Year_Extracted = year(as.Date(Date)))
 
 # Aggregate EV counts in df_v_electric by extracted year
@@ -352,7 +353,7 @@ ev_count_per_year <- df_v_electric %>%
   summarize(Total_EV_Count = sum(Count))
 
 # Merge datasets and calculate EV adoption rate per capita
-merged_data <- merge(df_demo, ev_count_per_year, by = "Year_Extracted")
+merged_data <- merge(df_demographic, ev_count_per_year, by = "Year_Extracted")
 merged_data$EV_Adoption_Rate_Per_Capita <- merged_data$Total_EV_Count / merged_data$Total_Population
 
 # Creating an interactive plot
