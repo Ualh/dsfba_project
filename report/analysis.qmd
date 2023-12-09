@@ -314,8 +314,8 @@ or vary with external factors like oil price changes, political
 opinions, and demographic shifts?
 
 ```{r}
-df_demographic
-df_v_electric
+df_demo <- df_demographic
+df_ev <- df_v_electric
 ```
 
 From the initial data:
@@ -343,30 +343,31 @@ population size, indicating a growing acceptance and usage of electric
 vehicles in Switzerland during this period.
 
 ```{r}
-# Extract year from the Date columns in both datasets
-df_demographic <- df_demographic %>% mutate(Year_Extracted = year(as.Date(Year)))
-df_v_electric <- df_v_electric %>% mutate(Year_Extracted = year(as.Date(Date)))
+# Convert Date and Year to Date type
+df_ev$Date <- as.Date(df_ev$Date)
+df_demo$Year <- as.Date(df_demo$Year)
 
-# Aggregate EV counts in df_v_electric by extracted year
-ev_count_per_year <- df_v_electric %>%
-  group_by(Year_Extracted) %>%
-  summarize(Total_EV_Count = sum(Count))
+# Summing up the population for each year
+df_demo$total_population <- rowSums(df_demo[,c("Generation Z", "Millennials", "Generation X", "Baby Boomers")])
 
-# Merge datasets and calculate EV adoption rate per capita
-merged_data <- merge(df_demographic, ev_count_per_year, by = "Year_Extracted")
-merged_data$EV_Adoption_Rate_Per_Capita <- merged_data$Total_EV_Count / merged_data$Total_Population
+# Aggregating EV data by year
+df_ev_yearly <- df_ev %>%
+  group_by(Year = as.Date(format(Date, "%Y-01-01"))) %>%
+  summarize(total_ev = sum(Count))
 
 # Creating an interactive plot
-p <- ggplot(merged_data, aes(x = Year_Extracted, y = EV_Adoption_Rate_Per_Capita)) +
+p <- ggplot(merged_data, aes(x = Year, y = ev_per_capita)) +
   geom_line() +
-  labs(title = "EV Adoption Rate Per Capita in Switzerland",
+  labs(title = "EV Adoption Per Capita Over Time in Switzerland",
        x = "Year",
-       y = "EV Adoption Rate Per Capita")
+       y = "EV Adoption Per Capita")
 
 # Convert to interactive plot and adjust legend
-ggplotly(p, width = 600, height = 400) %>%
+interactive_plot <- ggplotly(p, width = 600, height = 400) %>%
   layout(legend = list(orientation = 'h', x = 0.5, xanchor = 'center', y = -0.15))
 
+# To display the plot in an R environment, you can simply call the variable
+interactive_plot
 ```
 
 The correlation matrix below shows the relationships between the
@@ -382,43 +383,48 @@ negative values suggest an inverse relationship.
 \*babyboomers !
 
 ```{r}
-# Calculate proportions of each generation
-merged_data <- merged_data %>%
-  mutate(
-    Generation_Z_Prop = `Generation Z` / Total_Population,
-    Millennials_Prop = Millennials / Total_Population,
-    Generation_X_Prop = `Generation X` / Total_Population,
-    Baby_Boomers_Prop = `Baby Boomers` / Total_Population
-  )
+# Data Preparation
+df_ev$Date <- as.Date(df_ev$Date)
+df_demo$Year <- as.Date(df_demo$Year)
 
-# Selecting relevant columns for correlation
-correlation_data <- merged_data %>%
-  select(Generation_Z_Prop, Millennials_Prop, Generation_X_Prop, Baby_Boomers_Prop, EV_Adoption_Rate_Per_Capita)
+# Summing up the population for each year
+df_demo$total_population <- rowSums(df_demo[,c("Generation Z", "Millennials", "Generation X", "Baby Boomers")])
 
-# Clean up the column names for a prettier output
-colnames(correlation_data) <- gsub("_", " ", colnames(correlation_data))
-colnames(correlation_data) <- gsub(" Prop", "", colnames(correlation_data))
+# Calculate proportions
+df_demo$prop_gen_z <- df_demo$`Generation Z` / df_demo$total_population
+df_demo$prop_millennials <- df_demo$Millennials / df_demo$total_population
+df_demo$prop_gen_x <- df_demo$`Generation X` / df_demo$total_population
+df_demo$prop_boomers <- df_demo$`Baby Boomers` / df_demo$total_population
 
-# Calculate the correlation matrix
-correlation_matrix <- cor(correlation_data, use = "complete.obs")
+# Aggregating EV data by year
+df_ev_yearly <- df_ev %>%
+  group_by(Year = as.Date(format(Date, "%Y-01-01"))) %>%
+  summarize(total_ev = sum(Count))
 
-# Melt the matrix for plotting
-correlation_melted <- melt(correlation_matrix)
+# Merging the datasets
+merged_data <- merge(df_ev_yearly, df_demo, by = "Year")
 
-# Create a ggplot heatmap with shades of blue and text annotations
-p <- ggplot(data = correlation_melted, aes(x=Var2, y=Var1, fill=value)) +
+# Calculating EV adoption per capita
+merged_data$ev_per_capita <- merged_data$total_ev / merged_data$total_population
+
+# Correlation Matrix
+correlation_matrix <- cor(merged_data[,c("prop_gen_z", "prop_millennials", "prop_gen_x", "prop_boomers", "ev_per_capita")])
+
+# Melting the correlation matrix for ggplot
+melted_correlation_matrix <- melt(correlation_matrix)
+
+# Creating the heatmap
+# Creating the interactive heatmap
+p <- ggplot(melted_correlation_matrix, aes(Var1, Var2, fill = value)) +
   geom_tile() +
-  geom_text(aes(label=sprintf("%.2f", value)), color="white", size=3, vjust=1) +
-  scale_fill_gradientn(colors = c("#132B43", "#1D5174", "#3282BF", "#5FA8D3", "#B0D0F4"), name="Correlation") +
+  geom_text(aes(label = sprintf("%.2f", value)), color = "white", size = 4) +
+  scale_fill_gradient(low = "lightblue", high = "darkblue", name = "Correlation") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.text.y = element_text(angle = 45, vjust = 1),
-        axis.title.x=element_blank(),
-        axis.title.y=element_blank()) +
-  labs(fill = "Correlation")
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x = "", y = "", title = "Interactive Correlation Heatmap")
 
-# Convert to plotly for interactivity
-ggplotly(p)
+# Convert to interactive plot
+ggplotly(p, tooltip = c("label", "fill"))
 ```
 
 ## 4.4 RQç
