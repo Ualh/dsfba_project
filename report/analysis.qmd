@@ -240,6 +240,11 @@ reduced_model <- step(full_model, direction = "backward")
 
 # View the summary of the reduced model
 summary(reduced_model)
+
+plot(full_model, 1, main = "Full Model Residuals vs Fitted")
+plot(full_model, 2, main = "Full Model Q-Q Plot")
+plot(full_model, 3, main = "Full Model Scale-Location Plot")
+plot(full_model, 5, main = "Full Model Residuals vs Leverage")
 ```
 
 
