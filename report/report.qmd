@@ -11,4 +11,4 @@ format:
 ---
 
 ```{r child = c('intro.qmd', 'data.qmd', 'eda.qmd', 'analysis.qmd', 'concl.qmd')}
-```   
+```
