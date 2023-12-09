@@ -77,7 +77,7 @@ print(paste("RMSE:", rmse))
 table_regression <- tbl_regression(mod1_lin)
 
 # Viewing the table
-print(table_regression)
+table_regression
 ```
 
 The linear regression analysis results indicate that the Price variable
@@ -142,7 +142,7 @@ print(paste("RMSE:", rmse))
 table_regression2 <- tbl_regression(mod2_lin)
 
 # Viewing the table
-print(table_regression2)
+table_regression2
 ```
 
 Overall, while there is a statistically significant relationship between
@@ -186,7 +186,7 @@ cat("RMSE: ", rmse, "\n")
 table_regression_mod1_multi <- tbl_regression(mod1_multi)
 
 # Print the table
-print(table_regression_mod1_multi)
+table_regression_mod1_multi
 ```
 This multivariate linear regression model does not appear to have a strong explanatory power, as indicated by the low adjusted R-squared value and the relatively high RMSE. Additionally, only the Baby Boomers variable shows statistical significance in predicting the Count, while other variables do not appear to be significant in this context. You may want to consider further refining the model or exploring other variables to improve its predictive performance.
 
