@@ -274,7 +274,8 @@ merged_df
 ```
 
 ```{r}
-merged_df <- na.omit(merged_df)
+merged_df <- merged_df %>% select(-Canton, -KANTONSNUM)
+any(is.na(merged_df))
 
 # Perform regression analysis without 'Location'
 full_model <- lm(Count ~ Year + Price + SearchRatio + `Generation Z` + Millennials + `Generation X` + `Baby Boomers` + Against + `Slightly Against` + Neutral + `Slightly in Favour` + `In Favour`, data = merged_df)
