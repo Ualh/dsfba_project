@@ -592,10 +592,10 @@ poisson_model <- glm(Total_Count ~ Count, family = poisson, data = merged_v_char
 par(mfrow = c(1, 2))  # 1 row, 2 columns
 
 # Plotting for Simple Linear Regression
-plot(linear, 1, main = "LM Residuals vs Fitted")
-plot(linear, 2, main = "LM Normal Q-Q Plot")
-plot(linear, 3, main = "LM Scale-Location Plot")
-plot(linear, 5, main = "LM Residuals vs Leverage")
+plot(linear_charging, 1, main = "LM Residuals vs Fitted")
+plot(linear_charging, 2, main = "LM Normal Q-Q Plot")
+plot(linear_charging, 3, main = "LM Scale-Location Plot")
+plot(linear_charging, 5, main = "LM Residuals vs Leverage")
 
 # Plotting for Poisson Regression
 plot(poisson_model, which = 1, main = "Poisson Residuals vs Fitted")
