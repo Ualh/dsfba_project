@@ -249,6 +249,7 @@ df_merged
 Merge the Datasets:
 Merge the datasets on the aligned 'Location/Canton' and 'Date/Year' columns.
 ```{r}
+df_politics
 df_politics$Location <- df_politics$Canton 
 # Step 4: Merge the datasets on 'Canton' and 'Year'
 merged_df <- merge(df_merged, df_politics, by = c("Location", "Year"), all = FALSE)

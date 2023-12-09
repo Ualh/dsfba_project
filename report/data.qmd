@@ -291,9 +291,11 @@ variable_table_charging %>%
   kbl() %>%
   kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover", "condensed"))
 ```
-Source -
-[IEA.org] (https://www.iea.org/data-and-statistics/data-tools/global-ev-data-explorer)
-### 2.2.7 Complementary charging station
+
+Source - \[IEA.org\]
+(https://www.iea.org/data-and-statistics/data-tools/global-ev-data-explorer)
+\### 2.2.7 Complementary charging station
+
 ```{r}
 # Create a tibble with variable descriptions for the Swiss population data set
 variable_charging_station_v2 <- tibble(
@@ -315,11 +317,11 @@ variable_charging_station_v2 %>%
   kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover"))
 ```
 
-
 Source -
 [bfe.admin.ch](https://www.bfe.admin.ch/bfe/fr/home/approvisionnement/statistiques-et-geodonnees/geoinformation/geodonnees/mobilite/bornes-de-recharge-pour-la-mobilite-electrique.html)
 
 ### 2.2.8 Political strength per canton
+
 ```{r}
 # Create a tibble with variable descriptions for the Swiss population data set
 variable_table_politic <- tibble(
@@ -337,10 +339,11 @@ variable_table_politic %>%
   kbl() %>%
   kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover"))
 ```
-Source -
-[nom de la source](copy_paste_link)
+
+Source - [nom de la source](copy_paste_link)
 
 ### 2.2.7 Swiss Population
+
 ```{r}
 # Create a tibble with variable descriptions for the Swiss population dataset
 variable_table_swiss_pop <- tibble(
@@ -362,7 +365,8 @@ variable_table_swiss_pop %>%
   kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover"))
 ```
 
-Source - [bfe.admin.ch](https://www.bfs.admin.ch/bfs/fr/home/statistiques/population.assetdetail.26565163.html)
+Source -
+[bfe.admin.ch](https://www.bfs.admin.ch/bfs/fr/home/statistiques/population.assetdetail.26565163.html)
 
 ## 2.2 Data Wrangling
 
@@ -881,6 +885,7 @@ reactable(df_charging_station,
           searchable = TRUE)
 
 ```
+
 ### 2.2.7 Availability of charging station in France and Switzerland
 
 This data set is used to complement the prior charging station data set.
@@ -903,26 +908,26 @@ df_charge_number_FR <- charge_ch_fr %>%
   filter(region == "France")
 ```
 
-
 ### 2.2.8 Political strength per canton
 
-This data set will be used to explore and analyze the effects of political convictions on EVs adoption (per Canton).
+This data set will be used to explore and analyze the effects of
+political convictions on EVs adoption (per Canton).
 
-The 2 main difficulties with this data set were the following:
-  1. Create a process (loop) general enough to clean all the Cantons at the same time, but specific enough for it to work
-  2. The Swiss political parties' names have evolved quite a bit over the years.
-  
-To use this data effectively in our analysis. We will group them in 5 categories.
+The 2 main difficulties with this data set were the following: 1. Create
+a process (loop) general enough to clean all the Cantons at the same
+time, but specific enough for it to work 2. The Swiss political parties'
+names have evolved quite a bit over the years.
 
-The 5 categories respond to the following question: "What is the political party's stance on sustainability / ecological measures?"
-  1. Against
-  2. Slightly Against
-  3. Neutral
-  4. Slightly in Favour
-  5. In Favour
-  
-We assigned each political parties in one of those categories based on their program.
+To use this data effectively in our analysis. We will group them in 5
+categories.
 
+The 5 categories respond to the following question: "What is the
+political party's stance on sustainability / ecological measures?" 1.
+Against 2. Slightly Against 3. Neutral 4. Slightly in Favour 5. In
+Favour
+
+We assigned each political parties in one of those categories based on
+their program.
 
 ```{r}
 # We import each different sheets (one per canton) into a data set
@@ -1099,11 +1104,17 @@ reactable(political_combined_data,
           searchable = TRUE)
 str(political_combined_data)
 ```
+
 ### 2.2.9 Swiss Population
 
-We chose to use the population data from the year 2022 to ensure the most current and relevant demographic context, providing a contemporary snapshot that aligns closely with the latest trends in electric vehicle registrations.
+We chose to use the population data from the year 2022 to ensure the
+most current and relevant demographic context, providing a contemporary
+snapshot that aligns closely with the latest trends in electric vehicle
+registrations.
 
-Assuming the relevant data starts from row 5, canton names are in the first column, and the population figures for 2022 are in the second column.
+Assuming the relevant data starts from row 5, canton names are in the
+first column, and the population figures for 2022 are in the second
+column.
 
 ```{r}
 df_swisspop_2022 <- df_swisspop_2022 %>%
@@ -1189,6 +1200,8 @@ reactable(df_swisspop_2022,
           sortable = TRUE, 
           searchable = TRUE)
 ```
+
+
 ```{r}
 # Loop for 5 years of swisspop
 years = c(2022, 2021, 2020, 2019, 2018)
@@ -1285,3 +1298,4 @@ str(df_demographic)
 str(df_oil)
 str(political_combined_data)
 ```
+
