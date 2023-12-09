@@ -29,7 +29,11 @@ demographic_data <- fread(paste0(file_path, "demographic.csv"))
 charging_station <- fread(paste0(file_path, "charging_station.csv"))
 france_v <- read_excel(paste0(file_path, "parc_vp_france_2022.xlsx"), sheet = 2)
 political_data_sheets_prep <- excel_sheets(paste0(file_path, "political_data.xlsx"))
-df_swisspop <- read_excel(paste0(file_path, "swiss_pop.xlsx"), sheet = 1)
+df_swisspop_2022 <- read_excel(paste0(file_path, "swiss_pop.xlsx"), sheet = 1)
+df_swisspop_2021 <- read_excel(paste0(file_path, "swiss_pop.xlsx"), sheet = 2)
+df_swisspop_2020 <- read_excel(paste0(file_path, "swiss_pop.xlsx"), sheet = 3)
+df_swisspop_2019 <- read_excel(paste0(file_path, "swiss_pop.xlsx"), sheet = 4)
+df_swisspop_2018 <- read_excel(paste0(file_path, "swiss_pop.xlsx"), sheet = 5)
 charge_ch_fr <- fread(paste0(file_path,"df_charging_points_CH_FR.csv"))
 ```
 
@@ -1102,16 +1106,16 @@ We chose to use the population data from the year 2022 to ensure the most curren
 Assuming the relevant data starts from row 5, canton names are in the first column, and the population figures for 2022 are in the second column.
 
 ```{r}
-df_swisspop <- df_swisspop %>%
+df_swisspop_2022 <- df_swisspop_2022 %>%
   slice(-1:-4) %>%  # Remove the first 4 rows
   select(Canton = 1, TotalPopulation = 2)  # Select only the canton names and population figures
 
 # Remove rows with NAs in the Canton column
-df_swisspop <- df_swisspop %>%
+df_swisspop_2022 <- df_swisspop_2022 %>%
   filter(!is.na(Canton))
 
 # Map Canton names to abbreviations
-df_swisspop <- df_swisspop %>%
+df_swisspop_2022 <- df_swisspop_2022 %>%
   mutate(CantonAbbreviation = case_when(
     Canton == "Zurich" ~ "ZH",
     Canton == "Bern" ~ "BE",
@@ -1143,7 +1147,7 @@ df_swisspop <- df_swisspop %>%
   ))
 
 # Map Canton names to KANTONSNUM
-df_swisspop <- df_swisspop %>%
+df_swisspop_2022 <- df_swisspop_2022 %>%
   mutate(KANTONSNUM = case_when(
     Canton == "Graubünden" ~ 18,
     Canton == "Bern" ~ 2,
@@ -1175,15 +1179,105 @@ df_swisspop <- df_swisspop %>%
   ))
 
 
-df_swisspop$TotalPopulation <- as.integer(df_swisspop$TotalPopulation)
+df_swisspop_2022$TotalPopulation <- as.integer(df_swisspop_2022$TotalPopulation)
 # Filter out rows where CantonAbbreviation is NA
-df_swisspop <- df_swisspop %>%
+df_swisspop_2022 <- df_swisspop_2022 %>%
   filter(!is.na(CantonAbbreviation))
 
 # Display cleaned data
-reactable(df_swisspop,
+reactable(df_swisspop_2022,
           sortable = TRUE, 
           searchable = TRUE)
+```
+```{r}
+# Loop for 5 years of swisspop
+years = c(2022, 2021, 2020, 2019, 2018)
+
+for (year in years) {
+  df_name <- paste0("df_swisspop_",year)
+  df <- get(df_name)
+  df <- df %>%
+    slice(-1:-4) %>%
+    select(Canton = 1, TotalPopulation = 2)
+
+  # Remove rows with NAs in the Canton column
+  df <- df %>%
+    filter(!is.na(Canton))  
+  
+  # Map Canton names to abbreviations
+  df <- df %>%
+    mutate(CantonAbbreviation = case_when(
+      Canton == "Zurich" ~ "ZH",
+      Canton == "Bern" ~ "BE",
+      Canton == "Lucerne" ~ "LU",
+      Canton == "Uri" ~ "UR",
+      Canton == "Schwyz" ~ "SZ",
+      Canton == "Obwalden" ~ "OW",
+      Canton == "Nidwalden" ~ "NW",
+      Canton == "Glarus" ~ "GL",
+      Canton == "Zug" ~ "ZG",
+      Canton == "Fribourg" ~ "FR",
+      Canton == "Solothurn" ~ "SO",
+      Canton == "Basel-Stadt" ~ "BS",
+      Canton == "Basel-Landschaft" ~ "BL",
+      Canton == "Schaffhausen" ~ "SH",
+      Canton == "Appenzell A. Rh." ~ "AR",
+      Canton == "Appenzell I. Rh." ~ "AI",
+      Canton == "St. Gallen" ~ "SG",
+      Canton == "Graubünden" ~ "GR",
+      Canton == "Aargau" ~ "AG",
+      Canton == "Thurgau" ~ "TG",
+      Canton == "Ticino" ~ "TI",
+      Canton == "Vaud" ~ "VD",
+      Canton == "Valais" ~ "VS",
+      Canton == "Neuchâtel" ~ "NE",
+      Canton == "Geneva" ~ "GE",
+      Canton == "Jura" ~ "JU",
+      TRUE ~ NA_character_  # For unrecognized cantons
+    ))
+  
+  # Map Canton names to KANTONSNUM
+  df <- df %>%
+    mutate(KANTONSNUM = case_when(
+      Canton == "Graubünden" ~ 18,
+      Canton == "Bern" ~ 2,
+      Canton == "Valais" ~ 23,
+      Canton == "Vaud" ~ 22,
+      Canton == "Ticino" ~ 21,
+      Canton == "St. Gallen" ~ 17,
+      Canton == "Zurich" ~ 1,
+      Canton == "Fribourg" ~ 10,
+      Canton == "Lucerne" ~ 3,
+      Canton == "Aargau" ~ 19,
+      Canton == "Uri" ~ 4,
+      Canton == "Thurgau" ~ 20,
+      Canton == "Schwyz" ~ 5,
+      Canton == "Jura" ~ 26,
+      Canton == "Neuchâtel" ~ 24,
+      Canton == "Solothurn" ~ 11,
+      Canton == "Glarus" ~ 8,
+      Canton == "Basel-Landschaft" ~ 13,
+      Canton == "Obwalden" ~ 6,
+      Canton == "Nidwalden" ~ 7,
+      Canton == "Geneva" ~ 25,
+      Canton == "Schaffhausen" ~ 14,
+      Canton == "Appenzell A. Rh." ~ 15,
+      Canton == "Zug" ~ 9,
+      Canton == "Appenzell I. Rh." ~ 16,
+      Canton == "Basel-Stadt" ~ 12,
+      TRUE ~ NA_integer_  # For unrecognized cantons
+    ))
+  
+  # Convert TotalPopulation to integer
+  df$TotalPopulation <- as.integer(df$TotalPopulation)
+  
+  # Filter out rows where CantonAbbreviation is NA
+  df <- df %>%
+    filter(!is.na(CantonAbbreviation))
+  
+  assign(df_name, df)
+}
+
 ```
 
 ```{r}

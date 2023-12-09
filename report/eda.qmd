@@ -225,7 +225,7 @@ df_v_map <- df_v %>%
   summarize(TotalEV = sum(Count), .groups = 'drop')
 
 # Merge EV data with population data
-df_v_map <- left_join(df_v_map, df_swisspop, by = c("KANTONSNUM" = "KANTONSNUM"))
+df_v_map <- left_join(df_v_map, df_swisspop_2022, by = c("KANTONSNUM" = "KANTONSNUM"))
 
 str(df_v_map)
 # Calculate EV registrations per capita

@@ -202,7 +202,7 @@ rmse <- sqrt(mean((predictions - test_data$Count)^2))
 cat("RMSE: ", rmse, "\n")
 
 ```
-This multivariable linear regression model does not appear to have a strong explanatory power, as indicated by the low adjusted R-squared value and the relatively high RMSE. Additionally, only the Baby Boomers variable shows statistical significance in predicting the Count, while other variables do not appear to be significant in this context. You may want to consider further refining the model or exploring other variables to improve its predictive performance.
+This multivariate linear regression model does not appear to have a strong explanatory power, as indicated by the low adjusted R-squared value and the relatively high RMSE. Additionally, only the Baby Boomers variable shows statistical significance in predicting the Count, while other variables do not appear to be significant in this context. You may want to consider further refining the model or exploring other variables to improve its predictive performance.
 
 #### Adding Political Parties
 ```{r}
@@ -321,7 +321,7 @@ From the initial data:
 
 In 2005, the EV adoption rate per capita was approximately 0.000004,
 which means there were about 4 EVs per million people. By 2009, this
-rate increased to approximately 0.000018 EVs per million people.
+rate increased to approximately 18 EVs per million people.
 
 This approach will give us a general sense of EV adoption in relation to
 the overall population but won't provide regional demographic
@@ -343,7 +343,7 @@ vehicles in Switzerland during this period.
 
 ```{r}
 # Extract year from the Date columns in both datasets
-df_demo <- df_demo %>% mutate(Year_Extracted = year(as.Date(Year)))
+df_demographic <- df_demographic %>% mutate(Year_Extracted = year(as.Date(Year)))
 df_v_electric <- df_v_electric %>% mutate(Year_Extracted = year(as.Date(Date)))
 
 # Aggregate EV counts in df_v_electric by extracted year
@@ -352,7 +352,7 @@ ev_count_per_year <- df_v_electric %>%
   summarize(Total_EV_Count = sum(Count))
 
 # Merge datasets and calculate EV adoption rate per capita
-merged_data <- merge(df_demo, ev_count_per_year, by = "Year_Extracted")
+merged_data <- merge(df_demographic, ev_count_per_year, by = "Year_Extracted")
 merged_data$EV_Adoption_Rate_Per_Capita <- merged_data$Total_EV_Count / merged_data$Total_Population
 
 # Creating an interactive plot
@@ -420,15 +420,17 @@ p <- ggplot(data = correlation_melted, aes(x=Var2, y=Var1, fill=value)) +
 ggplotly(p)
 ```
 
+
+
 ## 4.4 RQç
 
 ## 4.5 RQ5
-To what extent does the evolution in the availability of charging stations exert an influence on the adoption of electric     vehicles in Switzerland?
+To what extent does the evolution in the availability of charging stations exert an influence on the adoption of electric vehicles in Switzerland?
 ```{r}
-# First, let's merge the df_v and df_charge_number_CH data sets, and we will look at Fuel: Electricity and Plug-in Hybrid
+# First, let's merge the df_v and df_charge_number_CH data sets, and we will look at Fuel: Electricity
 
 df_v_electric_total_ch <- df_v %>%
-  filter(Fuel == c("Electricity", "Plug-in hybrid"), VehicleType == "Passenger car", Location == c("Switzerland","Confederation")) %>%
+  filter(Fuel == "Electricity", VehicleType == "Passenger car", Location == c("Switzerland","Confederation")) %>%
   select(Date, Count)
 
 sum_by_year <- df_v_electric_total_ch %>%
@@ -489,7 +491,7 @@ print(lagged_correlations_df)
 # H0: new charging station increase EV adoption vs. H1: new charging station does not increase EV adoption
 
 # Check these hypotheses with a simple linear regression
-linear <- lm(Total_Count ~ Count, data = merged_v_charge)
+linear_charging <- lm(Total_Count ~ Count, data = merged_v_charge)
 
 # Poisson Test
 poisson_model <- glm(Total_Count ~ Count, family = poisson, data = merged_v_charge)
@@ -509,10 +511,13 @@ plot(poisson_model, which = 2, main = "Poisson Normal Q-Q Plot")
 plot(poisson_model, which = 3, main = "Poisson Scale-Location Plot")
 plot(poisson_model, which = 5, main = "Poisson Residuals vs Leverage")
 
+# Printing
+summary(linear_charging)
+summary(poisson_model)
 # Reset the layout
 par(mfrow = c(1, 1))
 ```
 The year-on-year correlation is the highest, the lagged correlation diminishes. We could suggest hat the availability of charging stations and the new registration of EVs go hand-in-hand, and that the availability of new charging station does not create a demand of new EVs by itself. Correlation does not imply causation, while we see a relationship, we can't conclude that charging stations directly cause changes in electric vehicle adoption only with a Correlation analysis
 
-With both a linear regression and a Poisson-test. We find evidence of statistically significant relationship between the count of available charging station and the count of electric vehicles registered. We have Prediction variable/coefficient of 2.69 x 10^-4 and 3.34 respectively. And a p-val < 0.005 for both. However, it is important to remind ourselves that these variables have a bidirectional / mutual influence, beyond the scope of what our analysis shows. The relationship is not strictly unidirectional and therefore, it is hard to conclude anything without further domain-knowledge and context-specific information
+With both a linear regression and a Poisson-test. We find evidence of statistically significant relationship between the count of available charging station and the count of electric vehicles registered. We have Prediction variable/coefficient of 2.68 x 10^-4 and 3.34 respectively. And a p-val < 0.005 for both. However, it is important to remind ourselves that these variables have a bidirectional / mutual influence, beyond the scope of what our analysis shows. The relationship is not strictly unidirectional and therefore, it is hard to conclude anything without further domain-knowledge and context-specific information
 
