@@ -11,9 +11,7 @@ source(here::here("scripts/setup.R"))
 -   Competing approaches
 -   Justifications
 
-## 4.1 RQ1
-
-## 4.2 RQ2
+## 4.2 RQ1
 
 Based on past electric vehicle adoption trends in Switzerland, can we forecast future adoption rates and pinpoint times of significant increases or decreases correlated with major events or policy changes?
 
@@ -54,9 +52,7 @@ df_merged <- merge(df_v_electric, df_oil_monthly, by = "Date", all.x = TRUE)
 
 # Remove rows with missing values in the 'Price' column
 df_merged <- df_merged[complete.cases(df_merged), ]
-```
 
-```{r}
 # Splitting the data into training and testing sets
 set.seed(123) # for reproducibility
 split_index <- sample(1:nrow(df_merged), 0.8 * nrow(df_merged))
@@ -141,6 +137,12 @@ residuals <- test_data$Count - predictions
 # Calculating RMSE
 rmse <- sqrt(mean(residuals^2))
 print(paste("RMSE:", rmse))
+
+# Creating a summary table for the linear model
+table_regression2 <- tbl_regression(mod2_lin)
+
+# Viewing the table
+print(table_regression2)
 ```
 
 Overall, while there is a statistically significant relationship between
@@ -240,11 +242,6 @@ reduced_model <- step(full_model, direction = "backward")
 
 # View the summary of the reduced model
 summary(reduced_model)
-
-plot(full_model, 1, main = "Full Model Residuals vs Fitted")
-plot(full_model, 2, main = "Full Model Q-Q Plot")
-plot(full_model, 3, main = "Full Model Scale-Location Plot")
-plot(full_model, 5, main = "Full Model Residuals vs Leverage")
 ```
 
 
@@ -265,8 +262,35 @@ plot(full_model, 5, main = "Full Model Residuals vs Leverage")
 
 7. **Cautions**: While stepwise regression is useful for variable selection, it can sometimes lead to overfitting or neglecting important variables that don't show strong individual effects but are important in combination with others. Hence, the results should be interpreted with caution, and further analysis (like checking for multicollinearity, interactions between variables, etc.) is recommended to validate the findings.
 
+##### Vizualisation of regression Quality
 
-## 4.3 RQ3
+```{r}
+# Set up the layout for a 2x2 plot
+par(mfrow = c(2, 2))
+
+# Create the diagnostic plots
+plot(full_model, 1, main = "Full Model Residuals vs Fitted")
+plot(full_model, 2, main = "Full Model Q-Q Plot")
+plot(full_model, 3, main = "Full Model Scale-Location Plot")
+plot(full_model, 5, main = "Full Model Residuals vs Leverage")
+
+# Reset to default layout
+par(mfrow = c(1, 1))
+```
+
+
+In the plot, most of the data points seem to be randomly scattered around the horizontal line at zero, which is good as it suggests that the residuals have constant variance and that the model's predictions are unbiased. However, there are two data points labeled 74 and 76 that stand out from the rest, with one particularly far from zero. These points could be outliers or influential points that have a large effect on the regression line.
+
+The decision to remove outliers should not be taken lightly. Simply removing outliers solely because they are outliers can lead to overfitting the model to the remaining data, and the results may not generalize well to new data. Instead, we should investigate why those data points are outliers:
+
+Are they the result of data entry errors or measurement errors? If so, they should be corrected or removed.
+
+Do they represent a segment of the population that is not well explained by the model? If that's the case, you might need a more complex model.
+
+Are they true extreme values that are part of the natural variation of the data? If they are valid observations, removing them could bias your results.
+
+
+## 4.3 RQ2
 
 In comparing regions in Switzerland, which areas show higher or lower
 adoption of electric vehicles, and how does this regional adoption align
@@ -378,26 +402,28 @@ correlation_matrix <- cor(merged_data[,c("prop_gen_z", "prop_millennials", "prop
 # Melting the correlation matrix for ggplot
 melted_correlation_matrix <- melt(correlation_matrix)
 
+# Modify the variable names by removing 'prop_' and replacing '_' with ' '
+melted_correlation_matrix$Var1 <- gsub("prop_", "", melted_correlation_matrix$Var1)
+melted_correlation_matrix$Var2 <- gsub("prop_", "", melted_correlation_matrix$Var2)
+melted_correlation_matrix$Var1 <- gsub("_", " ", melted_correlation_matrix$Var1)
+melted_correlation_matrix$Var2 <- gsub("_", " ", melted_correlation_matrix$Var2)
+
 # Creating the heatmap
-# Creating the interactive heatmap
 p <- ggplot(melted_correlation_matrix, aes(Var1, Var2, fill = value)) +
   geom_tile() +
   geom_text(aes(label = sprintf("%.2f", value)), color = "white", size = 4) +
   scale_fill_gradient(low = "lightblue", high = "darkblue", name = "Correlation") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(x = "", y = "", title = "Interactive Correlation Heatmap")
+  labs(x = "", y = "", title = "Correlation Heatmap")
 
 # Convert to interactive plot
 ggplotly(p, tooltip = c("label", "fill"))
 ```
 
-
-
-## 4.4 RQ4
+## 4.3 RQ3
 How has the growth of electric vehicles evolved in comparison to other countries such as France, and what factors might account for the differences in their evolution ?
 
-We have 
 
 ```{r}
 # Filtering Swiss data for specific fuel types
@@ -519,6 +545,37 @@ This compares the rate at which a certain category of fuel is adopted by the cit
 We can see that Electricity and Plug-in Hybrid follow roughly the same trajectory. This could be caused by the fact that they are used in a very similar way. In both these categories Switzerland has a slightly higher adoption rate.
 
 For Conventional hybrid however, France seems to have a slightly faster adopting rate. 
+
+```{r}
+data <- charge_ch_fr 
+
+# Convert year to Date format and then extract the year
+data$year <- as.Date(paste0(data$year, "-01-01"))
+data$year <- format(data$year, "%Y")
+
+# Sum the values by year and region
+data_summarized <- data %>%
+  group_by(year, region) %>%
+  summarize(total_value = sum(value))
+
+# Create the ggplot
+p <- ggplot(data_summarized, aes(x = year, y = total_value, fill = region)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = c("France" = "#4E79A7", "Switzerland" = "#F28E2B")) +  # Adjusted custom colors
+  labs(title = "Total Availability of Charging Stations in France vs Switzerland",
+       x = "Year",
+       y = "Total Charging Stations") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5), # Center the plot title
+        legend.title = element_blank()) # Remove the legend title
+
+# Convert to interactive plot using plotly
+p_interactive <- ggplotly(p)
+p_interactive <- ggplotly(p, width = 600, height = 600, tooltip = c("x", "y", "color"))
+p_interactive <- p_interactive %>%
+  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
+p_interactive
+```
 
 
 ## 4.5 RQ5

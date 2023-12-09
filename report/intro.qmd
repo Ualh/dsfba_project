@@ -67,32 +67,26 @@ recharging infrastructure for electric mobility in Switzerland.
 
 -   
 
-    1.  Given fluctuations in oil prices, demographic shifts, and major
-        policy, which of these factors have a direct causal impact on
-        the shifts in the adoption of electric vehicles in Switzerland?
-
--   
-
-    2.  Based on past electric vehicle adoption trends in Switzerland,
+    1.  Based on past electric vehicle adoption trends in Switzerland,
         can we forecast future adoption rates and pinpoint times of
         significant increases or decreases correlated with major events
         or policy changes?
 
 -   
 
-    3.  In comparing regions in Switzerland, which areas show higher or
+    2.  In comparing regions in Switzerland, which areas show higher or
         lower adoption of electric vehicles, and how does this regional
         adoption align or vary with external factors like oil price
         changes, political opinions, and demographic shifts?
 
 -   
 
-    4.  How has the growth of electric vehicles evolved in comparison to
+    3.  How has the growth of electric vehicles evolved in comparison to
         other countries such as France, and what factors might account
         for the differences in their evolution ?
 
 -   
 
-    5.  To what extent does the evolution in the availability of
+    4.  To what extent does the evolution in the availability of
         charging stations exert an influence on the adoption of electric
         vehicles in Switzerland?
