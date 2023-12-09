@@ -235,6 +235,13 @@ df_politics <- political_combined_data %>%
 df_politics
 # Append the new 'Switzerland' rows to df_politics
 df_politics <- bind_rows(political_combined_data, df_politics)
+
+# List of column names you want to divide by 26
+columns_to_divide <- c("Against", "Slightly Against", "Neutral", "Slightly in Favour", "In Favour")
+
+df_politics <- df_politics %>%
+  mutate_at(columns_to_divide, list(~./26))
+
 df_politics
 ```
 
