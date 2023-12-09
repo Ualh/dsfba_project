@@ -59,7 +59,7 @@ df_merged <- merge(df_v_electric, df_oil_monthly, by = "Date", all.x = TRUE)
 df_merged <- df_merged[complete.cases(df_merged), ]
 
 # View the first few rows of the merged dataset
-head(df_merged)
+df_merged
 # Check for missing values in df_merged
 sum(is.na(df_merged))
 # Check for missing values in each column of df_merged
@@ -125,7 +125,7 @@ may be necessary to improve predictive accuracy.
 df_merged <- merge(df_merged, df_gtrends, by = "Date")
 
 # View the first few rows of the merged dataset
-head(df_merged)
+df_merged
 # Check for missing values in df_merged
 sum(is.na(df_merged))
 # Check for missing values in each column of df_merged
@@ -172,9 +172,10 @@ improve predictive accuracy.
 df_merged <- merge(df_merged, df_demographic, by.x = "Date", by.y = "Year")
 
 # Check the merged data
-head(df_merged)  # Display the first few rows to verify the merge
-
+df_merged  # Display the first few rows to verify the merge
 ```
+
+
 ```{r}
 # Splitting the data into training and testing sets
 set.seed(123) # for reproducibility
@@ -234,6 +235,13 @@ df_politics <- political_combined_data %>%
 df_politics
 # Append the new 'Switzerland' rows to df_politics
 df_politics <- bind_rows(political_combined_data, df_politics)
+
+# List of column names you want to divide by 26
+columns_to_divide <- c("Against", "Slightly Against", "Neutral", "Slightly in Favour", "In Favour")
+
+df_politics <- df_politics %>%
+  mutate_at(columns_to_divide, list(~./26))
+
 df_politics
 ```
 
@@ -266,7 +274,8 @@ merged_df
 ```
 
 ```{r}
-merged_df <- na.omit(merged_df)
+merged_df <- merged_df %>% select(-Canton, -KANTONSNUM)
+any(is.na(merged_df))
 
 # Perform regression analysis without 'Location'
 full_model <- lm(Count ~ Year + Price + SearchRatio + `Generation Z` + Millennials + `Generation X` + `Baby Boomers` + Against + `Slightly Against` + Neutral + `Slightly in Favour` + `In Favour`, data = merged_df)
