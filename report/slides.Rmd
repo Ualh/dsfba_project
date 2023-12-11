@@ -1,0 +1,57 @@
+---
+title: "Untitled"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+---
+
+```{r, echo = FALSE, message = FALSE}
+packages <- c("here","tidyverse", "tidyr", "readxl","ggrepel",
+              "gghighlight", "patchwork", "maps","dplyr","scales",
+              "kableExtra", "reactable","sf", "shiny", "leaflet",
+              "plotly", "rsconnect", "gifski", "gganimate", 
+              "factoextra", "viridis", "reshape2", "heatmaply",
+              "gtsummary", "flexdashboard")
+purrr::walk(packages, library, character.only = TRUE)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+passenger_cars_processed <- read.csv("df_seasonality.csv")
+p_seaso_1 <- ggplot(passenger_cars_processed, aes(x = YearMonth, y = Count)) +
+  geom_line(color = "darkblue", size = 0.5) +
+  labs(title = "Passenger Car Adoption Over Time in Switzerland",
+       x = "Date",
+       y = "Number of Passenger Cars Registered") +
+  theme_minimal() +
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
+  geom_smooth(method = "loess", se = FALSE, color = "blue") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Convert to an interactive plotly object
+interactive_plot_seaso_1 <- ggplotly(p_seaso_1, width = 600, height = 400)
+
+# Display the interactive plot
+interactive_plot_seaso_1
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+interactive_plot_seaso_1
+```
+
+### Chart C
+
+```{r}
+
+```
+

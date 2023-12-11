@@ -200,7 +200,7 @@ df_v_fr <- france_v[25:37, ] %>%
 # Display cleaned data
 reactable(head(df_v_fr, 100), sortable = TRUE, searchable = TRUE)
 
-```{r}
+
 # Filtering Swiss data for specific fuel types
 swiss_specific_fuel <- df_v %>%
   filter(Fuel %in% c("Diesel", "Electricity", "Conventional hybrid", "Plug-in hybrid", "Petrol")) %>%
@@ -258,8 +258,8 @@ interactive_plot <- ggplotly(p, width = 600, height = 400, tooltip = c("x", "y",
 interactive_plot <- interactive_plot %>%
   layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
 interactive_plot
-ggsave("plot1.png", plot = p1, width = 8, height = 5)
-```
+
+
 
 
 # Filtering Swiss data for specific fuel types
@@ -314,5 +314,85 @@ interactive_plot <- ggplotly(p, width = 600, height = 600, tooltip = c("x", "y",
 interactive_plot <- interactive_plot %>%
   layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
 interactive_plot
-ggsave("plot2.png", plot = p2, width = 8, height = 6)
 
+# Create the leaflet maps
+# Read in the shapefile for Swiss cantons
+swiss_cantons <- st_read("data/CH_map/swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
+# Define canton abbreviations for matching
+abbreviation_values <- c("ZH", "BE", "LU", "UR", "SZ", "OW", "NW", "GL", "ZG", "FR", "SO", "BS", "BL", "SH", "AR", "AI", "SG", "GR", "AG", "TG", "TI", "VD", "VS", "NE", "GE", "JU")
+
+# Prepare the EV data with sum over all years
+df_v_map <- df_v %>%
+  filter(!Location %in% c("Switzerland", "Confederation"), 
+         Fuel == "Electricity", VehicleType == "Passenger car") %>%
+  mutate(KANTONSNUM = match(Location, abbreviation_values)) %>%
+  group_by(KANTONSNUM) %>%
+  summarize(TotalEV = sum(Count), .groups = 'drop')
+
+# Merge EV data with population data
+df_v_map <- left_join(df_v_map, df_swisspop_2022, by = c("KANTONSNUM" = "KANTONSNUM"))
+
+str(df_v_map)
+# Calculate EV registrations per capita
+df_v_map <- df_v_map %>%
+  mutate(EV_per_Capita = TotalEV / TotalPopulation)
+
+# Merge with shapefile data
+map_data <- left_join(swiss_cantons, df_v_map, by = "KANTONSNUM")
+
+# Ensure the geometries are valid and the CRS is set to WGS 84
+# Check if 'map_data' is already an sf object
+if (!inherits(map_data, "sf")) {
+  map_data_sf <- st_as_sf(map_data, wkt = "geometry")
+} else {
+  map_data_sf <- map_data
+}
+
+# Ensure the geometries are valid and the CRS is set
+map_data_sf <- st_make_valid(map_data_sf)
+# Reproject the data to WGS 84 (EPSG:4326)
+map_data_sf <- st_transform(map_data_sf, crs = 4326)
+
+
+# Create color palettes for the 'Total' and 'EV_per_Capita' columns
+color_palette_total <- colorNumeric(palette = "viridis", domain = map_data_sf$TotalEV)
+color_palette_per_capita <- colorNumeric(palette = "viridis", domain = map_data_sf$EV_per_Capita)
+
+leaflet_map_total <- leaflet(map_data_sf) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~color_palette_total(TotalEV),
+    weight = 1,
+    color = "#FFFFFF",
+    fillOpacity = 0.7,
+    popup = ~paste(NAME, "<br>Total EV Registrations: ", TotalEV)
+  ) %>%
+  addLegend(
+    pal = color_palette_total, 
+    values = ~TotalEV, 
+    opacity = 0.7, 
+    title = "Total EV <br> Registrations",
+    position = "topright"
+  )
+
+leaflet_map_per_capita <- leaflet(map_data_sf) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~color_palette_per_capita(EV_per_Capita),
+    weight = 1,
+    color = "#FFFFFF",
+    fillOpacity = 0.7,
+    popup = ~paste(NAME, "<br>EV Registrations per Capita: ", 
+                   round(EV_per_Capita, 3))
+  ) %>%
+  addLegend(
+    pal = color_palette_per_capita, 
+    values = ~EV_per_Capita, 
+    opacity = 0.7, 
+    title = "EV Registrations <br> per Capita",
+    position = "topright"
+  )
+
+# Print the maps to view them
+(leaflet_map_total)
+(leaflet_map_per_capita)
