@@ -1,5 +1,5 @@
 ---
-title: "A cool title"
+title: "Enegizing change"
 output: 
   flexdashboard::flex_dashboard:
     orientation: rows
@@ -105,6 +105,136 @@ ls()
 
 # RQ2
 
-# RQ3
+RQ3
+=======================================================
+## Column {data-width="500"}
 
+### chart x
+
+## Inputs {r fig.heigt=5}
+```{r}
+# Filtering Swiss data for specific fuel types
+swiss_specific_fuel <- df_v %>%
+  filter(Fuel %in% c("Diesel", "Electricity", "Conventional hybrid", "Plug-in hybrid", "Petrol")) %>%
+  filter(Location == 'Switzerland') |>
+  filter(VehicleType == 'Passenger car') |>
+  filter(Date > as.Date('2012-01-01')) |>
+  filter(Date < as.Date('2021-12-31'))
+
+# Selecting equivalent columns from the French dataset
+french_specific_fuel <- df_v_fr %>%
+  select(Date, Diesel_delta, Essence_delta, Conventional_Hybrid_delta, Plug_in_Hybrid_delta, Electrique_delta) # Adjust column names accordingly
+
+# Reshape French dataset to long format for easier plotting
+french_specific_fuel_long <- french_specific_fuel %>%
+  pivot_longer(cols = -Date, names_to = "Fuel", values_to = "Count")
+
+# Standardize counts in each dataset
+swiss_specific_fuel <- swiss_specific_fuel %>%
+  mutate(Count = scale(Count))
+
+french_specific_fuel_long <- french_specific_fuel_long %>%
+  mutate(Count = scale(Count))
+
+# Rename the 'Fuel' column in the French dataset
+french_specific_fuel_long <- french_specific_fuel_long %>%
+  mutate(Fuel = case_when(
+    Fuel == "Diesel_delta" ~ "Diesel",
+    Fuel == "Essence_delta" ~ "Petrol",
+    Fuel == "Conventional_Hybrid_delta" ~ "Conventional hybrid",
+    Fuel == "Plug_in_Hybrid_delta" ~ "Plug-in hybrid",
+    Fuel == "Electrique_delta" ~ "Electricity"
+  ))
+
+# Define color palette for each fuel type
+fuel_colors <- c("Diesel" = "black", "Electricity" = "green", "Conventional hybrid" = "purple", "Plug-in hybrid" = "blue", "Petrol" = "orange")
+
+p <- ggplot() +
+  geom_smooth(data = swiss_specific_fuel, aes(x = Date, y = Count, color = Fuel), 
+              method = "loess", se = FALSE, size = 1.5) +
+  geom_line(data = french_specific_fuel_long, aes(x = Date, y = Count, color = Fuel), 
+            alpha = 0.4, size = 0.8) +
+  scale_color_manual(values = fuel_colors, 
+                     labels = c("Diesel", "Electricity", "Conventional hybrid", 
+                                "Plug-in hybrid", "Petrol"),
+                     breaks = c("Diesel", "Electricity", "Conventional hybrid", 
+                                "Plug-in hybrid", "Petrol")) +
+  labs(x = "Date", y = "Standardized Count", color = "Fuel Type") +
+  theme_minimal() +
+  geom_text(data = data.frame(x = as.Date("2021-01-01"), y = c(3, 2.8), 
+                              label = c("Switzerland has", "the thickest line")), 
+            aes(x = x, y = y, label = label, color = label), 
+            size = 4, show.legend = FALSE)
+
+interactive_plot <- ggplotly(p, width = 600, height = 400, tooltip = c("x", "y", "color"))
+interactive_plot <- interactive_plot %>%
+  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
+interactive_plot
+
+```
+
+
+```{r}
+# Filtering Swiss data for specific fuel types
+swiss_specific_fuel <- df_v %>%
+  filter(Fuel %in% c("Electricity", "Conventional hybrid", "Plug-in hybrid")) %>%
+  filter(Location == 'Switzerland' & VehicleType == 'Passenger car' & Date > as.Date('2012-01-01') & Date < as.Date('2021-12-31'))
+
+# Selecting equivalent columns from the French dataset
+french_specific_fuel <- df_v_fr %>%
+  select(Date, Diesel_delta, Essence_delta, Conventional_Hybrid_delta, Plug_in_Hybrid_delta, Electrique_delta) # Adjust column names accordingly
+
+# Reshape French dataset to long format for easier plotting
+french_specific_fuel_long <- french_specific_fuel %>%
+  pivot_longer(cols = -Date, names_to = "Fuel", values_to = "Count") %>%
+  mutate(Fuel = case_when(
+    Fuel == "Conventional_Hybrid_delta" ~ "Conventional hybrid",
+    Fuel == "Plug_in_Hybrid_delta" ~ "Plug-in hybrid",
+    Fuel == "Electrique_delta" ~ "Electricity"
+  ))
+
+# Standardize counts in each dataset
+swiss_specific_fuel <- swiss_specific_fuel %>%
+  mutate(Count = scale(Count))
+
+french_specific_fuel_long <- french_specific_fuel_long %>%
+  filter(Fuel %in% c("Conventional hybrid", "Plug-in hybrid", "Electricity")) %>%
+  mutate(Count = scale(Count))
+
+# Define color palette for each fuel type
+fuel_colors <- c("Conventional hybrid" = "purple", "Plug-in hybrid" = "blue", "Electricity" = "green")
+
+# Plotting with faceting and improved axis text
+p <- ggplot() +
+  geom_smooth(data = swiss_specific_fuel, aes(x = Date, y = Count, color = Fuel), 
+              method = "loess", se = FALSE, size = 1.5) +
+  geom_line(data = french_specific_fuel_long, aes(x = Date, y = Count, color = Fuel), 
+            alpha = 0.4, size = 0.8) +
+  scale_color_manual(values = fuel_colors, labels = c("Switzerland", "France")) +
+  labs( y = "Standardized Count") +
+  theme_minimal() +
+  theme(legend.position = "bottom",
+        strip.background = element_blank(),
+        strip.text.x = element_text(size = 10, angle = 0),
+        axis.text.x = element_blank(),
+        axis.text.y = element_blank(),
+        axis.title.x = element_text(size = 12, margin = margin(t = 10)),
+        axis.title.y = element_text(size = 12, margin = margin(r = 10))) +
+  facet_wrap(~Fuel, scales = 'free_y', ncol = 1)
+
+# Convert to interactive plot
+interactive_plot <- ggplotly(p, width = 600, height = 600, tooltip = c("x", "y", "color"))
+interactive_plot <- interactive_plot %>%
+  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
+interactive_plot
+
+```
+
+## Column
+
+###chart y
+
+```{r}
+
+```
 # RQ4
