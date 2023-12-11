@@ -1,0 +1,89 @@
+---
+title: "A cool title"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social : menu
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r, echo = FALSE, message = FALSE}
+source(here::here("scripts/setup.R"))
+```
+
+Page 1
+=====================================
+
+Column {data-width=650}
+-------------------------------------
+
+### Chart 1
+
+```{r}
+
+```
+
+```{r global, include=FALSE}
+# load data in 'global' chunk so it can be shared by all users of the dashboard
+```
+
+Inputs {.sidebar}
+-----------------------------------------------------------------------
+
+```{r}
+
+```
+
+texttexttext
+
+Row
+-----------------------------------------------------------------------
+
+### Heatmap
+    
+```{r}
+
+```
+
+
+Row {.tabset}
+-----------------------------------------------------------------------
+
+### Parallel Coordinates
+    
+```{r}
+
+```
+   
+### Data for Selected Cluster
+
+```{r}
+
+```
+
+Page 2
+=====================================
+Column {data-width=650}
+-------------------------------------
+
+### chart x
+```{r}
+
+```
+
+
+Column
+-------------------------------------
+
+###chart y
+
+```{r}
+
+```
+
+Page 3
+=====================================
+
+Page 4
+=====================================
