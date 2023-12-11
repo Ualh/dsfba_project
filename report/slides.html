@@ -94,34 +94,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<div class="cell" data-layout-align="center">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the working directory</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Set the working directory to the correct path</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">""</span>))</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the working directory to verify it's correct</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">getwd</span>())</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] "C:/Users/UrsHu/Pillars/Learn/Academic/Master/Semestre 1/Data Science/0_group_project/dsfba_project"</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"scripts/data.R"</span>))</span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Warning: There was 1 warning in `mutate()`.</span></span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; i In argument: `Age_num = as.numeric(Age_clean)`.</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Caused by warning:</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; ! NAs introduced by coercion</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Attempt to load the specific file</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">file.exists</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/googletrends_auto-elettrica_2005-2022.csv"</span>)))</span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>google_trends_data <span class="ot">&lt;-</span> <span class="fu">fread</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data/googletrends_auto-elettrica_2005-2022.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: There was 1 warning in `mutate()`.
+i In argument: `Age_num = as.numeric(Age_clean)`.
+Caused by warning:
+! NAs introduced by coercion</code></pre>
 </div>
-<section id="page-1" class="level1">
-<h1>Page 1</h1>
+</div>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
 <section id="column" class="level2" data-width="650">
 <h2 data-width="650" class="anchored" data-anchor-id="column">Column</h2>
+</section>
+<section id="text" class="level2">
+<h2 class="anchored" data-anchor-id="text">Text ?</h2>
 <section id="chart-1" class="level3">
 <h3 class="anchored" data-anchor-id="chart-1">Chart 1</h3>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">"../images/intro.01.jpeg"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../images/intro.01.jpeg" class="img-fluid figure-img" style="width:70.0%"></p>
+</figure>
+</div>
+</div>
+</div>
 </section>
 </section>
 <section id="inputs" class="level2 sidebar">
 <h2 class="sidebar anchored" data-anchor-id="inputs">Inputs</h2>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df_v</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # A tibble: 2,594,592 x 5</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    Location    VehicleType   Fuel                Count Date      </span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    &lt;chr&gt;       &lt;chr&gt;         &lt;chr&gt;               &lt;int&gt; &lt;date&gt;    </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  1 Switzerland Passenger car Petrol              12203 2005-01-01</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  2 Switzerland Passenger car Diesel               5300 2005-01-01</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  3 Switzerland Passenger car Conventional hybrid    22 2005-01-01</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  4 Switzerland Passenger car Plug-in hybrid          0 2005-01-01</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  5 Switzerland Passenger car Conventional hybrid     0 2005-01-01</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  6 Switzerland Passenger car Plug-in hybrid          0 2005-01-01</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  7 Switzerland Passenger car Electricity             0 2005-01-01</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  8 Switzerland Passenger car Hydrogen                0 2005-01-01</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;  9 Switzerland Passenger car Gas                    33 2005-01-01</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; 10 Switzerland Passenger car Other                   4 2005-01-01</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; # i 2,594,582 more rows</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p>texttexttext</p>
 </section>
 <section id="row" class="level2">
@@ -140,8 +160,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 </section>
 </section>
-<section id="page-2" class="level1">
-<h1>Page 2</h1>
+<section id="rq1" class="level1">
+<h1>RQ1</h1>
 <section id="column-1" class="level2" data-width="650">
 <h2 data-width="650" class="anchored" data-anchor-id="column-1">Column</h2>
 <section id="chart-x" class="level3">
@@ -153,11 +173,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>###chart y</p>
 </section>
 </section>
-<section id="page-3" class="level1">
-<h1>Page 3</h1>
+<section id="rq2" class="level1">
+<h1>RQ2</h1>
 </section>
-<section id="page-4" class="level1">
-<h1>Page 4</h1>
+<section id="rq3" class="level1">
+<h1>RQ3</h1>
+</section>
+<section id="rq4" class="level1">
+<h1>RQ4</h1>
 </section>
 
 </main>
