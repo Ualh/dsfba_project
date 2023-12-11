@@ -828,7 +828,7 @@ data set in the following way:
 # Only taking the private cars from this data and transforming the data
 df_v_fr <- france_v[25:37, ] %>%
   t() %>%
-  as_tibble() %>%
+  as_tibble(.name_repair = "minimal") %>%
   setNames(.[1, ]) %>%
   slice(-1) %>%
   mutate(Year = 2011:2022) %>%

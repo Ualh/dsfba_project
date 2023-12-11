@@ -172,3 +172,32 @@ df_v <- df_v %>%
 #vehicle_count_2022 <- df_v %>%
 #  filter(Location == "Switzerland", year(Date) == 2023, VehicleType == "Passenger car") %>%
 #  summarize(TotalCount = sum(Count))
+
+### 2.2.5 Data wrangling French vehicle clean
+
+df_v_fr <- france_v[25:37, ] %>%
+  t() %>%
+  as_tibble(.name_repair = "minimal") %>%
+  setNames(.[1, ]) %>%
+  slice(-1) %>%
+  mutate(Year = 2011:2022) %>%
+  select(-c("Particulier", "Gaz", "Gaz HNR", "Gaz HR", "Hydrog\u00e8ne et autre ZE", "Inconnu")) %>%
+  mutate(across(-Year, ~ floor(as.numeric(.)))) %>%
+  mutate(
+    Conventional_Hybrid = as.numeric(`Diesel HNR`) + as.numeric(`Essence HNR`),
+    Plug_in_Hybrid = as.numeric(`Diesel HR`) + as.numeric(`Essence HR`),
+    across(c(Diesel, Essence, Conventional_Hybrid, Plug_in_Hybrid, Electrique), as.numeric),
+    Diesel_delta = Diesel - lag(Diesel),
+    Essence_delta = Essence - lag(Essence),
+    Conventional_Hybrid_delta = Conventional_Hybrid - lag(Conventional_Hybrid),
+    Plug_in_Hybrid_delta = Plug_in_Hybrid - lag(Plug_in_Hybrid),
+    Electrique_delta = Electrique - lag(Electrique)
+  ) %>%
+  filter(!is.na(Diesel_delta)) %>%
+  select(Date = Year, Diesel, Diesel_delta, Essence, Essence_delta, Conventional_Hybrid, Conventional_Hybrid_delta, Plug_in_Hybrid, Plug_in_Hybrid_delta, Electrique, Electrique_delta) %>%
+  mutate(Date = as.Date(paste(Date, "-01-01", sep = ""), format = "%Y-%m-%d"))
+
+# Display cleaned data
+reactable(head(df_v_fr, 100), sortable = TRUE, searchable = TRUE)
+
+
