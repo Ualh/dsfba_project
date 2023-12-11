@@ -15,25 +15,11 @@ setwd(here::here(""))
 source(here::here("scripts/data.R"))
 ```
 
-arpes
-Page 1
-=====================================
+# Introduction
 
-Column {data-width=650}
--------------------------------------
+## Column {data-width="650"}
 
-### Chart 1
-
-```{r}
-head(df_v)
-```
-
-```{r global, include=FALSE}
-# load data in 'global' chunk so it can be shared by all users of the dashboard
-```
-
-Inputs {.sidebar}
------------------------------------------------------------------------
+## Inputs {.sidebar}
 
 ```{r}
 # Plotting the data with ggplot2, showing the trend within each year
@@ -71,44 +57,45 @@ interactive_plot_seaso_2
 
 texttexttext
 
-Row
------------------------------------------------------------------------
+## Row
 
-### Heatmap
-    
+### Chart 1
+
 ```{r}
-
+df_v #this work
 ```
 
+### Seaso 1
 
-Row {.tabset}
------------------------------------------------------------------------
+```{r}
+# interactive_plot_seaso_1 #error :object 'interactive_plot_seaso_1' not found
+```
+
+## Row {.tabset}
 
 ### Parallel Coordinates
-    
-```{r}
 
+```{r}
+ls()
 ```
-   
+
 ### Data for Selected Cluster
 
 ```{r}
 
 ```
 
-Page 2
-=====================================
-Column {data-width=650}
--------------------------------------
+# RQ1
+
+## Column {data-width="650"}
 
 ### chart x
+
 ```{r}
 
 ```
 
-
-Column
--------------------------------------
+## Column
 
 ###chart y
 
@@ -116,8 +103,8 @@ Column
 
 ```
 
-Page 3
-=====================================
+# RQ2
 
-Page 4
-=====================================
+# RQ3
+
+# RQ4
