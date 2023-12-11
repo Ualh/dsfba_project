@@ -16,12 +16,24 @@ source(here::here("scripts/data.R"))
 ```
 
 # Introduction
-
 ## Column {data-width="650"}
 
-## Inputs {.sidebar}
+### row
+#### xyz
 
-```{r}
+### row 
+#### xyz
+
+# RQ1
+
+Column {data-width=500}
+-------------------------------------
+
+## Row {.tabset}
+
+### Seaso 1
+
+```{r, echo = FALSE, message = FALSE}
 # Plotting the data with ggplot2, showing the trend within each year
 passenger_cars_processed <- df_v %>%
   filter(VehicleType == "Passenger car") %>%
@@ -33,6 +45,27 @@ passenger_cars_processed <- df_v %>%
          Month = factor(month(YearMonth), levels = 1:12, labels = month.abb)) %>%
   arrange(Year, Month)
 
+# plot1
+p_seaso_1 <- ggplot(passenger_cars_processed, aes(x = YearMonth, y = Count)) +
+  geom_line(color = "darkblue", size = 0.5) +
+  labs(title = "Passenger Car Adoption Over Time in Switzerland",
+       x = "Date",
+       y = "Number of Passenger Cars Registered") +
+  theme_minimal() +
+  scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
+  geom_smooth(method = "loess", se = FALSE, color = "blue") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Convert to an interactive plotly object
+interactive_plot_seaso_1 <- ggplotly(p_seaso_1, width = 600, height = 400)
+
+# Display the interactive plot
+(interactive_plot_seaso_1)
+```
+
+### Seaso 1
+
+```{r, echo = FALSE, message = FALSE}
 p_seaso_2 <- ggplot(passenger_cars_processed, aes(x = Month, y = Count, group = Year, color = as.factor(Year))) +
   geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 0.7) +
   labs(title = "Monthly Passenger Car Registrations by Year",
@@ -52,43 +85,59 @@ interactive_plot_seaso_2 <- interactive_plot_seaso_2 %>%
          legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2)) # Adjust legend position
 
 # Display the interactive plot
-interactive_plot_seaso_2
-```
-
-texttexttext
-
-## Row
-
-### Chart 1
-
-```{r}
-df_v #this work
-```
-
-### Seaso 1
-
-```{r}
-# interactive_plot_seaso_1 #error :object 'interactive_plot_seaso_1' not found
+(interactive_plot_seaso_2)
 ```
 
 ## Row {.tabset}
 
-### Parallel Coordinates
+### Map 1
+```{r, echo = FALSE, message = FALSE}
+# Create the leaflet maps
+leaflet_map_total <- leaflet(map_data_sf) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~color_palette_total(TotalEV),
+    weight = 1,
+    color = "#FFFFFF",
+    fillOpacity = 0.7,
+    popup = ~paste(NAME, "<br>Total EV Registrations: ", TotalEV)
+  ) %>%
+  addLegend(
+    pal = color_palette_total, 
+    values = ~TotalEV, 
+    opacity = 0.7, 
+    title = "Total EV <br> Registrations",
+    position = "topright"
+  )
 
-```{r}
-ls()
+leaflet_map_per_capita <- leaflet(map_data_sf) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~color_palette_per_capita(EV_per_Capita),
+    weight = 1,
+    color = "#FFFFFF",
+    fillOpacity = 0.7,
+    popup = ~paste(NAME, "<br>EV Registrations per Capita: ", 
+                   round(EV_per_Capita, 3))
+  ) %>%
+  addLegend(
+    pal = color_palette_per_capita, 
+    values = ~EV_per_Capita, 
+    opacity = 0.7, 
+    title = "EV Registrations <br> per Capita",
+    position = "topright"
+  )
+
+# Print the maps to view them
+(leaflet_map_total)
+(leaflet_map_per_capita)
 ```
 
-### Data for Selected Cluster
-
-```{r}
-
+### Map 2
+```{r, echo = FALSE, message = FALSE}
 ```
 
-# RQ1
-
-## Column {data-width="650"}
-
+# RQ2
 ### chart x
 
 ```{r}
@@ -97,14 +146,13 @@ ls()
 
 ## Column
 
-###chart y
+### chart y
+
+
+# RQ3
 
 ```{r}
 
 ```
-
-# RQ2
-
-# RQ3
 
 # RQ4
