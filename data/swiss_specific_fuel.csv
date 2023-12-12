@@ -1,0 +1,834 @@
+"","Location","VehicleType","Fuel","Count","Date"
+"1","Switzerland","Passenger car","Petrol",2.06239853433955,2012-02-01
+"2","Switzerland","Passenger car","Diesel",1.0484223466542,2012-02-01
+"3","Switzerland","Passenger car","Conventional hybrid",-0.601817462611006,2012-02-01
+"4","Switzerland","Passenger car","Plug-in hybrid",-0.652387548141197,2012-02-01
+"5","Switzerland","Passenger car","Conventional hybrid",-0.653490895461856,2012-02-01
+"6","Switzerland","Passenger car","Plug-in hybrid",-0.655329807662954,2012-02-01
+"7","Switzerland","Passenger car","Electricity",-0.650916418380319,2012-02-01
+"8","Switzerland","Passenger car","Petrol",3.26854104703963,2012-03-01
+"9","Switzerland","Passenger car","Diesel",1.51201211255097,2012-03-01
+"10","Switzerland","Passenger car","Conventional hybrid",-0.558235243444987,2012-03-01
+"11","Switzerland","Passenger car","Plug-in hybrid",-0.651468092040648,2012-03-01
+"12","Switzerland","Passenger car","Conventional hybrid",-0.64098629249439,2012-03-01
+"13","Switzerland","Passenger car","Plug-in hybrid",-0.655329807662954,2012-03-01
+"14","Switzerland","Passenger car","Electricity",-0.638963489073183,2012-03-01
+"15","Switzerland","Passenger car","Petrol",2.68634144417205,2012-04-01
+"16","Switzerland","Passenger car","Diesel",1.25952946734023,2012-04-01
+"17","Switzerland","Passenger car","Conventional hybrid",-0.563751980048281,2012-04-01
+"18","Switzerland","Passenger car","Plug-in hybrid",-0.652939221801526,2012-04-01
+"19","Switzerland","Passenger car","Conventional hybrid",-0.642825204695488,2012-04-01
+"20","Switzerland","Passenger car","Plug-in hybrid",-0.655145916442844,2012-04-01
+"21","Switzerland","Passenger car","Electricity",-0.634550099790548,2012-04-01
+"22","Switzerland","Passenger car","Petrol",2.69682324371831,2012-05-01
+"23","Switzerland","Passenger car","Diesel",1.39910290340356,2012-05-01
+"24","Switzerland","Passenger car","Conventional hybrid",-0.579934407417942,2012-05-01
+"25","Switzerland","Passenger car","Plug-in hybrid",-0.653307004241746,2012-05-01
+"26","Switzerland","Passenger car","Conventional hybrid",-0.637308468092195,2012-05-01
+"27","Switzerland","Passenger car","Plug-in hybrid",-0.654962025222734,2012-05-01
+"28","Switzerland","Passenger car","Electricity",-0.638595706632963,2012-05-01
+"29","Switzerland","Passenger car","Petrol",4.03444797879688,2012-06-01
+"30","Switzerland","Passenger car","Diesel",2.0164257293121,2012-06-01
+"31","Switzerland","Passenger car","Conventional hybrid",-0.542788380955765,2012-06-01
+"32","Switzerland","Passenger car","Plug-in hybrid",-0.653123113021636,2012-06-01
+"33","Switzerland","Passenger car","Conventional hybrid",-0.634182317350328,2012-06-01
+"34","Switzerland","Passenger car","Plug-in hybrid",-0.654962025222734,2012-06-01
+"35","Switzerland","Passenger car","Electricity",-0.64172185737483,2012-06-01
+"36","Switzerland","Passenger car","Petrol",2.07784539682877,2012-07-01
+"37","Switzerland","Passenger car","Diesel",0.983508745955446,2012-07-01
+"38","Switzerland","Passenger car","Conventional hybrid",-0.57313043227388,2012-07-01
+"39","Switzerland","Passenger car","Plug-in hybrid",-0.652755330581417,2012-07-01
+"40","Switzerland","Passenger car","Conventional hybrid",-0.63307897002967,2012-07-01
+"41","Switzerland","Passenger car","Plug-in hybrid",-0.655145916442844,2012-07-01
+"42","Switzerland","Passenger car","Electricity",-0.643009095915598,2012-07-01
+"43","Switzerland","Passenger car","Petrol",1.71613136687283,2012-08-01
+"44","Switzerland","Passenger car","Diesel",0.923744099419766,2012-08-01
+"45","Switzerland","Passenger car","Conventional hybrid",-0.57313043227388,2012-08-01
+"46","Switzerland","Passenger car","Plug-in hybrid",-0.652019765700977,2012-08-01
+"47","Switzerland","Passenger car","Conventional hybrid",-0.628481689526925,2012-08-01
+"48","Switzerland","Passenger car","Plug-in hybrid",-0.654778134002624,2012-08-01
+"49","Switzerland","Passenger car","Electricity",-0.645215790556915,2012-08-01
+"50","Switzerland","Passenger car","Petrol",1.58795918645631,2012-09-01
+"51","Switzerland","Passenger car","Diesel",0.874093469990124,2012-09-01
+"52","Switzerland","Passenger car","Conventional hybrid",-0.566142565909708,2012-09-01
+"53","Switzerland","Passenger car","Plug-in hybrid",-0.650364744719989,2012-09-01
+"54","Switzerland","Passenger car","Conventional hybrid",-0.639515162733512,2012-09-01
+"55","Switzerland","Passenger car","Plug-in hybrid",-0.655329807662954,2012-09-01
+"56","Switzerland","Passenger car","Electricity",-0.635837338331316,2012-09-01
+"57","Switzerland","Passenger car","Petrol",2.14092008532643,2012-10-01
+"58","Switzerland","Passenger car","Diesel",1.28178030497352,2012-10-01
+"59","Switzerland","Passenger car","Conventional hybrid",-0.544259510716644,2012-10-01
+"60","Switzerland","Passenger car","Plug-in hybrid",-0.651651983260758,2012-10-01
+"61","Switzerland","Passenger car","Conventional hybrid",-0.637124576872085,2012-10-01
+"62","Switzerland","Passenger car","Plug-in hybrid",-0.655513698883063,2012-10-01
+"63","Switzerland","Passenger car","Electricity",-0.638044032972634,2012-10-01
+"64","Switzerland","Passenger car","Petrol",2.21944163631331,2012-11-01
+"65","Switzerland","Passenger car","Diesel",1.26982737566638,2012-11-01
+"66","Switzerland","Passenger car","Conventional hybrid",-0.561177502966744,2012-11-01
+"67","Switzerland","Passenger car","Plug-in hybrid",-0.653123113021636,2012-11-01
+"68","Switzerland","Passenger car","Conventional hybrid",-0.640802401274281,2012-11-01
+"69","Switzerland","Passenger car","Plug-in hybrid",-0.654410351562405,2012-11-01
+"70","Switzerland","Passenger car","Electricity",-0.644480225676476,2012-11-01
+"71","Switzerland","Passenger car","Petrol",2.48387721083118,2012-12-01
+"72","Switzerland","Passenger car","Diesel",1.37905876041159,2012-12-01
+"73","Switzerland","Passenger car","Conventional hybrid",-0.580486081078271,2012-12-01
+"74","Switzerland","Passenger car","Plug-in hybrid",-0.654042569122185,2012-12-01
+"75","Switzerland","Passenger car","Conventional hybrid",-0.647606376418343,2012-12-01
+"76","Switzerland","Passenger car","Plug-in hybrid",-0.654042569122185,2012-12-01
+"77","Switzerland","Passenger car","Electricity",-0.638779597853073,2012-12-01
+"78","Switzerland","Passenger car","Petrol",1.59770542112213,2013-01-01
+"79","Switzerland","Passenger car","Diesel",0.983876528395665,2013-01-01
+"80","Switzerland","Passenger car","Conventional hybrid",-0.570188172752123,2013-01-01
+"81","Switzerland","Passenger car","Plug-in hybrid",-0.651835874480868,2013-01-01
+"82","Switzerland","Passenger car","Conventional hybrid",-0.643928552016147,2013-01-01
+"83","Switzerland","Passenger car","Plug-in hybrid",-0.654594242782514,2013-01-01
+"84","Switzerland","Passenger car","Electricity",-0.643376878355818,2013-01-01
+"85","Switzerland","Passenger car","Petrol",1.75603576163665,2013-02-01
+"86","Switzerland","Passenger car","Diesel",0.983324854735336,2013-02-01
+"87","Switzerland","Passenger car","Conventional hybrid",-0.569084825431465,2013-02-01
+"88","Switzerland","Passenger car","Plug-in hybrid",-0.653123113021636,2013-02-01
+"89","Switzerland","Passenger car","Conventional hybrid",-0.644848008116696,2013-02-01
+"90","Switzerland","Passenger car","Plug-in hybrid",-0.650364744719989,2013-02-01
+"91","Switzerland","Passenger car","Electricity",-0.648893614959111,2013-02-01
+"92","Switzerland","Passenger car","Petrol",2.6177500190711,2013-03-01
+"93","Switzerland","Passenger car","Diesel",1.26486231272342,2013-03-01
+"94","Switzerland","Passenger car","Conventional hybrid",-0.522928129183909,2013-03-01
+"95","Switzerland","Passenger car","Plug-in hybrid",-0.653307004241746,2013-03-01
+"96","Switzerland","Passenger car","Conventional hybrid",-0.643009095915598,2013-03-01
+"97","Switzerland","Passenger car","Plug-in hybrid",-0.649445288619441,2013-03-01
+"98","Switzerland","Passenger car","Electricity",-0.642641313475378,2013-03-01
+"99","Switzerland","Passenger car","Petrol",2.55541089545388,2013-04-01
+"100","Switzerland","Passenger car","Diesel",1.23139411066344,2013-04-01
+"101","Switzerland","Passenger car","Conventional hybrid",-0.55584465758356,2013-04-01
+"102","Switzerland","Passenger car","Plug-in hybrid",-0.652939221801526,2013-04-01
+"103","Switzerland","Passenger car","Conventional hybrid",-0.643560769575927,2013-04-01
+"104","Switzerland","Passenger car","Plug-in hybrid",-0.652939221801526,2013-04-01
+"105","Switzerland","Passenger car","Electricity",-0.647238593978123,2013-04-01
+"106","Switzerland","Passenger car","Petrol",2.42282532575473,2013-05-01
+"107","Switzerland","Passenger car","Diesel",1.18891523881807,2013-05-01
+"108","Switzerland","Passenger car","Conventional hybrid",-0.570923737632563,2013-05-01
+"109","Switzerland","Passenger car","Plug-in hybrid",-0.653123113021636,2013-05-01
+"110","Switzerland","Passenger car","Conventional hybrid",-0.644480225676476,2013-05-01
+"111","Switzerland","Passenger car","Plug-in hybrid",-0.652939221801526,2013-05-01
+"112","Switzerland","Passenger car","Electricity",-0.643192987135708,2013-05-01
+"113","Switzerland","Passenger car","Petrol",2.62749625373692,2013-06-01
+"114","Switzerland","Passenger car","Diesel",1.27938971911209,2013-06-01
+"115","Switzerland","Passenger car","Conventional hybrid",-0.579014951317393,2013-06-01
+"116","Switzerland","Passenger car","Plug-in hybrid",-0.652203656921087,2013-06-01
+"117","Switzerland","Passenger car","Conventional hybrid",-0.644848008116696,2013-06-01
+"118","Switzerland","Passenger car","Plug-in hybrid",-0.654226460342295,2013-06-01
+"119","Switzerland","Passenger car","Electricity",-0.622597170483412,2013-06-01
+"120","Switzerland","Passenger car","Petrol",2.20473033870452,2013-07-01
+"121","Switzerland","Passenger car","Diesel",1.18119180757346,2013-07-01
+"122","Switzerland","Passenger car","Conventional hybrid",-0.578463277657064,2013-07-01
+"123","Switzerland","Passenger car","Plug-in hybrid",-0.652019765700977,2013-07-01
+"124","Switzerland","Passenger car","Conventional hybrid",-0.636205120771536,2013-07-01
+"125","Switzerland","Passenger car","Plug-in hybrid",-0.652755330581417,2013-07-01
+"126","Switzerland","Passenger car","Electricity",-0.635837338331316,2013-07-01
+"127","Switzerland","Passenger car","Petrol",1.70914350050866,2013-08-01
+"128","Switzerland","Passenger car","Diesel",0.722383213399552,2013-08-01
+"129","Switzerland","Passenger car","Conventional hybrid",-0.567797586890696,2013-08-01
+"130","Switzerland","Passenger car","Plug-in hybrid",-0.652755330581417,2013-08-01
+"131","Switzerland","Passenger car","Conventional hybrid",-0.647422485198233,2013-08-01
+"132","Switzerland","Passenger car","Plug-in hybrid",-0.652019765700977,2013-08-01
+"133","Switzerland","Passenger car","Electricity",-0.634733991010658,2013-08-01
+"134","Switzerland","Passenger car","Petrol",1.83179894432188,2013-09-01
+"135","Switzerland","Passenger car","Diesel",0.891195353460334,2013-09-01
+"136","Switzerland","Passenger car","Conventional hybrid",-0.573682105934209,2013-09-01
+"137","Switzerland","Passenger car","Plug-in hybrid",-0.652387548141197,2013-09-01
+"138","Switzerland","Passenger car","Conventional hybrid",-0.646503029097684,2013-09-01
+"139","Switzerland","Passenger car","Plug-in hybrid",-0.649445288619441,2013-09-01
+"140","Switzerland","Passenger car","Electricity",-0.630688384168242,2013-09-01
+"141","Switzerland","Passenger car","Petrol",2.21282155238935,2013-10-01
+"142","Switzerland","Passenger car","Diesel",1.2119016413318,2013-10-01
+"143","Switzerland","Passenger car","Conventional hybrid",-0.562280850287403,2013-10-01
+"144","Switzerland","Passenger car","Plug-in hybrid",-0.653123113021636,2013-10-01
+"145","Switzerland","Passenger car","Conventional hybrid",-0.647974158858562,2013-10-01
+"146","Switzerland","Passenger car","Plug-in hybrid",-0.650364744719989,2013-10-01
+"147","Switzerland","Passenger car","Electricity",-0.63252729636934,2013-10-01
+"148","Switzerland","Passenger car","Petrol",2.06773137972273,2013-11-01
+"149","Switzerland","Passenger car","Diesel",1.0521001710564,2013-11-01
+"150","Switzerland","Passenger car","Conventional hybrid",-0.571475411292892,2013-11-01
+"151","Switzerland","Passenger car","Plug-in hybrid",-0.64999696227977,2013-11-01
+"152","Switzerland","Passenger car","Conventional hybrid",-0.648341941298782,2013-11-01
+"153","Switzerland","Passenger car","Plug-in hybrid",-0.647606376418343,2013-11-01
+"154","Switzerland","Passenger car","Electricity",-0.623148844143741,2013-11-01
+"155","Switzerland","Passenger car","Petrol",2.55872093741586,2013-12-01
+"156","Switzerland","Passenger car","Diesel",1.40645855220795,2013-12-01
+"157","Switzerland","Passenger car","Conventional hybrid",-0.54738566145851,2013-12-01
+"158","Switzerland","Passenger car","Plug-in hybrid",-0.647606376418343,2013-12-01
+"159","Switzerland","Passenger car","Conventional hybrid",-0.649261397399331,2013-12-01
+"160","Switzerland","Passenger car","Plug-in hybrid",-0.647790267638452,2013-12-01
+"161","Switzerland","Passenger car","Electricity",-0.605311395793092,2013-12-01
+"162","Switzerland","Passenger car","Petrol",1.55669767903764,2014-01-01
+"163","Switzerland","Passenger car","Diesel",0.878506859272759,2014-01-01
+"164","Switzerland","Passenger car","Conventional hybrid",-0.589128968423431,2014-01-01
+"165","Switzerland","Passenger car","Plug-in hybrid",-0.652571439361307,2014-01-01
+"166","Switzerland","Passenger car","Conventional hybrid",-0.646686920317794,2014-01-01
+"167","Switzerland","Passenger car","Plug-in hybrid",-0.648525832518892,2014-01-01
+"168","Switzerland","Passenger car","Electricity",-0.635469555891097,2014-01-01
+"169","Switzerland","Passenger car","Petrol",1.75585187041654,2014-02-01
+"170","Switzerland","Passenger car","Diesel",0.958683431240625,2014-02-01
+"171","Switzerland","Passenger car","Conventional hybrid",-0.58986453330387,2014-02-01
+"172","Switzerland","Passenger car","Plug-in hybrid",-0.650548635940099,2014-02-01
+"173","Switzerland","Passenger car","Conventional hybrid",-0.646870811537903,2014-02-01
+"174","Switzerland","Passenger car","Plug-in hybrid",-0.653674786681966,2014-02-01
+"175","Switzerland","Passenger car","Electricity",-0.640618510054171,2014-02-01
+"176","Switzerland","Passenger car","Petrol",2.33566088742269,2014-03-01
+"177","Switzerland","Passenger car","Diesel",1.1124164912524,2014-03-01
+"178","Switzerland","Passenger car","Conventional hybrid",-0.544995075597083,2014-03-01
+"179","Switzerland","Passenger car","Plug-in hybrid",-0.648893614959111,2014-03-01
+"180","Switzerland","Passenger car","Conventional hybrid",-0.647790267638452,2014-03-01
+"181","Switzerland","Passenger car","Plug-in hybrid",-0.652387548141197,2014-03-01
+"182","Switzerland","Passenger car","Electricity",-0.611931479717044,2014-03-01
+"183","Switzerland","Passenger car","Petrol",2.46898202200228,2014-04-01
+"184","Switzerland","Passenger car","Diesel",1.18928302125829,2014-04-01
+"185","Switzerland","Passenger car","Conventional hybrid",-0.560258046866195,2014-04-01
+"186","Switzerland","Passenger car","Plug-in hybrid",-0.645583572997135,2014-04-01
+"187","Switzerland","Passenger car","Conventional hybrid",-0.645215790556915,2014-04-01
+"188","Switzerland","Passenger car","Plug-in hybrid",-0.650732527160209,2014-04-01
+"189","Switzerland","Passenger car","Electricity",-0.625907212445388,2014-04-01
+"190","Switzerland","Passenger car","Petrol",2.25861046619669,2014-05-01
+"191","Switzerland","Passenger car","Diesel",1.07729326821144,2014-05-01
+"192","Switzerland","Passenger car","Conventional hybrid",-0.56467143614883,2014-05-01
+"193","Switzerland","Passenger car","Plug-in hybrid",-0.64981307105966,2014-05-01
+"194","Switzerland","Passenger car","Conventional hybrid",-0.647606376418343,2014-05-01
+"195","Switzerland","Passenger car","Plug-in hybrid",-0.653858677902075,2014-05-01
+"196","Switzerland","Passenger car","Electricity",-0.6242521914644,2014-05-01
+"197","Switzerland","Passenger car","Petrol",2.4693498044425,2014-06-01
+"198","Switzerland","Passenger car","Diesel",1.22587737406014,2014-06-01
+"199","Switzerland","Passenger car","Conventional hybrid",-0.583244449379918,2014-06-01
+"200","Switzerland","Passenger car","Plug-in hybrid",-0.64135407493461,2014-06-01
+"201","Switzerland","Passenger car","Conventional hybrid",-0.649077506179221,2014-06-01
+"202","Switzerland","Passenger car","Plug-in hybrid",-0.653858677902075,2014-06-01
+"203","Switzerland","Passenger car","Electricity",-0.622045496823083,2014-06-01
+"204","Switzerland","Passenger car","Petrol",2.35975063725707,2014-07-01
+"205","Switzerland","Passenger car","Diesel",1.25566775171793,2014-07-01
+"206","Switzerland","Passenger car","Conventional hybrid",-0.568717042991245,2014-07-01
+"207","Switzerland","Passenger car","Plug-in hybrid",-0.647238593978123,2014-07-01
+"208","Switzerland","Passenger car","Conventional hybrid",-0.65018085349988,2014-07-01
+"209","Switzerland","Passenger car","Plug-in hybrid",-0.653858677902075,2014-07-01
+"210","Switzerland","Passenger car","Electricity",-0.624987756344839,2014-07-01
+"211","Switzerland","Passenger car","Petrol",1.55743324391808,2014-08-01
+"212","Switzerland","Passenger car","Diesel",0.671077562988922,2014-08-01
+"213","Switzerland","Passenger car","Conventional hybrid",-0.600714115290348,2014-08-01
+"214","Switzerland","Passenger car","Plug-in hybrid",-0.647054702758013,2014-08-01
+"215","Switzerland","Passenger car","Conventional hybrid",-0.651651983260758,2014-08-01
+"216","Switzerland","Passenger car","Plug-in hybrid",-0.652387548141197,2014-08-01
+"217","Switzerland","Passenger car","Electricity",-0.631975622709011,2014-08-01
+"218","Switzerland","Passenger car","Petrol",1.76780479972368,2014-09-01
+"219","Switzerland","Passenger car","Diesel",0.781780077495012,2014-09-01
+"220","Switzerland","Passenger car","Conventional hybrid",-0.571107628852672,2014-09-01
+"221","Switzerland","Passenger car","Plug-in hybrid",-0.643560769575927,2014-09-01
+"222","Switzerland","Passenger car","Conventional hybrid",-0.647054702758013,2014-09-01
+"223","Switzerland","Passenger car","Plug-in hybrid",-0.64962917983955,2014-09-01
+"224","Switzerland","Passenger car","Electricity",-0.630872275388352,2014-09-01
+"225","Switzerland","Passenger car","Petrol",2.22937176219924,2014-10-01
+"226","Switzerland","Passenger car","Diesel",1.12197883469811,2014-10-01
+"227","Switzerland","Passenger car","Conventional hybrid",-0.551982941961255,2014-10-01
+"228","Switzerland","Passenger car","Plug-in hybrid",-0.644296334456366,2014-10-01
+"229","Switzerland","Passenger car","Conventional hybrid",-0.646135246657464,2014-10-01
+"230","Switzerland","Passenger car","Plug-in hybrid",-0.652387548141197,2014-10-01
+"231","Switzerland","Passenger car","Electricity",-0.63234340514923,2014-10-01
+"232","Switzerland","Passenger car","Petrol",1.83510898628386,2014-11-01
+"233","Switzerland","Passenger car","Diesel",1.06294975304287,2014-11-01
+"234","Switzerland","Passenger car","Conventional hybrid",-0.578279386436954,2014-11-01
+"235","Switzerland","Passenger car","Plug-in hybrid",-0.642273531035159,2014-11-01
+"236","Switzerland","Passenger car","Conventional hybrid",-0.647606376418343,2014-11-01
+"237","Switzerland","Passenger car","Plug-in hybrid",-0.652939221801526,2014-11-01
+"238","Switzerland","Passenger car","Electricity",-0.625907212445388,2014-11-01
+"239","Switzerland","Passenger car","Petrol",2.79961843575968,2014-12-01
+"240","Switzerland","Passenger car","Diesel",1.62712801633969,2014-12-01
+"241","Switzerland","Passenger car","Conventional hybrid",-0.53911055655357,2014-12-01
+"242","Switzerland","Passenger car","Plug-in hybrid",-0.643376878355818,2014-12-01
+"243","Switzerland","Passenger car","Conventional hybrid",-0.645399681777025,2014-12-01
+"244","Switzerland","Passenger car","Plug-in hybrid",-0.652939221801526,2014-12-01
+"245","Switzerland","Passenger car","Electricity",-0.601633571390896,2014-12-01
+"246","Switzerland","Passenger car","Petrol",1.2928137781801,2015-01-01
+"247","Switzerland","Passenger car","Diesel",0.789687399959733,2015-01-01
+"248","Switzerland","Passenger car","Conventional hybrid",-0.599794659189799,2015-01-01
+"249","Switzerland","Passenger car","Plug-in hybrid",-0.636572903211756,2015-01-01
+"250","Switzerland","Passenger car","Conventional hybrid",-0.646319137877574,2015-01-01
+"251","Switzerland","Passenger car","Plug-in hybrid",-0.653858677902075,2015-01-01
+"252","Switzerland","Passenger car","Electricity",-0.628665580747035,2015-01-01
+"253","Switzerland","Passenger car","Petrol",1.75732300017742,2015-02-01
+"254","Switzerland","Passenger car","Diesel",1.02948155098289,2015-02-01
+"255","Switzerland","Passenger car","Conventional hybrid",-0.58122164595871,2015-02-01
+"256","Switzerland","Passenger car","Plug-in hybrid",-0.625171647564949,2015-02-01
+"257","Switzerland","Passenger car","Conventional hybrid",-0.649261397399331,2015-02-01
+"258","Switzerland","Passenger car","Plug-in hybrid",-0.650364744719989,2015-02-01
+"259","Switzerland","Passenger car","Electricity",-0.637124576872085,2015-02-01
+"260","Switzerland","Passenger car","Petrol",2.8020090216211,2015-03-01
+"261","Switzerland","Passenger car","Diesel",1.53941190434732,2015-03-01
+"262","Switzerland","Passenger car","Conventional hybrid",-0.513917459398529,2015-03-01
+"263","Switzerland","Passenger car","Plug-in hybrid",-0.617815998760557,2015-03-01
+"264","Switzerland","Passenger car","Conventional hybrid",-0.643928552016147,2015-03-01
+"265","Switzerland","Passenger car","Plug-in hybrid",-0.652387548141197,2015-03-01
+"266","Switzerland","Passenger car","Electricity",-0.587657838662553,2015-03-01
+"267","Switzerland","Passenger car","Petrol",2.52359771437489,2015-04-01
+"268","Switzerland","Passenger car","Diesel",1.30605394602801,2015-04-01
+"269","Switzerland","Passenger car","Conventional hybrid",-0.541868924855217,2015-04-01
+"270","Switzerland","Passenger car","Plug-in hybrid",-0.620942149502424,2015-04-01
+"271","Switzerland","Passenger car","Conventional hybrid",-0.640066836393841,2015-04-01
+"272","Switzerland","Passenger car","Plug-in hybrid",-0.652387548141197,2015-04-01
+"273","Switzerland","Passenger car","Electricity",-0.588577294763102,2015-04-01
+"274","Switzerland","Passenger car","Petrol",2.36306067921905,2015-05-01
+"275","Switzerland","Passenger car","Diesel",1.23121021944333,2015-05-01
+"276","Switzerland","Passenger car","Conventional hybrid",-0.560258046866195,2015-05-01
+"277","Switzerland","Passenger car","Plug-in hybrid",-0.625723321225278,2015-05-01
+"278","Switzerland","Passenger car","Conventional hybrid",-0.638411815412853,2015-05-01
+"279","Switzerland","Passenger car","Plug-in hybrid",-0.654778134002624,2015-05-01
+"280","Switzerland","Passenger car","Electricity",-0.585635035241345,2015-05-01
+"281","Switzerland","Passenger car","Petrol",2.90204584536083,2015-06-01
+"282","Switzerland","Passenger car","Diesel",1.68008868773131,2015-06-01
+"283","Switzerland","Passenger car","Conventional hybrid",-0.565407001029269,2015-06-01
+"284","Switzerland","Passenger car","Plug-in hybrid",-0.625907212445388,2015-06-01
+"285","Switzerland","Passenger car","Conventional hybrid",-0.639699053953622,2015-06-01
+"286","Switzerland","Passenger car","Plug-in hybrid",-0.650548635940099,2015-06-01
+"287","Switzerland","Passenger car","Electricity",-0.563200306387952,2015-06-01
+"288","Switzerland","Passenger car","Petrol",2.51458704458951,2015-07-01
+"289","Switzerland","Passenger car","Diesel",1.50741483204822,2015-07-01
+"290","Switzerland","Passenger car","Conventional hybrid",-0.588025621102772,2015-07-01
+"291","Switzerland","Passenger car","Plug-in hybrid",-0.613954283138252,2015-07-01
+"292","Switzerland","Passenger car","Conventional hybrid",-0.636021229551426,2015-07-01
+"293","Switzerland","Passenger car","Plug-in hybrid",-0.652019765700977,2015-07-01
+"294","Switzerland","Passenger car","Electricity",-0.589312859643541,2015-07-01
+"295","Switzerland","Passenger car","Petrol",1.83547676872408,2015-08-01
+"296","Switzerland","Passenger car","Diesel",1.04400895737156,2015-08-01
+"297","Switzerland","Passenger car","Conventional hybrid",-0.583428340600028,2015-08-01
+"298","Switzerland","Passenger car","Plug-in hybrid",-0.634366208570438,2015-08-01
+"299","Switzerland","Passenger car","Conventional hybrid",-0.646686920317794,2015-08-01
+"300","Switzerland","Passenger car","Plug-in hybrid",-0.654042569122185,2015-08-01
+"301","Switzerland","Passenger car","Electricity",-0.60696641677408,2015-08-01
+"302","Switzerland","Passenger car","Petrol",1.877220075689,2015-09-01
+"303","Switzerland","Passenger car","Diesel",1.09200456582022,2015-09-01
+"304","Switzerland","Passenger car","Conventional hybrid",-0.579198842537503,2015-09-01
+"305","Switzerland","Passenger car","Plug-in hybrid",-0.634917882230768,2015-09-01
+"306","Switzerland","Passenger car","Conventional hybrid",-0.643928552016147,2015-09-01
+"307","Switzerland","Passenger car","Plug-in hybrid",-0.652571439361307,2015-09-01
+"308","Switzerland","Passenger car","Electricity",-0.597036290888152,2015-09-01
+"309","Switzerland","Passenger car","Petrol",1.95592551789599,2015-10-01
+"310","Switzerland","Passenger car","Diesel",1.2176022691552,2015-10-01
+"311","Switzerland","Passenger car","Conventional hybrid",-0.577911603996734,2015-10-01
+"312","Switzerland","Passenger car","Plug-in hybrid",-0.621126040722534,2015-10-01
+"313","Switzerland","Passenger car","Conventional hybrid",-0.64135407493461,2015-10-01
+"314","Switzerland","Passenger car","Plug-in hybrid",-0.652755330581417,2015-10-01
+"315","Switzerland","Passenger car","Electricity",-0.606414743113751,2015-10-01
+"316","Switzerland","Passenger car","Petrol",1.94617928323017,2015-11-01
+"317","Switzerland","Passenger car","Diesel",1.35791127009897,2015-11-01
+"318","Switzerland","Passenger car","Conventional hybrid",-0.584347796700577,2015-11-01
+"319","Switzerland","Passenger car","Plug-in hybrid",-0.630688384168242,2015-11-01
+"320","Switzerland","Passenger car","Conventional hybrid",-0.645215790556915,2015-11-01
+"321","Switzerland","Passenger car","Plug-in hybrid",-0.651835874480868,2015-11-01
+"322","Switzerland","Passenger car","Electricity",-0.578279386436954,2015-11-01
+"323","Switzerland","Passenger car","Petrol",2.46879813078217,2015-12-01
+"324","Switzerland","Passenger car","Diesel",1.85073973999319,2015-12-01
+"325","Switzerland","Passenger car","Conventional hybrid",-0.587106165002224,2015-12-01
+"326","Switzerland","Passenger car","Plug-in hybrid",-0.571107628852672,2015-12-01
+"327","Switzerland","Passenger car","Conventional hybrid",-0.64172185737483,2015-12-01
+"328","Switzerland","Passenger car","Plug-in hybrid",-0.638227924192744,2015-12-01
+"329","Switzerland","Passenger car","Electricity",-0.583428340600028,2015-12-01
+"330","Switzerland","Passenger car","Petrol",1.39082779849862,2016-01-01
+"331","Switzerland","Passenger car","Diesel",0.980750377653799,2016-01-01
+"332","Switzerland","Passenger car","Conventional hybrid",-0.592071227945188,2016-01-01
+"333","Switzerland","Passenger car","Plug-in hybrid",-0.610828132396386,2016-01-01
+"334","Switzerland","Passenger car","Conventional hybrid",-0.645767464217245,2016-01-01
+"335","Switzerland","Passenger car","Plug-in hybrid",-0.654410351562405,2016-01-01
+"336","Switzerland","Passenger car","Electricity",-0.611563697276825,2016-01-01
+"337","Switzerland","Passenger car","Petrol",1.71282132491085,2016-02-01
+"338","Switzerland","Passenger car","Diesel",1.0616625145021,2016-02-01
+"339","Switzerland","Passenger car","Conventional hybrid",-0.571843193733111,2016-02-01
+"340","Switzerland","Passenger car","Plug-in hybrid",-0.61560930411924,2016-02-01
+"341","Switzerland","Passenger car","Conventional hybrid",-0.644112443236257,2016-02-01
+"342","Switzerland","Passenger car","Plug-in hybrid",-0.654778134002624,2016-02-01
+"343","Switzerland","Passenger car","Electricity",-0.626091103665498,2016-02-01
+"344","Switzerland","Passenger car","Petrol",2.48921005621436,2016-03-01
+"345","Switzerland","Passenger car","Diesel",1.36637026622402,2016-03-01
+"346","Switzerland","Passenger car","Conventional hybrid",-0.535984405811703,2016-03-01
+"347","Switzerland","Passenger car","Plug-in hybrid",-0.610644241176276,2016-03-01
+"348","Switzerland","Passenger car","Conventional hybrid",-0.644480225676476,2016-03-01
+"349","Switzerland","Passenger car","Plug-in hybrid",-0.652387548141197,2016-03-01
+"350","Switzerland","Passenger car","Electricity",-0.575337126915197,2016-03-01
+"351","Switzerland","Passenger car","Petrol",2.37869143292838,2016-04-01
+"352","Switzerland","Passenger car","Diesel",1.43532947376519,2016-04-01
+"353","Switzerland","Passenger car","Conventional hybrid",-0.552350724401474,2016-04-01
+"354","Switzerland","Passenger car","Plug-in hybrid",-0.61597708655946,2016-04-01
+"355","Switzerland","Passenger car","Conventional hybrid",-0.643192987135708,2016-04-01
+"356","Switzerland","Passenger car","Plug-in hybrid",-0.654594242782514,2016-04-01
+"357","Switzerland","Passenger car","Electricity",-0.611563697276825,2016-04-01
+"358","Switzerland","Passenger car","Petrol",2.07196087778526,2016-05-01
+"359","Switzerland","Passenger car","Diesel",1.22679683016069,2016-05-01
+"360","Switzerland","Passenger car","Conventional hybrid",-0.549040682439498,2016-05-01
+"361","Switzerland","Passenger car","Plug-in hybrid",-0.619471019741546,2016-05-01
+"362","Switzerland","Passenger car","Conventional hybrid",-0.646319137877574,2016-05-01
+"363","Switzerland","Passenger car","Plug-in hybrid",-0.654042569122185,2016-05-01
+"364","Switzerland","Passenger car","Electricity",-0.620022693401875,2016-05-01
+"365","Switzerland","Passenger car","Petrol",2.54971026763048,2016-06-01
+"366","Switzerland","Passenger car","Diesel",1.66813575842417,2016-06-01
+"367","Switzerland","Passenger car","Conventional hybrid",-0.543707837056314,2016-06-01
+"368","Switzerland","Passenger car","Plug-in hybrid",-0.611563697276825,2016-06-01
+"369","Switzerland","Passenger car","Conventional hybrid",-0.646686920317794,2016-06-01
+"370","Switzerland","Passenger car","Plug-in hybrid",-0.654226460342295,2016-06-01
+"371","Switzerland","Passenger car","Electricity",-0.584163905480467,2016-06-01
+"372","Switzerland","Passenger car","Petrol",2.00392112634464,2016-07-01
+"373","Switzerland","Passenger car","Diesel",1.29299766940021,2016-07-01
+"374","Switzerland","Passenger car","Conventional hybrid",-0.548121226338949,2016-07-01
+"375","Switzerland","Passenger car","Plug-in hybrid",-0.603472483591994,2016-07-01
+"376","Switzerland","Passenger car","Conventional hybrid",-0.648893614959111,2016-07-01
+"377","Switzerland","Passenger car","Plug-in hybrid",-0.651835874480868,2016-07-01
+"378","Switzerland","Passenger car","Electricity",-0.629217254407364,2016-07-01
+"379","Switzerland","Passenger car","Petrol",1.57968408155137,2016-08-01
+"380","Switzerland","Passenger car","Diesel",0.938823179468768,2016-08-01
+"381","Switzerland","Passenger car","Conventional hybrid",-0.55566076636345,2016-08-01
+"382","Switzerland","Passenger car","Plug-in hybrid",-0.620942149502424,2016-08-01
+"383","Switzerland","Passenger car","Conventional hybrid",-0.652019765700977,2016-08-01
+"384","Switzerland","Passenger car","Plug-in hybrid",-0.653123113021636,2016-08-01
+"385","Switzerland","Passenger car","Electricity",-0.601449680170787,2016-08-01
+"386","Switzerland","Passenger car","Petrol",2.01421903467079,2016-09-01
+"387","Switzerland","Passenger car","Diesel",1.17714620073105,2016-09-01
+"388","Switzerland","Passenger car","Conventional hybrid",-0.505642354493589,2016-09-01
+"389","Switzerland","Passenger car","Plug-in hybrid",-0.60678252555397,2016-09-01
+"390","Switzerland","Passenger car","Conventional hybrid",-0.649261397399331,2016-09-01
+"391","Switzerland","Passenger car","Plug-in hybrid",-0.653490895461856,2016-09-01
+"392","Switzerland","Passenger car","Electricity",-0.566878130790147,2016-09-01
+"393","Switzerland","Passenger car","Petrol",1.73396881522348,2016-10-01
+"394","Switzerland","Passenger car","Diesel",1.01771251289587,2016-10-01
+"395","Switzerland","Passenger car","Conventional hybrid",-0.542420598515546,2016-10-01
+"396","Switzerland","Passenger car","Plug-in hybrid",-0.613586500698032,2016-10-01
+"397","Switzerland","Passenger car","Conventional hybrid",-0.651100309600429,2016-10-01
+"398","Switzerland","Passenger car","Plug-in hybrid",-0.652571439361307,2016-10-01
+"399","Switzerland","Passenger car","Electricity",-0.616712651439899,2016-10-01
+"400","Switzerland","Passenger car","Petrol",2.0370215459644,2016-11-01
+"401","Switzerland","Passenger car","Diesel",1.25548386049782,2016-11-01
+"402","Switzerland","Passenger car","Conventional hybrid",-0.528444865787202,2016-11-01
+"403","Switzerland","Passenger car","Plug-in hybrid",-0.613218718257813,2016-11-01
+"404","Switzerland","Passenger car","Conventional hybrid",-0.651835874480868,2016-11-01
+"405","Switzerland","Passenger car","Plug-in hybrid",-0.651284200820538,2016-11-01
+"406","Switzerland","Passenger car","Electricity",-0.623148844143741,2016-11-01
+"407","Switzerland","Passenger car","Petrol",3.02488518039416,2016-12-01
+"408","Switzerland","Passenger car","Diesel",1.79667572128091,2016-12-01
+"409","Switzerland","Passenger car","Conventional hybrid",-0.526054279925775,2016-12-01
+"410","Switzerland","Passenger car","Plug-in hybrid",-0.609357002635507,2016-12-01
+"411","Switzerland","Passenger car","Conventional hybrid",-0.652387548141197,2016-12-01
+"412","Switzerland","Passenger car","Plug-in hybrid",-0.652203656921087,2016-12-01
+"413","Switzerland","Passenger car","Electricity",-0.551799050741145,2016-12-01
+"414","Switzerland","Passenger car","Petrol",1.31432905093295,2017-01-01
+"415","Switzerland","Passenger car","Diesel",0.867841168506391,2017-01-01
+"416","Switzerland","Passenger car","Conventional hybrid",-0.575521018135307,2017-01-01
+"417","Switzerland","Passenger car","Plug-in hybrid",-0.623148844143741,2017-01-01
+"418","Switzerland","Passenger car","Conventional hybrid",-0.653490895461856,2017-01-01
+"419","Switzerland","Passenger car","Plug-in hybrid",-0.653123113021636,2017-01-01
+"420","Switzerland","Passenger car","Electricity",-0.597955746988701,2017-01-01
+"421","Switzerland","Passenger car","Petrol",1.74169224646809,2017-02-01
+"422","Switzerland","Passenger car","Diesel",1.01421857971378,2017-02-01
+"423","Switzerland","Passenger car","Conventional hybrid",-0.554373527822682,2017-02-01
+"424","Switzerland","Passenger car","Plug-in hybrid",-0.627010559766047,2017-02-01
+"425","Switzerland","Passenger car","Conventional hybrid",-0.652387548141197,2017-02-01
+"426","Switzerland","Passenger car","Plug-in hybrid",-0.653858677902075,2017-02-01
+"427","Switzerland","Passenger car","Electricity",-0.616344868999679,2017-02-01
+"428","Switzerland","Passenger car","Petrol",2.6966393524982,2017-03-01
+"429","Switzerland","Passenger car","Diesel",1.36968030818599,2017-03-01
+"430","Switzerland","Passenger car","Conventional hybrid",-0.516675827700176,2017-03-01
+"431","Switzerland","Passenger car","Plug-in hybrid",-0.614505956798581,2017-03-01
+"432","Switzerland","Passenger car","Conventional hybrid",-0.654226460342295,2017-03-01
+"433","Switzerland","Passenger car","Plug-in hybrid",-0.654042569122185,2017-03-01
+"434","Switzerland","Passenger car","Electricity",-0.547937335118839,2017-03-01
+"435","Switzerland","Passenger car","Petrol",2.14239121508731,2017-04-01
+"436","Switzerland","Passenger car","Diesel",1.1028541478067,2017-04-01
+"437","Switzerland","Passenger car","Conventional hybrid",-0.527709300906763,2017-04-01
+"438","Switzerland","Passenger car","Plug-in hybrid",-0.614322065578472,2017-04-01
+"439","Switzerland","Passenger car","Conventional hybrid",-0.654594242782514,2017-04-01
+"440","Switzerland","Passenger car","Plug-in hybrid",-0.653674786681966,2017-04-01
+"441","Switzerland","Passenger car","Electricity",-0.612299262157264,2017-04-01
+"442","Switzerland","Passenger car","Petrol",2.42448034673572,2017-05-01
+"443","Switzerland","Passenger car","Diesel",1.23378469652486,2017-05-01
+"444","Switzerland","Passenger car","Conventional hybrid",-0.523663694064348,2017-05-01
+"445","Switzerland","Passenger car","Plug-in hybrid",-0.605863069453421,2017-05-01
+"446","Switzerland","Passenger car","Conventional hybrid",-0.651835874480868,2017-05-01
+"447","Switzerland","Passenger car","Plug-in hybrid",-0.654410351562405,2017-05-01
+"448","Switzerland","Passenger car","Electricity",-0.603840266032214,2017-05-01
+"449","Switzerland","Passenger car","Petrol",2.69332931053622,2017-06-01
+"450","Switzerland","Passenger car","Diesel",1.58685583913565,2017-06-01
+"451","Switzerland","Passenger car","Conventional hybrid",-0.498102814469088,2017-06-01
+"452","Switzerland","Passenger car","Plug-in hybrid",-0.600162441630018,2017-06-01
+"453","Switzerland","Passenger car","Conventional hybrid",-0.652571439361307,2017-06-01
+"454","Switzerland","Passenger car","Plug-in hybrid",-0.654042569122185,2017-06-01
+"455","Switzerland","Passenger car","Electricity",-0.563568088828171,2017-06-01
+"456","Switzerland","Passenger car","Petrol",1.98314141847223,2017-07-01
+"457","Switzerland","Passenger car","Diesel",1.04897402031453,2017-07-01
+"458","Switzerland","Passenger car","Conventional hybrid",-0.552718506841694,2017-07-01
+"459","Switzerland","Passenger car","Plug-in hybrid",-0.608437546534959,2017-07-01
+"460","Switzerland","Passenger car","Conventional hybrid",-0.654042569122185,2017-07-01
+"461","Switzerland","Passenger car","Plug-in hybrid",-0.654778134002624,2017-07-01
+"462","Switzerland","Passenger car","Electricity",-0.60715030799419,2017-07-01
+"463","Switzerland","Passenger car","Petrol",1.88531128937383,2017-08-01
+"464","Switzerland","Passenger car","Diesel",0.795204136563026,2017-08-01
+"465","Switzerland","Passenger car","Conventional hybrid",-0.536903861912252,2017-08-01
+"466","Switzerland","Passenger car","Plug-in hybrid",-0.594094031366395,2017-08-01
+"467","Switzerland","Passenger car","Conventional hybrid",-0.653123113021636,2017-08-01
+"468","Switzerland","Passenger car","Plug-in hybrid",-0.654042569122185,2017-08-01
+"469","Switzerland","Passenger car","Electricity",-0.593542357706066,2017-08-01
+"470","Switzerland","Passenger car","Petrol",1.99417489167882,2017-09-01
+"471","Switzerland","Passenger car","Diesel",0.880713553914076,2017-09-01
+"472","Switzerland","Passenger car","Conventional hybrid",-0.494424990066892,2017-09-01
+"473","Switzerland","Passenger car","Plug-in hybrid",-0.596668508447932,2017-09-01
+"474","Switzerland","Passenger car","Conventional hybrid",-0.653123113021636,2017-09-01
+"475","Switzerland","Passenger car","Plug-in hybrid",-0.654410351562405,2017-09-01
+"476","Switzerland","Passenger car","Electricity",-0.552166833181365,2017-09-01
+"477","Switzerland","Passenger car","Petrol",2.06589246752164,2017-10-01
+"478","Switzerland","Passenger car","Diesel",0.872438449009136,2017-10-01
+"479","Switzerland","Passenger car","Conventional hybrid",-0.518514739901274,2017-10-01
+"480","Switzerland","Passenger car","Plug-in hybrid",-0.604943613352873,2017-10-01
+"481","Switzerland","Passenger car","Conventional hybrid",-0.653674786681966,2017-10-01
+"482","Switzerland","Passenger car","Plug-in hybrid",-0.654594242782514,2017-10-01
+"483","Switzerland","Passenger car","Electricity",-0.588209512322882,2017-10-01
+"484","Switzerland","Passenger car","Petrol",2.32499519665632,2017-11-01
+"485","Switzerland","Passenger car","Diesel",0.909768366691422,2017-11-01
+"486","Switzerland","Passenger car","Conventional hybrid",-0.529732104327971,2017-11-01
+"487","Switzerland","Passenger car","Plug-in hybrid",-0.5904162069642,2017-11-01
+"488","Switzerland","Passenger car","Conventional hybrid",-0.647422485198233,2017-11-01
+"489","Switzerland","Passenger car","Plug-in hybrid",-0.654226460342295,2017-11-01
+"490","Switzerland","Passenger car","Electricity",-0.52219256430347,2017-11-01
+"491","Switzerland","Passenger car","Petrol",2.63632303230219,2017-12-01
+"492","Switzerland","Passenger car","Diesel",1.37721984821049,2017-12-01
+"493","Switzerland","Passenger car","Conventional hybrid",-0.532490472629618,2017-12-01
+"494","Switzerland","Passenger car","Plug-in hybrid",-0.565407001029269,2017-12-01
+"495","Switzerland","Passenger car","Conventional hybrid",-0.652387548141197,2017-12-01
+"496","Switzerland","Passenger car","Plug-in hybrid",-0.652387548141197,2017-12-01
+"497","Switzerland","Passenger car","Electricity",-0.554557419042792,2017-12-01
+"498","Switzerland","Passenger car","Petrol",1.80219245788421,2018-01-01
+"499","Switzerland","Passenger car","Diesel",0.741507900290969,2018-01-01
+"500","Switzerland","Passenger car","Conventional hybrid",-0.544259510716644,2018-01-01
+"501","Switzerland","Passenger car","Plug-in hybrid",-0.603472483591994,2018-01-01
+"502","Switzerland","Passenger car","Conventional hybrid",-0.653858677902075,2018-01-01
+"503","Switzerland","Passenger car","Plug-in hybrid",-0.651284200820538,2018-01-01
+"504","Switzerland","Passenger car","Electricity",-0.6073341992143,2018-01-01
+"505","Switzerland","Passenger car","Petrol",1.93201965928171,2018-02-01
+"506","Switzerland","Passenger car","Diesel",0.643493879972454,2018-02-01
+"507","Switzerland","Passenger car","Conventional hybrid",-0.541685033635107,2018-02-01
+"508","Switzerland","Passenger car","Plug-in hybrid",-0.610460349956166,2018-02-01
+"509","Switzerland","Passenger car","Conventional hybrid",-0.654226460342295,2018-02-01
+"510","Switzerland","Passenger car","Plug-in hybrid",-0.654962025222734,2018-02-01
+"511","Switzerland","Passenger car","Electricity",-0.578647168877173,2018-02-01
+"512","Switzerland","Passenger car","Petrol",2.68137638122909,2018-03-01
+"513","Switzerland","Passenger car","Diesel",0.897631546164176,2018-03-01
+"514","Switzerland","Passenger car","Conventional hybrid",-0.504171224732711,2018-03-01
+"515","Switzerland","Passenger car","Plug-in hybrid",-0.592990684045737,2018-03-01
+"516","Switzerland","Passenger car","Conventional hybrid",-0.650732527160209,2018-03-01
+"517","Switzerland","Passenger car","Plug-in hybrid",-0.652755330581417,2018-03-01
+"518","Switzerland","Passenger car","Electricity",-0.528444865787202,2018-03-01
+"519","Switzerland","Passenger car","Petrol",2.52782721243742,2018-04-01
+"520","Switzerland","Passenger car","Diesel",0.725141581701198,2018-04-01
+"521","Switzerland","Passenger car","Conventional hybrid",-0.474380847074926,2018-04-01
+"522","Switzerland","Passenger car","Plug-in hybrid",-0.60751809043441,2018-04-01
+"523","Switzerland","Passenger car","Conventional hybrid",-0.64999696227977,2018-04-01
+"524","Switzerland","Passenger car","Plug-in hybrid",-0.654410351562405,2018-04-01
+"525","Switzerland","Passenger car","Electricity",-0.599610767969689,2018-04-01
+"526","Switzerland","Passenger car","Petrol",2.60285483024221,2018-05-01
+"527","Switzerland","Passenger car","Diesel",0.940845982889976,2018-05-01
+"528","Switzerland","Passenger car","Conventional hybrid",-0.499390053009856,2018-05-01
+"529","Switzerland","Passenger car","Plug-in hybrid",-0.596852399668042,2018-05-01
+"530","Switzerland","Passenger car","Conventional hybrid",-0.654226460342295,2018-05-01
+"531","Switzerland","Passenger car","Plug-in hybrid",-0.654962025222734,2018-05-01
+"532","Switzerland","Passenger car","Electricity",-0.602553027491445,2018-05-01
+"533","Switzerland","Passenger car","Petrol",3.03040191699746,2018-06-01
+"534","Switzerland","Passenger car","Diesel",1.07196042282825,2018-06-01
+"535","Switzerland","Passenger car","Conventional hybrid",-0.490011600784257,2018-06-01
+"536","Switzerland","Passenger car","Plug-in hybrid",-0.566694239570038,2018-06-01
+"537","Switzerland","Passenger car","Conventional hybrid",-0.653307004241746,2018-06-01
+"538","Switzerland","Passenger car","Plug-in hybrid",-0.654410351562405,2018-06-01
+"539","Switzerland","Passenger car","Electricity",-0.54701787901829,2018-06-01
+"540","Switzerland","Passenger car","Petrol",2.33069582447973,2018-07-01
+"541","Switzerland","Passenger car","Diesel",0.744450159812726,2018-07-01
+"542","Switzerland","Passenger car","Conventional hybrid",-0.501596747651174,2018-07-01
+"543","Switzerland","Passenger car","Plug-in hybrid",-0.599610767969689,2018-07-01
+"544","Switzerland","Passenger car","Conventional hybrid",-0.645399681777025,2018-07-01
+"545","Switzerland","Passenger car","Plug-in hybrid",-0.654962025222734,2018-07-01
+"546","Switzerland","Passenger car","Electricity",-0.610460349956166,2018-07-01
+"547","Switzerland","Passenger car","Petrol",1.88144957375152,2018-08-01
+"548","Switzerland","Passenger car","Diesel",0.490128602400894,2018-08-01
+"549","Switzerland","Passenger car","Conventional hybrid",-0.50490678961315,2018-08-01
+"550","Switzerland","Passenger car","Plug-in hybrid",-0.591887336725078,2018-08-01
+"551","Switzerland","Passenger car","Conventional hybrid",-0.639331271513402,2018-08-01
+"552","Switzerland","Passenger car","Plug-in hybrid",-0.655145916442844,2018-08-01
+"553","Switzerland","Passenger car","Electricity",-0.594094031366395,2018-08-01
+"554","Switzerland","Passenger car","Petrol",1.676226972109,2018-09-01
+"555","Switzerland","Passenger car","Diesel",0.425950566582579,2018-09-01
+"556","Switzerland","Passenger car","Conventional hybrid",-0.476955324156463,2018-09-01
+"557","Switzerland","Passenger car","Plug-in hybrid",-0.6073341992143,2018-09-01
+"558","Switzerland","Passenger car","Conventional hybrid",-0.638595706632963,2018-09-01
+"559","Switzerland","Passenger car","Plug-in hybrid",-0.654410351562405,2018-09-01
+"560","Switzerland","Passenger car","Electricity",-0.555109092703121,2018-09-01
+"561","Switzerland","Passenger car","Petrol",2.04400941232857,2018-10-01
+"562","Switzerland","Passenger car","Diesel",0.446362492014765,2018-10-01
+"563","Switzerland","Passenger car","Conventional hybrid",-0.471622478773279,2018-10-01
+"564","Switzerland","Passenger car","Plug-in hybrid",-0.58195721083915,2018-10-01
+"565","Switzerland","Passenger car","Conventional hybrid",-0.63271118758945,2018-10-01
+"566","Switzerland","Passenger car","Plug-in hybrid",-0.655145916442844,2018-10-01
+"567","Switzerland","Passenger car","Electricity",-0.572210976173331,2018-10-01
+"568","Switzerland","Passenger car","Petrol",2.06184686067922,2018-11-01
+"569","Switzerland","Passenger car","Diesel",0.660779654662774,2018-11-01
+"570","Switzerland","Passenger car","Conventional hybrid",-0.465186286069436,2018-11-01
+"571","Switzerland","Passenger car","Plug-in hybrid",-0.593910140146286,2018-11-01
+"572","Switzerland","Passenger car","Conventional hybrid",-0.630320601728023,2018-11-01
+"573","Switzerland","Passenger car","Plug-in hybrid",-0.654594242782514,2018-11-01
+"574","Switzerland","Passenger car","Electricity",-0.560258046866195,2018-11-01
+"575","Switzerland","Passenger car","Petrol",2.28950419117513,2018-12-01
+"576","Switzerland","Passenger car","Diesel",0.952063347316673,2018-12-01
+"577","Switzerland","Passenger car","Conventional hybrid",-0.473277499754267,2018-12-01
+"578","Switzerland","Passenger car","Plug-in hybrid",-0.554189636602572,2018-12-01
+"579","Switzerland","Passenger car","Conventional hybrid",-0.617448216320338,2018-12-01
+"580","Switzerland","Passenger car","Plug-in hybrid",-0.655329807662954,2018-12-01
+"581","Switzerland","Passenger car","Electricity",-0.515388589159408,2018-12-01
+"582","Switzerland","Passenger car","Petrol",1.68100814383186,2019-01-01
+"583","Switzerland","Passenger car","Diesel",0.593659359322703,2019-01-01
+"584","Switzerland","Passenger car","Conventional hybrid",-0.49663168470821,2019-01-01
+"585","Switzerland","Passenger car","Plug-in hybrid",-0.606598634333861,2019-01-01
+"586","Switzerland","Passenger car","Conventional hybrid",-0.619103237301326,2019-01-01
+"587","Switzerland","Passenger car","Plug-in hybrid",-0.655513698883063,2019-01-01
+"588","Switzerland","Passenger car","Electricity",-0.572210976173331,2019-01-01
+"589","Switzerland","Passenger car","Petrol",1.90443597626525,2019-02-01
+"590","Switzerland","Passenger car","Diesel",0.561110613363271,2019-02-01
+"591","Switzerland","Passenger car","Conventional hybrid",-0.484678755401074,2019-02-01
+"592","Switzerland","Passenger car","Plug-in hybrid",-0.617448216320338,2019-02-01
+"593","Switzerland","Passenger car","Conventional hybrid",-0.633446752469889,2019-02-01
+"594","Switzerland","Passenger car","Plug-in hybrid",-0.655513698883063,2019-02-01
+"595","Switzerland","Passenger car","Electricity",-0.517411392580615,2019-02-01
+"596","Switzerland","Passenger car","Petrol",2.72201634087335,2019-03-01
+"597","Switzerland","Passenger car","Diesel",0.677697646912874,2019-03-01
+"598","Switzerland","Passenger car","Conventional hybrid",-0.41093837613705,2019-03-01
+"599","Switzerland","Passenger car","Plug-in hybrid",-0.59887520308925,2019-03-01
+"600","Switzerland","Passenger car","Conventional hybrid",-0.622781061703522,2019-03-01
+"601","Switzerland","Passenger car","Plug-in hybrid",-0.655513698883063,2019-03-01
+"602","Switzerland","Passenger car","Electricity",-0.302442556272277,2019-03-01
+"603","Switzerland","Passenger car","Petrol",2.65250545967185,2019-04-01
+"604","Switzerland","Passenger car","Diesel",0.704361873828793,2019-04-01
+"605","Switzerland","Passenger car","Conventional hybrid",-0.389974777044535,2019-04-01
+"606","Switzerland","Passenger car","Plug-in hybrid",-0.605127504572982,2019-04-01
+"607","Switzerland","Passenger car","Conventional hybrid",-0.633998426130219,2019-04-01
+"608","Switzerland","Passenger car","Plug-in hybrid",-0.655513698883063,2019-04-01
+"609","Switzerland","Passenger car","Electricity",-0.462979591428119,2019-04-01
+"610","Switzerland","Passenger car","Petrol",2.60873934928572,2019-05-01
+"611","Switzerland","Passenger car","Diesel",0.724773799260979,2019-05-01
+"612","Switzerland","Passenger car","Conventional hybrid",-0.344001972017088,2019-05-01
+"613","Switzerland","Passenger car","Plug-in hybrid",-0.610092567515947,2019-05-01
+"614","Switzerland","Passenger car","Conventional hybrid",-0.619103237301326,2019-05-01
+"615","Switzerland","Passenger car","Plug-in hybrid",-0.655329807662954,2019-05-01
+"616","Switzerland","Passenger car","Electricity",-0.526973736026324,2019-05-01
+"617","Switzerland","Passenger car","Petrol",2.58612072921222,2019-06-01
+"618","Switzerland","Passenger car","Diesel",0.737278402228444,2019-06-01
+"619","Switzerland","Passenger car","Conventional hybrid",-0.373424567234654,2019-06-01
+"620","Switzerland","Passenger car","Plug-in hybrid",-0.617080433880118,2019-06-01
+"621","Switzerland","Passenger car","Conventional hybrid",-0.600714115290348,2019-06-01
+"622","Switzerland","Passenger car","Plug-in hybrid",-0.655329807662954,2019-06-01
+"623","Switzerland","Passenger car","Electricity",-0.442567665995933,2019-06-01
+"624","Switzerland","Passenger car","Petrol",2.26412720279998,2019-07-01
+"625","Switzerland","Passenger car","Diesel",0.530216888384827,2019-07-01
+"626","Switzerland","Passenger car","Conventional hybrid",-0.391445906805413,2019-07-01
+"627","Switzerland","Passenger car","Plug-in hybrid",-0.606230851893641,2019-07-01
+"628","Switzerland","Passenger car","Conventional hybrid",-0.571291520072782,2019-07-01
+"629","Switzerland","Passenger car","Plug-in hybrid",-0.655513698883063,2019-07-01
+"630","Switzerland","Passenger car","Electricity",-0.529732104327971,2019-07-01
+"631","Switzerland","Passenger car","Petrol",1.59936044210311,2019-08-01
+"632","Switzerland","Passenger car","Diesel",0.253460602119601,2019-08-01
+"633","Switzerland","Passenger car","Conventional hybrid",-0.405973313194086,2019-08-01
+"634","Switzerland","Passenger car","Plug-in hybrid",-0.611931479717044,2019-08-01
+"635","Switzerland","Passenger car","Conventional hybrid",-0.599978550409908,2019-08-01
+"636","Switzerland","Passenger car","Plug-in hybrid",-0.655329807662954,2019-08-01
+"637","Switzerland","Passenger car","Electricity",-0.541133359974777,2019-08-01
+"638","Switzerland","Passenger car","Petrol",2.08924665247558,2019-09-01
+"639","Switzerland","Passenger car","Diesel",0.317822529158026,2019-09-01
+"640","Switzerland","Passenger car","Conventional hybrid",-0.383538584340692,2019-09-01
+"641","Switzerland","Passenger car","Plug-in hybrid",-0.594829596246835,2019-09-01
+"642","Switzerland","Passenger car","Conventional hybrid",-0.577727712776624,2019-09-01
+"643","Switzerland","Passenger car","Plug-in hybrid",-0.655513698883063,2019-09-01
+"644","Switzerland","Passenger car","Electricity",-0.365517244769933,2019-09-01
+"645","Switzerland","Passenger car","Petrol",2.34485544842818,2019-10-01
+"646","Switzerland","Passenger car","Diesel",0.488105798979686,2019-10-01
+"647","Switzerland","Passenger car","Conventional hybrid",-0.348231470079614,2019-10-01
+"648","Switzerland","Passenger car","Plug-in hybrid",-0.575337126915197,2019-10-01
+"649","Switzerland","Passenger car","Conventional hybrid",-0.56430365370861,2019-10-01
+"650","Switzerland","Passenger car","Plug-in hybrid",-0.654778134002624,2019-10-01
+"651","Switzerland","Passenger car","Electricity",-0.533409928730166,2019-10-01
+"652","Switzerland","Passenger car","Petrol",2.08795941393481,2019-11-01
+"653","Switzerland","Passenger car","Diesel",0.392298473302489,2019-11-01
+"654","Switzerland","Passenger car","Conventional hybrid",-0.326164523666439,2019-11-01
+"655","Switzerland","Passenger car","Plug-in hybrid",-0.567613695670586,2019-11-01
+"656","Switzerland","Passenger car","Conventional hybrid",-0.579198842537503,2019-11-01
+"657","Switzerland","Passenger car","Plug-in hybrid",-0.655145916442844,2019-11-01
+"658","Switzerland","Passenger car","Electricity",-0.510791308656663,2019-11-01
+"659","Switzerland","Passenger car","Petrol",2.92135442347235,2019-12-01
+"660","Switzerland","Passenger car","Diesel",0.75787421888074,2019-12-01
+"661","Switzerland","Passenger car","Conventional hybrid",-0.148709496260497,2019-12-01
+"662","Switzerland","Passenger car","Plug-in hybrid",-0.482839843199976,2019-12-01
+"663","Switzerland","Passenger car","Conventional hybrid",-0.537087753132362,2019-12-01
+"664","Switzerland","Passenger car","Plug-in hybrid",-0.655329807662954,2019-12-01
+"665","Switzerland","Passenger car","Electricity",-0.13785991427402,2019-12-01
+"666","Switzerland","Passenger car","Petrol",1.31690352801448,2020-01-01
+"667","Switzerland","Passenger car","Diesel",0.253828384559821,2020-01-01
+"668","Switzerland","Passenger car","Conventional hybrid",-0.346576449098625,2020-01-01
+"669","Switzerland","Passenger car","Plug-in hybrid",-0.532306581409508,2020-01-01
+"670","Switzerland","Passenger car","Conventional hybrid",-0.576072691795636,2020-01-01
+"671","Switzerland","Passenger car","Plug-in hybrid",-0.655145916442844,2020-01-01
+"672","Switzerland","Passenger car","Electricity",-0.506194028153918,2020-01-01
+"673","Switzerland","Passenger car","Petrol",1.36876085208544,2020-02-01
+"674","Switzerland","Passenger car","Diesel",0.228451396184671,2020-02-01
+"675","Switzerland","Passenger car","Conventional hybrid",-0.328187327087647,2020-02-01
+"676","Switzerland","Passenger car","Plug-in hybrid",-0.51299800329798,2020-02-01
+"677","Switzerland","Passenger car","Conventional hybrid",-0.593358466485956,2020-02-01
+"678","Switzerland","Passenger car","Plug-in hybrid",-0.655513698883063,2020-02-01
+"679","Switzerland","Passenger car","Electricity",-0.510423526216443,2020-02-01
+"680","Switzerland","Passenger car","Petrol",1.05246795349661,2020-03-01
+"681","Switzerland","Passenger car","Diesel",0.097520847466504,2020-03-01
+"682","Switzerland","Passenger car","Conventional hybrid",-0.329658456848525,2020-03-01
+"683","Switzerland","Passenger car","Plug-in hybrid",-0.497918923248978,2020-03-01
+"684","Switzerland","Passenger car","Conventional hybrid",-0.595013487466944,2020-03-01
+"685","Switzerland","Passenger car","Plug-in hybrid",-0.655145916442844,2020-03-01
+"686","Switzerland","Passenger car","Electricity",-0.36000050816664,2020-03-01
+"687","Switzerland","Passenger car","Petrol",0.266884661187616,2020-04-01
+"688","Switzerland","Passenger car","Diesel",-0.229437741888693,2020-04-01
+"689","Switzerland","Passenger car","Conventional hybrid",-0.494608881287002,2020-04-01
+"690","Switzerland","Passenger car","Plug-in hybrid",-0.580486081078271,2020-04-01
+"691","Switzerland","Passenger car","Conventional hybrid",-0.625723321225278,2020-04-01
+"692","Switzerland","Passenger car","Plug-in hybrid",-0.654962025222734,2020-04-01
+"693","Switzerland","Passenger car","Electricity",-0.560074155646085,2020-04-01
+"694","Switzerland","Passenger car","Petrol",0.829959577163776,2020-05-01
+"695","Switzerland","Passenger car","Diesel",-0.145031671858302,2020-05-01
+"696","Switzerland","Passenger car","Conventional hybrid",-0.364597788669384,2020-05-01
+"697","Switzerland","Passenger car","Plug-in hybrid",-0.539478338993789,2020-05-01
+"698","Switzerland","Passenger car","Conventional hybrid",-0.615241521679021,2020-05-01
+"699","Switzerland","Passenger car","Plug-in hybrid",-0.653674786681966,2020-05-01
+"700","Switzerland","Passenger car","Electricity",-0.525502606265446,2020-05-01
+"701","Switzerland","Passenger car","Petrol",1.88236902985207,2020-06-01
+"702","Switzerland","Passenger car","Diesel",0.307708512051988,2020-06-01
+"703","Switzerland","Passenger car","Conventional hybrid",-0.184752175402015,2020-06-01
+"704","Switzerland","Passenger car","Plug-in hybrid",-0.460037331906362,2020-06-01
+"705","Switzerland","Passenger car","Conventional hybrid",-0.572027084953221,2020-06-01
+"706","Switzerland","Passenger car","Plug-in hybrid",-0.654226460342295,2020-06-01
+"707","Switzerland","Passenger car","Electricity",-0.400824359031012,2020-06-01
+"708","Switzerland","Passenger car","Petrol",1.53132069066249,2020-07-01
+"709","Switzerland","Passenger car","Diesel",0.391930690862269,2020-07-01
+"710","Switzerland","Passenger car","Conventional hybrid",-0.256101968804612,2020-07-01
+"711","Switzerland","Passenger car","Plug-in hybrid",-0.435212017191542,2020-07-01
+"712","Switzerland","Passenger car","Conventional hybrid",-0.568349260551026,2020-07-01
+"713","Switzerland","Passenger car","Plug-in hybrid",-0.654778134002624,2020-07-01
+"714","Switzerland","Passenger car","Electricity",-0.469783566572181,2020-07-01
+"715","Switzerland","Passenger car","Petrol",0.782699533595561,2020-08-01
+"716","Switzerland","Passenger car","Diesel",0.025067706743249,2020-08-01
+"717","Switzerland","Passenger car","Conventional hybrid",-0.306855945554912,2020-08-01
+"718","Switzerland","Passenger car","Plug-in hybrid",-0.484678755401074,2020-08-01
+"719","Switzerland","Passenger car","Conventional hybrid",-0.590967880624529,2020-08-01
+"720","Switzerland","Passenger car","Plug-in hybrid",-0.654778134002624,2020-08-01
+"721","Switzerland","Passenger car","Electricity",-0.356506574984554,2020-08-01
+"722","Switzerland","Passenger car","Petrol",1.14441356355151,2020-09-01
+"723","Switzerland","Passenger car","Diesel",0.114254948496494,2020-09-01
+"724","Switzerland","Passenger car","Conventional hybrid",-0.139698826475118,2020-09-01
+"725","Switzerland","Passenger car","Plug-in hybrid",-0.398249881949475,2020-09-01
+"726","Switzerland","Passenger car","Conventional hybrid",-0.575521018135307,2020-09-01
+"727","Switzerland","Passenger car","Plug-in hybrid",-0.652203656921087,2020-09-01
+"728","Switzerland","Passenger car","Electricity",-0.121493595684249,2020-09-01
+"729","Switzerland","Passenger car","Petrol",1.21888950769597,2020-10-01
+"730","Switzerland","Passenger car","Diesel",0.101750345529029,2020-10-01
+"731","Switzerland","Passenger car","Conventional hybrid",-0.0905998707058055,2020-10-01
+"732","Switzerland","Passenger car","Plug-in hybrid",-0.37691850041674,2020-10-01
+"733","Switzerland","Passenger car","Conventional hybrid",-0.536352188251923,2020-10-01
+"734","Switzerland","Passenger car","Plug-in hybrid",-0.652939221801526,2020-10-01
+"735","Switzerland","Passenger car","Electricity",-0.375079588215642,2020-10-01
+"736","Switzerland","Passenger car","Petrol",1.15250477723634,2020-11-01
+"737","Switzerland","Passenger car","Diesel",0.231945329366756,2020-11-01
+"738","Switzerland","Passenger car","Conventional hybrid",-0.0326741363712234,2020-11-01
+"739","Switzerland","Passenger car","Plug-in hybrid",-0.321015569503365,2020-11-01
+"740","Switzerland","Passenger car","Conventional hybrid",-0.529732104327971,2020-11-01
+"741","Switzerland","Passenger car","Plug-in hybrid",-0.648158050078672,2020-11-01
+"742","Switzerland","Passenger car","Electricity",-0.248378537560001,2020-11-01
+"743","Switzerland","Passenger car","Petrol",1.46714265484418,2020-12-01
+"744","Switzerland","Passenger car","Diesel",0.29759449494595,2020-12-01
+"745","Switzerland","Passenger car","Conventional hybrid",0.0669949049282798,2020-12-01
+"746","Switzerland","Passenger car","Plug-in hybrid",-0.128113679608201,2020-12-01
+"747","Switzerland","Passenger car","Conventional hybrid",-0.501596747651174,2020-12-01
+"748","Switzerland","Passenger car","Plug-in hybrid",-0.645031899336806,2020-12-01
+"749","Switzerland","Passenger car","Electricity",0.200316039507874,2020-12-01
+"750","Switzerland","Passenger car","Petrol",0.688363337679242,2021-01-01
+"751","Switzerland","Passenger car","Diesel",-0.115609076640736,2021-01-01
+"752","Switzerland","Passenger car","Conventional hybrid",-0.13785991427402,2021-01-01
+"753","Switzerland","Passenger car","Plug-in hybrid",-0.447900511379117,2021-01-01
+"754","Switzerland","Passenger car","Conventional hybrid",-0.536903861912252,2021-01-01
+"755","Switzerland","Passenger car","Plug-in hybrid",-0.648158050078672,2021-01-01
+"756","Switzerland","Passenger car","Electricity",-0.45378503042263,2021-01-01
+"757","Switzerland","Passenger car","Petrol",0.758793674981289,2021-02-01
+"758","Switzerland","Passenger car","Diesel",-0.15496179774423,2021-02-01
+"759","Switzerland","Passenger car","Conventional hybrid",-0.0869220463036098,2021-02-01
+"760","Switzerland","Passenger car","Plug-in hybrid",-0.446797164058458,2021-02-01
+"761","Switzerland","Passenger car","Conventional hybrid",-0.534881058491045,2021-02-01
+"762","Switzerland","Passenger car","Plug-in hybrid",-0.64999696227977,2021-02-01
+"763","Switzerland","Passenger car","Electricity",-0.392733145346181,2021-02-01
+"764","Switzerland","Passenger car","Petrol",1.55301985463545,2021-03-01
+"765","Switzerland","Passenger car","Diesel",0.0734310976321223,2021-03-01
+"766","Switzerland","Passenger car","Conventional hybrid",0.159859971083721,2021-03-01
+"767","Switzerland","Passenger car","Plug-in hybrid",-0.288834605984153,2021-03-01
+"768","Switzerland","Passenger car","Conventional hybrid",-0.456359507504167,2021-03-01
+"769","Switzerland","Passenger car","Plug-in hybrid",-0.646319137877574,2021-03-01
+"770","Switzerland","Passenger car","Electricity",-0.220794854543533,2021-03-01
+"771","Switzerland","Passenger car","Petrol",1.19185749833983,2021-04-01
+"772","Switzerland","Passenger car","Diesel",-0.0446270656783594,2021-04-01
+"773","Switzerland","Passenger car","Conventional hybrid",0.105612061151335,2021-04-01
+"774","Switzerland","Passenger car","Plug-in hybrid",-0.303178121152716,2021-04-01
+"775","Switzerland","Passenger car","Conventional hybrid",-0.484494864180964,2021-04-01
+"776","Switzerland","Passenger car","Plug-in hybrid",-0.649077506179221,2021-04-01
+"777","Switzerland","Passenger car","Electricity",-0.285892346462397,2021-04-01
+"778","Switzerland","Passenger car","Petrol",0.989944938659288,2021-05-01
+"779","Switzerland","Passenger car","Diesel",-0.0666940120915335,2021-05-01
+"780","Switzerland","Passenger car","Conventional hybrid",0.0055752374116118,2021-05-01
+"781","Switzerland","Passenger car","Plug-in hybrid",-0.326164523666439,2021-05-01
+"782","Switzerland","Passenger car","Conventional hybrid",-0.511894655977322,2021-05-01
+"783","Switzerland","Passenger car","Plug-in hybrid",-0.646319137877574,2021-05-01
+"784","Switzerland","Passenger car","Electricity",-0.294351342587447,2021-05-01
+"785","Switzerland","Passenger car","Petrol",1.40057403316444,2021-06-01
+"786","Switzerland","Passenger car","Diesel",-0.0146527968004645,2021-06-01
+"787","Switzerland","Passenger car","Conventional hybrid",0.196270432665458,2021-06-01
+"788","Switzerland","Passenger car","Plug-in hybrid",-0.243965148277366,2021-06-01
+"789","Switzerland","Passenger car","Conventional hybrid",-0.462795700208009,2021-06-01
+"790","Switzerland","Passenger car","Plug-in hybrid",-0.645951355437355,2021-06-01
+"791","Switzerland","Passenger car","Electricity",0.0259871628437979,2021-06-01
+"792","Switzerland","Passenger car","Petrol",0.949121087794916,2021-07-01
+"793","Switzerland","Passenger car","Diesel",-0.180154894899271,2021-07-01
+"794","Switzerland","Passenger car","Conventional hybrid",-0.0098716250776101,2021-07-01
+"795","Switzerland","Passenger car","Plug-in hybrid",-0.333520172470831,2021-07-01
+"796","Switzerland","Passenger car","Conventional hybrid",-0.494976663727221,2021-07-01
+"797","Switzerland","Passenger car","Plug-in hybrid",-0.647238593978123,2021-07-01
+"798","Switzerland","Passenger car","Electricity",-0.316050506560401,2021-07-01
+"799","Switzerland","Passenger car","Petrol",0.51017274539286,2021-08-01
+"800","Switzerland","Passenger car","Diesel",-0.299316405530411,2021-08-01
+"801","Switzerland","Passenger car","Conventional hybrid",-0.000125390411791522,2021-08-01
+"802","Switzerland","Passenger car","Plug-in hybrid",-0.337197996873026,2021-08-01
+"803","Switzerland","Passenger car","Conventional hybrid",-0.527893192126873,2021-08-01
+"804","Switzerland","Passenger car","Plug-in hybrid",-0.642273531035159,2021-08-01
+"805","Switzerland","Passenger car","Electricity",-0.240838997535499,2021-08-01
+"806","Switzerland","Passenger car","Petrol",0.637241578488721,2021-09-01
+"807","Switzerland","Passenger car","Diesel",-0.297845275769533,2021-09-01
+"808","Switzerland","Passenger car","Conventional hybrid",0.10965766799375,2021-09-01
+"809","Switzerland","Passenger car","Plug-in hybrid",-0.330577912949074,2021-09-01
+"810","Switzerland","Passenger car","Conventional hybrid",-0.506010136933809,2021-09-01
+"811","Switzerland","Passenger car","Plug-in hybrid",-0.643928552016147,2021-09-01
+"812","Switzerland","Passenger car","Electricity",0.0846484620588191,2021-09-01
+"813","Switzerland","Passenger car","Petrol",0.46787776476761,2021-10-01
+"814","Switzerland","Passenger car","Diesel",-0.37673460919663,2021-10-01
+"815","Switzerland","Passenger car","Conventional hybrid",-0.0606256018279106,2021-10-01
+"816","Switzerland","Passenger car","Plug-in hybrid",-0.378389630177618,2021-10-01
+"817","Switzerland","Passenger car","Conventional hybrid",-0.553270180502023,2021-10-01
+"818","Switzerland","Passenger car","Plug-in hybrid",-0.648709723739001,2021-10-01
+"819","Switzerland","Passenger car","Electricity",-0.255366403924172,2021-10-01
+"820","Switzerland","Passenger car","Petrol",0.669974215668263,2021-11-01
+"821","Switzerland","Passenger car","Diesel",-0.288466823543934,2021-11-01
+"822","Switzerland","Passenger car","Conventional hybrid",-0.0324902451511136,2021-11-01
+"823","Switzerland","Passenger car","Plug-in hybrid",-0.306120380674473,2021-11-01
+"824","Switzerland","Passenger car","Conventional hybrid",-0.515204697939298,2021-11-01
+"825","Switzerland","Passenger car","Plug-in hybrid",-0.646503029097684,2021-11-01
+"826","Switzerland","Passenger car","Electricity",0.00483967253117266,2021-11-01
+"827","Switzerland","Passenger car","Petrol",0.847061460633986,2021-12-01
+"828","Switzerland","Passenger car","Diesel",-0.108437319056455,2021-12-01
+"829","Switzerland","Passenger car","Conventional hybrid",0.111680471414957,2021-12-01
+"830","Switzerland","Passenger car","Plug-in hybrid",-0.219323724782655,2021-12-01
+"831","Switzerland","Passenger car","Conventional hybrid",-0.499206161789747,2021-12-01
+"832","Switzerland","Passenger car","Plug-in hybrid",-0.646503029097684,2021-12-01
+"833","Switzerland","Passenger car","Electricity",0.36581813760668,2021-12-01

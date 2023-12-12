@@ -15,7 +15,7 @@ runtime: shiny
 # load the required packages
 packages <- c("here","tidyverse", "tidyr", "readxl","ggrepel",
               "gghighlight", "patchwork", "maps","dplyr","scales",
-              "kableExtra", "reactable","sf", "shiny", "leaflet",
+              "kableExtra","sf", "shiny", "leaflet",
               "plotly", "rsconnect", "gifski", "gganimate", 
               "factoextra", "viridis", "reshape2", "heatmaply",
               "gtsummary", "flexdashboard", "dygraphs", "xts", 
@@ -28,23 +28,23 @@ purrr::walk(packages, library, character.only = TRUE)
 
 ```
 
-# Introduction
-
-
-# RQ1
-
 ```{r}
 df_seasonality <- read.csv("../data/df_seasonality.csv")
-df_fuel_over_time <- read.csv("../data/fuel_type_trends.csv")
 df_swisspop_2022 <- read.csv("../data/df_swisspop_2022.csv")
 map_data_sf <- readRDS("../data/map_data_sf.rds")
+df_ch <- read.csv("../data/swiss_specific_fuel.csv")
+df_fr <- read.csv("../data/french_specific_fuel.csv")
+charge_ch_fr <- read.csv("../data/df_charging_points_CH_FR.csv")
+df_v_fr <- read.csv("../data/df_v_fr.csv")
+df_v_ch <- read.csv("../data/df_v_ch.csv")
+df_corr <- read.csv("../data/df_corr.csv")
 ```
-
+# RQ1
 
 ## Car Registrations Over Time {.tabset}
 
 -----------------------------------------------------------------------
-
+  
 ### Trend over Time
 ```{r}
 # Ensure the YearMonth is in Date format
@@ -128,21 +128,21 @@ detach("package:xts", unload = TRUE)
 color_palette_total <- colorNumeric(palette = "viridis", domain = map_data_sf$TotalEV)
 
 leaflet(map_data_sf) %>%
-    addProviderTiles(providers$CartoDB.Positron) %>%
-    addPolygons(
-      fillColor = ~color_palette_total(TotalEV),
-      weight = 1,
-      color = "#FFFFFF",
-      fillOpacity = 0.7,
-      popup = ~paste(NAME, "<br>Total EV Registrations: ", TotalEV)
-    ) %>%
-    addLegend(
-      pal = color_palette_total, 
-      values = ~TotalEV, 
-      opacity = 0.7, 
-      title = "Total EV <br> Registrations",
-      position = "topright"
-    )
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~color_palette_total(TotalEV),
+    weight = 1,
+    color = "#FFFFFF",
+    fillOpacity = 0.7,
+    popup = ~paste(NAME, "<br>Total EV Registrations: ", TotalEV)
+  ) %>%
+  addLegend(
+    pal = color_palette_total, 
+    values = ~TotalEV, 
+    opacity = 0.7, 
+    title = "Total EV <br> Registrations",
+    position = "topright"
+  )
 ```
 
 ### EV Registration Standardized
@@ -170,11 +170,10 @@ leaflet_map_per_capita
 ```
 
 
-Column {data-width=350}
------------------------------------------------------------------------
+## Car Registrations Over Time {data-width=350 .tabset}
 
-### Car Details {data-width=300}
-
+### Swiss Registration Dataset {data-width=300}
+  
 ```{r}
 # Assuming you have a data frame named df_seasonality
 datatable(df_seasonality[, !names(df_seasonality) %in% c("Smoothed", "YearMonth")], options = list(pageLength = 10, autoWidth = TRUE))
@@ -185,5 +184,122 @@ datatable(df_seasonality[, !names(df_seasonality) %in% c("Smoothed", "YearMonth"
 ```{r}
 # Assuming you have a data frame named df_seasonality
 datatable(df_swisspop_2022[, !names(df_swisspop_2022) %in% c("CantonAbbreviation", "KANTONSNUM")], options = list(pageLength = 10, autoWidth = TRUE))
+```
+
+
+# RQ2
+
+### Correlation of EV with Demographics
+```{r}
+# Creating the heatmap
+p <- ggplot(df_corr, aes(Var1, Var2, fill = value)) +
+  geom_tile() +
+  geom_text(aes(label = sprintf("%.2f", value)), color = "white", size = 4) +
+  scale_fill_gradient(low = "lightblue", high = "darkblue", name = "Correlation") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(x = "", y = "", title = "Correlation Heatmap")
+
+# Convert to interactive plot
+ggplotly(p, tooltip = c(sprintf("value")))
+```
+
+# RQ3
+
+## Swiss vs France {.tabset}
+
+-----------------------------------------------------------------------
+### Electric Trend over Time
+
+```{r}
+# Assuming df_ch and df_fr are already loaded and the 'Date' columns are of type character
+df_ch$Date <- as.Date(df_ch$Date)
+df_fr$Date <- as.Date(df_fr$Date)
+
+# Define color palette for each fuel type
+fuel_colors <- c(
+  "Diesel" = viridis(5)[1], 
+  "Electricity" = viridis(5)[2], 
+  "Conventional hybrid" = viridis(5)[3], 
+  "Plug-in hybrid" = viridis(5)[4], 
+  "Petrol" = viridis(5)[5]
+)
+# Create the ggplot
+p <- ggplot() +
+  geom_line(data = df_fr, aes(x = Date, y = Count, color = Fuel), size = 1) +
+  geom_line(data = df_ch, aes(x = Date, y = Count, color = Fuel), size = 1) +
+  scale_color_manual(values = fuel_colors) +
+  labs(x = "Date", y = "Standardized Count", color = "Fuel Type") +
+  theme_minimal() +
+  scale_x_date() # This will handle the dates on the x-axis
+
+# Convert to interactive plot using plotly
+interactive_plot <- ggplotly(p, tooltip = c("x", "y", "color"))
+
+# Use style() to set the visibility of the lines
+for (i in 1:length(interactive_plot$x$data)) {
+  # Assuming the name of the trace includes the fuel type
+  if (grepl("Electricity", interactive_plot$x$data[[i]]$name)) {
+    interactive_plot$x$data[[i]]$visible <- TRUE
+  } else {
+    interactive_plot$x$data[[i]]$visible <- 'legendonly'
+  }
+}
+
+# Adjust the layout of the interactive plot, if needed
+interactive_plot <- interactive_plot %>%
+  layout(legend = list(orientation = "h", x = 0.5, xanchor = "center", y = -0.2)) # Adjust the legend position
+
+# Print the plot
+interactive_plot
+```
+
+### Chargin Station
+```{r}
+data <- charge_ch_fr 
+
+# Convert year to Date format and then extract the year
+data$year <- as.Date(paste0(data$year, "-01-01"))
+data$year <- format(data$year, "%Y")
+
+# Sum the values by year and region
+data_summarized <- data %>%
+  group_by(year, region) %>%
+  summarize(total_value = sum(value))
+
+# Create the ggplot
+p <- ggplot(data_summarized, aes(x = year, y = total_value, fill = region)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_manual(values = c("France" = "#4E79A7", "Switzerland" = "#F28E2B")) +  # Adjusted custom colors
+  labs(title = "Total Availability of Charging Stations in France vs Switzerland",
+       x = "Year",
+       y = "Total Charging Stations") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5), # Center the plot title
+        legend.title = element_blank()) # Remove the legend title
+
+# Convert to interactive plot using plotly
+p_interactive <- ggplotly(p)
+p_interactive <- ggplotly(p, tooltip = c("x", "y", "color"))
+p_interactive <- p_interactive %>%
+  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
+p_interactive
+```
+
+## Swiss Vehicle Dataset {data-width=350 .tabset}
+
+### Swiss Vehicle Dataset
+```{r}
+datatable(df_v_ch[, !names(df_v_ch) %in% c("Location", "VehicleType", "X")], options = list(pageLength = 10, autoWidth = TRUE))
+```
+
+### French Vehicle Dataset
+```{r}
+datatable(df_v_fr[, !names(df_v_fr) %in% c("X", "Diesel", "Essence", "Convetional_Hybrid", "Plug_in_Hybrid", "Electrique")], options = list(pageLength = 10, autoWidth = TRUE))
+```
+
+### Chargin Station Dataset
+```{r}
+datatable(charge_ch_fr[, !names(charge_ch_fr) %in% c("X", "Diesel", "Essence", "Convetional_Hybrid", "Plug_in_Hybrid", "Electrique")], options = list(pageLength = 10, autoWidth = TRUE))
 ```
 

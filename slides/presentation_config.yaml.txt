@@ -1,6 +1,0 @@
-title: "Energizing Change: Electric Vehicle Rise in Switzerland"
-author: "Pierre Vernet, Alexis Jeanneret, Hugo Troendle, Urs Hurni"
-theme: default
-slides:
-  - file: ../report/report.qmd
-output-dir: slides_generated_by_sharingan

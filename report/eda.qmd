@@ -255,7 +255,6 @@ color_palette_per_capita <- colorNumeric(palette = "viridis", domain = map_data_
 
 
 
-
 # Create the leaflet maps
 leaflet_map_total <- leaflet(map_data_sf) %>%
   addProviderTiles(providers$CartoDB.Positron) %>%
@@ -629,7 +628,6 @@ interactive_plot
 ```
 
 ```{r}
-# Plotting with faceting and improved axis text
 p <- ggplot() +
   geom_smooth(data = swiss_specific_fuel, aes(x = Date, y = Count, color = Fuel), 
               method = "loess", se = FALSE, size = 1.5) +
@@ -652,6 +650,9 @@ interactive_plot <- ggplotly(p, width = 600, height = 600, tooltip = c("x", "y",
 interactive_plot <- interactive_plot %>%
   layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
 interactive_plot
+
+swiss_specific_fuel
+french_specific_fuel_long
 ```
 
 ## 3.8 EV and Google Trends

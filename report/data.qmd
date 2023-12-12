@@ -1199,5 +1199,6 @@ df_swisspop_2022 <- df_swisspop_2022 %>%
 reactable(df_swisspop_2022,
           sortable = TRUE, 
           searchable = TRUE)
+
 ```
 

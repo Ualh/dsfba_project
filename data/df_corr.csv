@@ -1,0 +1,26 @@
+"","Var1","Var2","value"
+"1","gen z","gen z",1
+"2","millennials","gen z",0.367932753243402
+"3","gen x","gen z",0.64204295627856
+"4","boomers","gen z",-0.957691999496331
+"5","ev per capita","gen z",-0.918301081547961
+"6","gen z","millennials",0.367932753243402
+"7","millennials","millennials",1
+"8","gen x","millennials",-0.449685315581832
+"9","boomers","millennials",-0.606841621111985
+"10","ev per capita","millennials",-0.290703978686982
+"11","gen z","gen x",0.64204295627856
+"12","millennials","gen x",-0.449685315581832
+"13","gen x","gen x",1
+"14","boomers","gen x",-0.431604079460425
+"15","ev per capita","gen x",-0.690774615743009
+"16","gen z","boomers",-0.957691999496331
+"17","millennials","boomers",-0.606841621111985
+"18","gen x","boomers",-0.431604079460425
+"19","boomers","boomers",1
+"20","ev per capita","boomers",0.892747708728793
+"21","gen z","ev per capita",-0.918301081547961
+"22","millennials","ev per capita",-0.290703978686982
+"23","gen x","ev per capita",-0.690774615743009
+"24","boomers","ev per capita",0.892747708728793
+"25","ev per capita","ev per capita",1

@@ -242,6 +242,11 @@ reduced_model <- step(full_model, direction = "backward")
 
 # View the summary of the reduced model
 summary(reduced_model)
+# Create a summary table for the linear model
+table_regression_mod2_multi <- tbl_regression(reduced_model)
+
+# Print the table
+table_regression_mod2_multi
 ```
 
 
@@ -341,23 +346,24 @@ merged_data <- merge(df_ev_yearly, df_demo, by = "Year")
 
 # Calculating EV adoption per capita
 merged_data$ev_per_capita <- merged_data$total_ev / merged_data$total_population
+```
 
-# Creating an interactive plot
-p <- ggplot(merged_data, aes(x = Year, y = ev_per_capita)) +
-  geom_line() +
+```{r}
+# Creating a ggplot object with your data
+p <- ggplot(merged_data, aes(x = Year, y = ev_per_capita, group = 1)) +
+  geom_line(color = "darkblue", size = 1) +
   labs(title = "EV Adoption Per Capita Over Time in Switzerland",
        x = "Year",
        y = "EV Adoption Per Capita")
 
-# Convert to interactive plot and adjust legend
-interactive_plot <- ggplotly(p, width = 600, height = 400) %>%
-  layout(legend = list(orientation = 'h', x = 0.5, xanchor = 'center', y = -0.15))
+# Animate the plot with gganimate, revealing the line over time
+animated_plot <- p +
+  transition_reveal(Year)
+# Render the animation
+animate(animated_plot, renderer = gganimate::gifski_renderer(), width = 600, height = 400, res = 96)
 
-# To display the plot in an R environment, you can simply call the variable
-interactive_plot
 
 ```
-
 
 The correlation matrix below shows the relationships between the
 proportions of different generational groups (Generation Z, Millennials,
