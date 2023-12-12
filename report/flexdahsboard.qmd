@@ -1,0 +1,50 @@
+---
+title: "Enegizing change"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    social : menu
+    vertical_layout: fill
+runtime: shiny
+---
+
+```{r, echo = FALSE, message = FALSE}
+# load the required packages
+packages <- c("here","tidyverse", "tidyr", "readxl","ggrepel",
+              "gghighlight", "patchwork", "maps","dplyr","scales",
+              "kableExtra", "reactable","sf", "shiny", "leaflet",
+              "plotly", "rsconnect", "gifski", "gganimate", 
+              "factoextra", "viridis", "reshape2", "heatmaply",
+              "gtsummary", "flexdashboard", "dygraphs", "xts")
+purrr::walk(packages, library, character.only = TRUE)
+#source(here::here("scripts/setup.R"))
+# Set the working directory to the correct path
+#setwd(here::here(""))
+#source(here::here("report/setup_slides.R"))
+df_seasonality <- read.csv("../data/df_seasonality.csv")
+```
+
+# Introduction
+
+
+# RQ1
+
+## Column {data-width="500"}
+
+## Row {.tabset}
+
+### Seaso 1
+
+```{r, echo = FALSE, message = FALSE}
+
+df_seasonality$YearMonth <- as.Date(df_seasonality$YearMonth, format = "%Y-%m-%d")
+df_xts <- xts(df_seasonality$Count, order.by = df_seasonality$YearMonth)
+
+dygraph(df_xts, main = "Passenger Car Adoption Over Time in Switzerland") %>%
+  dyAxis("x", label = "Date") %>%
+  dyAxis("y", label = "Number of Passenger Cars Registered") %>%
+  dyOptions(stackedGraph = FALSE) %>%
+  dyRangeSelector(height = 20)
+
+
+```

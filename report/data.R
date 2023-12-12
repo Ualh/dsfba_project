@@ -153,7 +153,9 @@ df_swisspop_2022 <- df_swisspop_2022 %>%
   filter(!is.na(CantonAbbreviation))
 
 
-
+# Read in the shapefile for Swiss cantons
+swiss_cantons <- st_read("data/CH_map/swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
+# Define canton abbreviations for matching
 
 
 
