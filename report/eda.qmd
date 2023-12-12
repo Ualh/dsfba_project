@@ -253,6 +253,9 @@ map_data_sf <- st_transform(map_data_sf, crs = 4326)
 color_palette_total <- colorNumeric(palette = "viridis", domain = map_data_sf$TotalEV)
 color_palette_per_capita <- colorNumeric(palette = "viridis", domain = map_data_sf$EV_per_Capita)
 
+
+
+
 # Create the leaflet maps
 leaflet_map_total <- leaflet(map_data_sf) %>%
   addProviderTiles(providers$CartoDB.Positron) %>%

@@ -2,6 +2,9 @@
 title: "Enegizing change"
 output: 
   flexdashboard::flex_dashboard:
+    theme: 
+      version: 4
+      bootswatch: minty
     orientation: columns
     social : menu
     vertical_layout: fill
@@ -16,7 +19,7 @@ packages <- c("here","tidyverse", "tidyr", "readxl","ggrepel",
               "plotly", "rsconnect", "gifski", "gganimate", 
               "factoextra", "viridis", "reshape2", "heatmaply",
               "gtsummary", "flexdashboard", "dygraphs", "xts", 
-              "zoo", "shiny", "DT")
+              "zoo", "shiny", "DT", "RColorBrewer")
 purrr::walk(packages, library, character.only = TRUE)
 #source(here::here("scripts/setup.R"))
 # Set the working directory to the correct path
@@ -32,6 +35,9 @@ purrr::walk(packages, library, character.only = TRUE)
 
 ```{r}
 df_seasonality <- read.csv("../data/df_seasonality.csv")
+df_fuel_over_time <- read.csv("../data/fuel_type_trends.csv")
+df_swisspop_2022 <- read.csv("../data/df_swisspop_2022.csv")
+map_data_sf <- readRDS("../data/map_data_sf.rds")
 ```
 
 
@@ -115,20 +121,69 @@ interactive_plot_seaso_3 <- ggplotly(p_seaso_3) %>%
 interactive_plot_seaso_3
 ```
 
+### EV Registration
+```{r}
+detach("package:xts", unload = TRUE)
+# Create color palettes for the 'Total' and 'EV_per_Capita' columns
+color_palette_total <- colorNumeric(palette = "viridis", domain = map_data_sf$TotalEV)
+
+leaflet(map_data_sf) %>%
+    addProviderTiles(providers$CartoDB.Positron) %>%
+    addPolygons(
+      fillColor = ~color_palette_total(TotalEV),
+      weight = 1,
+      color = "#FFFFFF",
+      fillOpacity = 0.7,
+      popup = ~paste(NAME, "<br>Total EV Registrations: ", TotalEV)
+    ) %>%
+    addLegend(
+      pal = color_palette_total, 
+      values = ~TotalEV, 
+      opacity = 0.7, 
+      title = "Total EV <br> Registrations",
+      position = "topright"
+    )
+```
+
+### EV Registration Standardized
+```{r}
+color_palette_per_capita <- colorNumeric(palette = "viridis", domain = map_data_sf$EV_per_Capita)
+
+leaflet_map_per_capita <- leaflet(map_data_sf) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addPolygons(
+    fillColor = ~color_palette_per_capita(EV_per_Capita),
+    weight = 1,
+    color = "#FFFFFF",
+    fillOpacity = 0.7,
+    popup = ~paste(NAME, "<br>EV Registrations per Capita: ", 
+                   round(EV_per_Capita, 3))
+  ) %>%
+  addLegend(
+    pal = color_palette_per_capita, 
+    values = ~EV_per_Capita, 
+    opacity = 0.7, 
+    title = "EV Registrations <br> per Capita",
+    position = "topright"
+  )
+leaflet_map_per_capita
+```
+
+
 Column {data-width=350}
 -----------------------------------------------------------------------
 
 ### Car Details {data-width=300}
 
 ```{r}
-# Use DT::renderDataTable to render the table on the server side
-output$carDetails <- renderDataTable({
-  # Exclude the 'Smoothed' column before rendering the table
-  datatable(df_seasonality[, !names(df_seasonality) %in% c("Smoothed", "YearMonth")], options = list(pageLength = 10, autoWidth = TRUE))
-})
+# Assuming you have a data frame named df_seasonality
+datatable(df_seasonality[, !names(df_seasonality) %in% c("Smoothed", "YearMonth")], options = list(pageLength = 10, autoWidth = TRUE))
 
-# Use DT::dataTableOutput to display the table on the UI side
-dataTableOutput("carDetails")
+```
 
+### Swiss Population
+```{r}
+# Assuming you have a data frame named df_seasonality
+datatable(df_swisspop_2022[, !names(df_swisspop_2022) %in% c("CantonAbbreviation", "KANTONSNUM")], options = list(pageLength = 10, autoWidth = TRUE))
 ```
 
