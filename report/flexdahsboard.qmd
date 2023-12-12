@@ -2,7 +2,7 @@
 title: "Enegizing change"
 output: 
   flexdashboard::flex_dashboard:
-    orientation: rows
+    orientation: columns
     social : menu
     vertical_layout: fill
 runtime: shiny
@@ -15,13 +15,14 @@ packages <- c("here","tidyverse", "tidyr", "readxl","ggrepel",
               "kableExtra", "reactable","sf", "shiny", "leaflet",
               "plotly", "rsconnect", "gifski", "gganimate", 
               "factoextra", "viridis", "reshape2", "heatmaply",
-              "gtsummary", "flexdashboard", "dygraphs", "xts")
+              "gtsummary", "flexdashboard", "dygraphs", "xts", 
+              "zoo", "shiny", "DT")
 purrr::walk(packages, library, character.only = TRUE)
 #source(here::here("scripts/setup.R"))
 # Set the working directory to the correct path
 #setwd(here::here(""))
 #source(here::here("report/setup_slides.R"))
-df_seasonality <- read.csv("../data/df_seasonality.csv")
+
 ```
 
 # Introduction
@@ -29,22 +30,105 @@ df_seasonality <- read.csv("../data/df_seasonality.csv")
 
 # RQ1
 
-## Column {data-width="500"}
+```{r}
+df_seasonality <- read.csv("../data/df_seasonality.csv")
+```
 
-## Row {.tabset}
 
-### Seaso 1
+## Car Registrations Over Time {.tabset}
 
-```{r, echo = FALSE, message = FALSE}
+-----------------------------------------------------------------------
 
+### Trend over Time
+```{r}
+# Ensure the YearMonth is in Date format
 df_seasonality$YearMonth <- as.Date(df_seasonality$YearMonth, format = "%Y-%m-%d")
-df_xts <- xts(df_seasonality$Count, order.by = df_seasonality$YearMonth)
 
-dygraph(df_xts, main = "Passenger Car Adoption Over Time in Switzerland") %>%
-  dyAxis("x", label = "Date") %>%
-  dyAxis("y", label = "Number of Passenger Cars Registered") %>%
+# Calculate a smoothed series using a rolling mean or LOESS
+# For a rolling mean:
+df_seasonality$Smoothed <- rollmean(df_seasonality$Count, k = 12, fill = NA)
+
+# Alternatively, for LOESS smoothing:
+# loess_fit <- loess(Count ~ as.numeric(YearMonth), data = df_seasonality, span = 0.5)
+# df_seasonality$Smoothed <- predict(loess_fit)
+
+# Create an xts object with both the original and smoothed counts
+df_xts <- xts(df_seasonality[, c("Count", "Smoothed")], order.by = df_seasonality$YearMonth)
+
+# Plot using dygraphs
+dygraph_object <- dygraph(df_xts, main = "Passenger Car Adoption Over Time in Switzerland") %>%
+  dySeries("Count", label = "Number of Passenger Cars Registered") %>%
+  dySeries("Smoothed", label = "Smoothed Trend") %>%
   dyOptions(stackedGraph = FALSE) %>%
   dyRangeSelector(height = 20)
 
+# Print the dygraph to display it
+dygraph_object
 
 ```
+
+### Monthly Trend
+```{r}
+p_seaso_2 <- ggplot(df_seasonality, aes(x = Month, y = Count, group = Year, color = as.factor(Year))) +
+  geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 0.7) +
+  labs(title = "Monthly Passenger Car Registrations by Year",
+       x = "Month",
+       y = "Number of Passenger Cars Registered",
+       color = "Year") +
+  theme_minimal() +
+  scale_color_viridis_d() +
+  theme(legend.position = "bottom", axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Convert to an interactive plotly object
+interactive_plot_seaso_2 <- ggplotly(p_seaso_2)
+
+# Adjust plotly settings if needed, such as margins or layout
+interactive_plot_seaso_2 <- interactive_plot_seaso_2 %>%
+  layout(margin = list(l = 10, r = 10, b = 40, t = 40), # Adjust margins
+         legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2)) # Adjust legend position
+
+# Display the interactive plot
+(interactive_plot_seaso_2)
+```
+
+### Monthly Trend 2
+```{r}
+df_seasonality$Year <- as.factor(df_seasonality$Year)
+p_seaso_3 <- ggplot(df_seasonality, aes(x = Month, y = Count, group = Year, color = Year)) +
+  geom_line() +
+  facet_wrap(~ Year, scales = "free_y") +
+  labs(title = "Seasonal Trends in Passenger Car Registrations",
+       x = "Month",
+       y = "Number of Passenger Cars Registered") +
+  theme_minimal() +
+  scale_color_viridis_d(guide = FALSE) +
+  theme(axis.text.x = element_blank(),  # Combine axis.text.x settings here
+        axis.text.y = element_blank(),
+        axis.ticks.x = element_blank(),
+        legend.position = "none")
+
+interactive_plot_seaso_3 <- ggplotly(p_seaso_3) %>%
+  layout(xaxis = list(tickmode = "array",
+                      tickvals = 1:12,
+                      ticktext = month.abb))
+
+interactive_plot_seaso_3
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Car Details {data-width=300}
+
+```{r}
+# Use DT::renderDataTable to render the table on the server side
+output$carDetails <- renderDataTable({
+  # Exclude the 'Smoothed' column before rendering the table
+  datatable(df_seasonality[, !names(df_seasonality) %in% c("Smoothed", "YearMonth")], options = list(pageLength = 10, autoWidth = TRUE))
+})
+
+# Use DT::dataTableOutput to display the table on the UI side
+dataTableOutput("carDetails")
+
+```
+
