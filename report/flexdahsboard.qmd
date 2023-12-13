@@ -73,7 +73,7 @@ dygraph_object
 
 ```
 
-### Monthly Trend
+### Trend
 ```{r}
 p_seaso_2 <- ggplot(df_seasonality, aes(x = Month, y = Count, group = Year, color = as.factor(Year))) +
   geom_smooth(se = FALSE, method = "loess", span = 0.5, size = 0.7) +
@@ -97,7 +97,7 @@ interactive_plot_seaso_2 <- interactive_plot_seaso_2 %>%
 (interactive_plot_seaso_2)
 ```
 
-### Monthly Trend 2
+### Trend 2.0
 ```{r}
 df_seasonality$Year <- as.factor(df_seasonality$Year)
 p_seaso_3 <- ggplot(df_seasonality, aes(x = Month, y = Count, group = Year, color = Year)) +
@@ -121,7 +121,29 @@ interactive_plot_seaso_3 <- ggplotly(p_seaso_3) %>%
 interactive_plot_seaso_3
 ```
 
-### EV Registration
+
+## Car Registrations Over Time {data-width=350 .tabset}
+
+### Swiss Registration Dataset {data-width=300}
+  
+```{r}
+# Assuming you have a data frame named df_seasonality
+datatable(df_seasonality[, !names(df_seasonality) %in% c("Smoothed", "YearMonth")], options = list(pageLength = 10, autoWidth = TRUE))
+
+```
+
+### Swiss Population
+```{r}
+# Assuming you have a data frame named df_seasonality
+datatable(df_swisspop_2022[, !names(df_swisspop_2022) %in% c("CantonAbbreviation", "KANTONSNUM")], options = list(pageLength = 10, autoWidth = TRUE))
+```
+
+
+# RQ2
+
+## Leaflet Maps {data-width=600 .tabset}
+
+### EV Registration 
 ```{r}
 detach("package:xts", unload = TRUE)
 # Create color palettes for the 'Total' and 'EV_per_Capita' columns
@@ -169,25 +191,7 @@ leaflet_map_per_capita <- leaflet(map_data_sf) %>%
 leaflet_map_per_capita
 ```
 
-
-## Car Registrations Over Time {data-width=350 .tabset}
-
-### Swiss Registration Dataset {data-width=300}
-  
-```{r}
-# Assuming you have a data frame named df_seasonality
-datatable(df_seasonality[, !names(df_seasonality) %in% c("Smoothed", "YearMonth")], options = list(pageLength = 10, autoWidth = TRUE))
-
-```
-
-### Swiss Population
-```{r}
-# Assuming you have a data frame named df_seasonality
-datatable(df_swisspop_2022[, !names(df_swisspop_2022) %in% c("CantonAbbreviation", "KANTONSNUM")], options = list(pageLength = 10, autoWidth = TRUE))
-```
-
-
-# RQ2
+## Corr
 
 ### Correlation of EV with Demographics
 ```{r}
@@ -226,7 +230,7 @@ fuel_colors <- c(
 )
 # Create the ggplot
 p <- ggplot() +
-  geom_line(data = df_fr, aes(x = Date, y = Count, color = Fuel), size = 1) +
+  geom_line(data = df_fr, aes(x = Date, y = Count, color = Fuel), size = 1, alpha = 0.4) +
   geom_line(data = df_ch, aes(x = Date, y = Count, color = Fuel), size = 1) +
   scale_color_manual(values = fuel_colors) +
   labs(x = "Date", y = "Standardized Count", color = "Fuel Type") +
@@ -254,7 +258,7 @@ interactive_plot <- interactive_plot %>%
 interactive_plot
 ```
 
-### Chargin Station
+### Charging Station
 ```{r}
 data <- charge_ch_fr 
 
@@ -300,6 +304,6 @@ datatable(df_v_fr[, !names(df_v_fr) %in% c("X", "Diesel", "Essence", "Convetiona
 
 ### Chargin Station Dataset
 ```{r}
-datatable(charge_ch_fr[, !names(charge_ch_fr) %in% c("X", "Diesel", "Essence", "Convetional_Hybrid", "Plug_in_Hybrid", "Electrique")], options = list(pageLength = 10, autoWidth = TRUE))
+datatable(charge_ch_fr[, !names(charge_ch_fr) %in% c("X", "region", "parameter", "mode", "category")], options = list(pageLength = 10, autoWidth = TRUE))
 ```
 
