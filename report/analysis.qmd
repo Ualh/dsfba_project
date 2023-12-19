@@ -4,16 +4,7 @@
 source(here::here("scripts/setup.R"))
 ```
 
-**TO DO's**
-
--   Answers to the research questions
--   Different methods considered
--   Competing approaches
--   Justifications
-
-## 4.2 RQ1
-
-Based on past electric vehicle adoption trends in Switzerland, can we forecast future adoption rates and pinpoint times of significant increases or decreases correlated with major events or policy changes?
+## 4.1 RQ1 - Based on past electric vehicle adoption trends in Switzerland, can we forecast future adoption rates and pinpoint times of significant increases or decreases correlated with major events or policy changes?
 
 ### Simple Linear Regression
 
@@ -21,13 +12,13 @@ Based on past electric vehicle adoption trends in Switzerland, can we forecast f
 
 Choosing Dependent Variable, sales or EV registrations
 
-Sales Data (from `df_sales_EV`):
+Sales Data :
 
 Pros: Directly reflects market demand and consumer purchasing behavior.
 Cons: Can be influenced by short-term factors such as promotions or
 subsidies, which might not indicate long-term adoption trends.
 
-Registration Data (from `df_v_electric`):
+Registration Data :
 
 Pros: Represents actual additions to the vehicle population and can be
 more indicative of long-term trends in EV adoption. Cons: Might lag
@@ -92,9 +83,7 @@ significance level of 0.05. This high p-value suggests that Price is not
 statistically significant in predicting Count, as it fails to reject the
 null hypothesis that the coefficient is zero.
 
-The R-squared value is very low (0.000523), indicating that the linear
-regression model explains only a negligible fraction of the variance in
-Count.
+The R-squared value is very low (3.83e-07), which indicates that the linear regression model solely explains a negligible fraction of the variance related to the variable Count.  
 
 The Root Mean Squared Error (RMSE) is relatively high (247), suggesting
 that the model's predictions have a substantial amount of error.
@@ -145,11 +134,11 @@ table_regression2 <- tbl_regression(mod2_lin)
 table_regression2
 ```
 
+
 Overall, while there is a statistically significant relationship between
 SearchRatio and Count, the model's R-squared value suggests that other
 factors not included in the model may also influence the Count variable.
-You may want to explore additional variables or more complex models to
-improve predictive accuracy.
+One might want to explore additional variables along with more complex models to improve predictive accuracy.
 
 ### Multivariable Regression
 #### with Demographic groups, Oil Price and Google Trend
@@ -188,7 +177,8 @@ table_regression_mod1_multi <- tbl_regression(mod1_multi)
 # Print the table
 table_regression_mod1_multi
 ```
-This multivariate linear regression model does not appear to have a strong explanatory power, as indicated by the low adjusted R-squared value and the relatively high RMSE. Additionally, only the Baby Boomers variable shows statistical significance in predicting the Count, while other variables do not appear to be significant in this context. You may want to consider further refining the model or exploring other variables to improve its predictive performance.
+This multivariate linear regression model does not appear to have a strong explanatory power, as indicated by the low adjusted R-squared value and the relatively high RMSE. Additionally, only the Baby Boomers variable shows statistical significance in predicting the Count, while other variables do not appear to be significant in this context. Refining the model or exploring other variables to improve its predictive performance might be suggestible.
+
 
 #### Adding Political Parties
 ```{r}
@@ -295,10 +285,9 @@ Do they represent a segment of the population that is not well explained by the 
 Are they true extreme values that are part of the natural variation of the data? If they are valid observations, removing them could bias your results.
 
 
-## 4.3 RQ2
+## 4.2 RQ2 - Are there differences in adoption rate within the different regions in Switzerland? And are there different buying behaviors displayed by the demographic segments within Switzerland?
 
-Are there differences in adoption rate within the different regions in Switzerland? And are there different buying behaviors displayed by the demographic segments within Switzerland?
-
+### EV Adoption per Capita
 From the initial data:
 
 In 2005, the EV adoption rate per capita was approximately 0.000004,
@@ -343,9 +332,7 @@ merged_data <- merge(df_ev_yearly, df_demo, by = "Year")
 
 # Calculating EV adoption per capita
 merged_data$ev_per_capita <- merged_data$total_ev / merged_data$total_population
-```
 
-```{r}
 # Creating a ggplot object with your data
 p <- ggplot(merged_data, aes(x = Year, y = ev_per_capita, group = 1)) +
   geom_line(color = "darkblue", size = 1) +
@@ -358,9 +345,9 @@ animated_plot <- p +
   transition_reveal(Year)
 # Render the animation
 animate(animated_plot, renderer = gganimate::gifski_renderer(), width = 600, height = 400, res = 96)
-
-
 ```
+
+### Correlation of EV registration with age groups
 
 The correlation matrix below shows the relationships between the
 proportions of different generational groups (Generation Z, Millennials,
@@ -415,78 +402,157 @@ melted_correlation_matrix$Var2 <- gsub("_", " ", melted_correlation_matrix$Var2)
 p <- ggplot(melted_correlation_matrix, aes(Var1, Var2, fill = value)) +
   geom_tile() +
   geom_text(aes(label = sprintf("%.2f", value)), color = "white", size = 4) +
-  scale_fill_gradient(low = "lightblue", high = "darkblue", name = "Correlation") +
+  scale_fill_gradient(low = "lightgreen", high = "darkgreen", name = "Correlation") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(x = "", y = "", title = "Correlation Heatmap")
 
 # Convert to interactive plot
-ggplotly(p, tooltip = c("label", "fill"))
+ggplotly(p, tooltip = c("label", "fill"), width = 600, height = 500)
 ```
 
-## 4.3 RQ3
-How has the growth of electric vehicles evolved in comparison to other countries such as France, and what factors might account for the differences in their evolution ?
+### Rural vs Urban
+We merged two datasets, one listing Swiss cantons as urban or rural ('df_cantons') and the other tracking monthly electric vehicle counts ('df_ev'), filtered out non-canton data, grouped by urban/rural typology and month, then calculated a 12-month rolling average to smooth out variances, and finally created an interactive time-series graph using 'dygraphs' to visually compare EV trends between urban and rural areas in Switzerland.
+
+Source -
+[bfs.admin.ch](https://www.bfs.admin.ch/bfs/en/home/statistics/cross-sectional-topics/city-statistics/urban-switzerland.html)
+
+```{r}
+# Text input
+text <- "Canton\tUrban-Rural Typology
+Aargau\tUrban
+Appenzell Ausserrhoden\tRural
+Appenzell Innerrhoden\tRural
+Basel-Landschaft\tUrban
+Basel-Stadt\tUrban
+Bern\tUrban
+Freiburg\tUrban
+Genève\tUrban
+Glarus\tRural
+Graubünden\tRural
+Jura\tRural
+Luzern\tUrban
+Neuchâtel\tUrban
+Nidwalden\tRural
+Obwalden\tRural
+St. Gallen\tUrban
+Schaffhausen\tUrban
+Schwyz\tRural
+Solothurn\tUrban
+Thurgau\tUrban
+Ticino\tUrban
+Uri\tRural
+Valais\tRural
+Vaud\tUrban
+Zug\tUrban
+Zürich\tUrban"
+
+# Split the text into lines
+lines <- strsplit(text, "\n")[[1]]
+
+# Split each line into Canton and Typology
+data <- strsplit(lines, "\t")
+
+# Extract Cantons and Typologies into separate vectors
+cantons <- sapply(data, function(x) x[1])
+typologies <- sapply(data, function(x) x[2])
+
+# Remove the header
+cantons <- cantons[-1]
+typologies <- typologies[-1]
+
+# Create a data frame
+dataset <- data.frame(Canton = cantons, Typology = typologies)
+
+# Update the 'Canton' column with abbreviations
+df_cantons <- dataset %>%
+  mutate(Canton = case_when(
+    Canton == "Zürich" ~ "ZH",
+    Canton == "Bern" ~ "BE",
+    Canton == "Luzerne" ~ "LU",
+    Canton == "Uri" ~ "UR",
+    Canton == "Schwyz" ~ "SZ",
+    Canton == "Obwalden" ~ "OW",
+    Canton == "Nidwalden" ~ "NW",
+    Canton == "Glarus" ~ "GL",
+    Canton == "Zug" ~ "ZG",
+    Canton == "Freibourg" ~ "FR",
+    Canton == "Solothurn" ~ "SO",
+    Canton == "Basel-Stadt" ~ "BS",
+    Canton == "Basel-Landschaft" ~ "BL",
+    Canton == "Schaffhausen" ~ "SH",
+    Canton == "Appenzell Ausserrhoden" ~ "AR", # Adjusted to match your data
+    Canton == "Appenzell Innerrhoden" ~ "AI",  # Adjusted to match your data
+    Canton == "St. Gallen" ~ "SG",
+    Canton == "Graubünden" ~ "GR",
+    Canton == "Aargau" ~ "AG",
+    Canton == "Thurgau" ~ "TG",
+    Canton == "Ticino" ~ "TI",
+    Canton == "Vaud" ~ "VD",
+    Canton == "Valais" ~ "VS",
+    Canton == "Neuchâtel" ~ "NE",
+    Canton == "Genève" ~ "GE", # Adjusted to match your data
+    Canton == "Jura" ~ "JU",
+    TRUE ~ Canton # Default case to keep original names for unmatched entries
+  ))
+
+library(xts)
+# Filter out 'Confederation' and 'Switzerland' from df_ev before merging
+df_ev_filtered <- df_ev %>%
+  filter(!Location %in% c("Confederation", "Switzerland"))
+
+# Convert Date to Date format in df_ev_filtered
+df_ev_filtered$Date <- as.Date(df_ev_filtered$Date)
+
+# Perform the merge
+df_merged <- inner_join(df_ev_filtered, df_cantons, by = c("Location" = "Canton"))
+
+# Create a sequence of all months present in the data
+all_months <- seq(from = min(df_merged$Date), to = max(df_merged$Date), by = "1 month")
+
+# Group by Typology and Date (monthly)
+df_grouped <- df_merged %>%
+  group_by(Typology, Month = floor_date(Date, "month")) %>%
+  summarise(Total_EV_Count = sum(Count), .groups = 'drop')
+
+# Make sure that we have all months for each Typology
+df_complete <- df_grouped %>%
+  complete(Month = all_months, Typology, fill = list(Total_EV_Count = 0))
+
+# Spread the data into separate columns for each Typology
+df_wide <- df_complete %>%
+  pivot_wider(names_from = Typology, values_from = Total_EV_Count)
+
+# Replace NA with 0 if there are any left after pivot_wider
+df_wide[is.na(df_wide)] <- 0
+
+# Convert to xts object for dygraphs
+xts_data <- xts(df_wide[, -1], order.by = df_wide$Month)
+
+# Calculate rolling mean
+roll_mean <- rollapply(xts_data, width = 12, FUN = mean, by.column = TRUE, align = "right", fill = NA)
+
+# Create the dygraph with options for improved readability
+dygraph(roll_mean, main = "Urban vs Rural EV Adoption (12-Month Rolling Mean)", width = "600px", height = "400px") %>%
+  dySeries("Urban", label = "Urban", color = "#1c61b6", fillGraph = TRUE) %>%
+  dySeries("Rural", label = "Rural", color = "#4daf4a", fillGraph = TRUE) %>%
+  dyOptions(strokeWidth = 1.5) %>%
+  dyLegend(show = "always") %>%
+  dyRangeSelector(height = 20) # Adds a range selector for zooming 
+```
+
+
+Key Findings: 
+The graph displays a clear upward trend in electric vehicle adoption over time in both urban and rural areas of Switzerland, with urban areas consistently showing higher counts. This could be due to factors like better charging infrastructure, higher population density, or more environmental awareness in urban regions.
+
+## 4.3 RQ3 - How has the growth of electric vehicles evolved in comparison to other countries such as France, and what factors might account for the differences in their evolution ?
 
 
 ```{r}
-# Filtering Swiss data for specific fuel types
-swiss_specific_fuel <- df_v %>%
-  filter(Fuel %in% c("Diesel", "Electricity", "Conventional hybrid", "Plug-in hybrid", "Petrol")) %>%
-  filter(Location == 'Switzerland') |>
-  filter(VehicleType == 'Passenger car') |>
-  filter(Date > as.Date('2012-01-01')) |>
-  filter(Date < as.Date('2021-12-31'))
-
-# Selecting equivalent columns from the French dataset
-french_specific_fuel <- df_v_fr %>%
-  select(Date, Diesel_delta, Essence_delta, Conventional_Hybrid_delta, Plug_in_Hybrid_delta, Electrique_delta) # Adjust column names accordingly
-
-# Reshape French dataset to long format for easier plotting
-french_specific_fuel_long <- french_specific_fuel %>%
-  pivot_longer(cols = -Date, names_to = "Fuel", values_to = "Count")
-
-# Standardize counts in each dataset
-swiss_specific_fuel <- swiss_specific_fuel %>%
-  mutate(Count = scale(Count))
-
-french_specific_fuel_long <- french_specific_fuel_long %>%
-  mutate(Count = scale(Count))
-
-# Rename the 'Fuel' column in the French dataset
-french_specific_fuel_long <- french_specific_fuel_long %>%
-  mutate(Fuel = case_when(
-    Fuel == "Diesel_delta" ~ "Diesel",
-    Fuel == "Essence_delta" ~ "Petrol",
-    Fuel == "Conventional_Hybrid_delta" ~ "Conventional hybrid",
-    Fuel == "Plug_in_Hybrid_delta" ~ "Plug-in hybrid",
-    Fuel == "Electrique_delta" ~ "Electricity"
-  ))
-
-# Define color palette for each fuel type
-fuel_colors <- c("Diesel" = "black", "Electricity" = "green", "Conventional hybrid" = "purple", "Plug-in hybrid" = "blue", "Petrol" = "orange")
-
-p <- ggplot() +
-  geom_smooth(data = swiss_specific_fuel, aes(x = Date, y = Count, color = Fuel), 
-              method = "loess", se = FALSE, size = 1.5) +
-  geom_line(data = french_specific_fuel_long, aes(x = Date, y = Count, color = Fuel), 
-            alpha = 0.4, size = 0.8) +
-  scale_color_manual(values = fuel_colors, 
-                     labels = c("Diesel", "Electricity", "Conventional hybrid", 
-                                "Plug-in hybrid", "Petrol"),
-                     breaks = c("Diesel", "Electricity", "Conventional hybrid", 
-                                "Plug-in hybrid", "Petrol")) +
-  labs(x = "Date", y = "Standardized Count", color = "Fuel Type") +
-  theme_minimal() +
-  geom_text(data = data.frame(x = as.Date("2021-01-01"), y = c(3, 2.8), 
-                              label = c("Switzerland has", "the thickest line")), 
-            aes(x = x, y = y, label = label, color = label), 
-            size = 4, show.legend = FALSE)
-
-interactive_plot <- ggplotly(p, width = 600, height = 400, tooltip = c("x", "y", "color"))
-interactive_plot <- interactive_plot %>%
-  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
-interactive_plot
+p_ch_vs_fr1
 ```
+
+
 ```{r}
 # Filtering Swiss data for specific fuel types
 swiss_specific_fuel <- df_v %>%
@@ -581,8 +647,7 @@ p_interactive
 ```
 
 
-## 4.5 RQ4
-To what extent does the evolution in the availability of charging stations exert an influence on the adoption of electric vehicles in Switzerland?
+## 4.4 RQ4 - To what extent does the evolution in the availability of charging stations exert an influence on the adoption of electric vehicles in Switzerland?
 ```{r}
 # First, let's merge the df_v and df_charge_number_CH data sets, and we will look at Fuel: Electricity
 

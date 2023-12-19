@@ -7,7 +7,6 @@ source(here::here("scripts/setup.R"))
 ## 3.1 Switzerland
 
 ### 3.1.1 seasonality
-
 ```{r}
 #creating dataset for the three seasonality graphs
 passenger_cars_processed <- df_v %>%
@@ -20,22 +19,29 @@ passenger_cars_processed <- df_v %>%
          Month = factor(month(YearMonth), levels = 1:12, labels = month.abb)) %>%
   arrange(Year, Month)
 
-# plot1
-p_seaso_1 <- ggplot(passenger_cars_processed, aes(x = YearMonth, y = Count)) +
-  geom_line(color = "darkblue", size = 0.5) +
-  labs(title = "Passenger Car Adoption Over Time in Switzerland",
-       x = "Date",
-       y = "Number of Passenger Cars Registered") +
-  theme_minimal() +
-  scale_x_date(date_breaks = "1 year", date_labels = "%Y") +
-  geom_smooth(method = "loess", se = FALSE, color = "blue") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# Ensure the YearMonth is in Date format
+passenger_cars_processed$YearMonth <- as.Date(passenger_cars_processed$YearMonth, format = "%Y-%m-%d")
 
-# Convert to an interactive plotly object
-interactive_plot_seaso_1 <- ggplotly(p_seaso_1, width = 600, height = 400)
+# Calculate a smoothed series using a rolling mean or LOESS
+# For a rolling mean:
+passenger_cars_processed$Smoothed <- rollmean(passenger_cars_processed$Count, k = 12, fill = NA)
 
-# Display the interactive plot
-interactive_plot_seaso_1
+# Alternatively, for LOESS smoothing:
+# loess_fit <- loess(Count ~ as.numeric(YearMonth), data = df_seasonality, span = 0.5)
+# df_seasonality$Smoothed <- predict(loess_fit)
+
+# Create an xts object with both the original and smoothed counts
+df_xts <- xts(passenger_cars_processed[, c("Count", "Smoothed")], order.by = passenger_cars_processed$YearMonth)
+
+# Plot using dygraphs
+p_seaso1 <- dygraph(df_xts, main = "Passenger Car Adoption Over Time in Switzerland", width = "600px", height = "400px") %>%
+  dySeries("Count", label = "Number of Passenger Cars Registered") %>%
+  dySeries("Smoothed", label = "Smoothed Trend") %>%
+  dyOptions(stackedGraph = FALSE) %>%
+  dyRangeSelector(height = 20)
+
+# Print the dygraph to display it
+p_seaso1
 ```
 
 The blue line represents a smoothed trend, indicating an initial
@@ -104,8 +110,16 @@ only year which show a decreasing peak instead of an increasing one as
 it is presented for all other years.
 
 ### 3.1.2 Vehicule Registration by Fuel time over time
-
 ```{r}
+# Define color palette for each fuel type using Viridis
+fuel_colors <- c(
+  "Diesel" = viridis(5)[1], 
+  "Electricity" = viridis(5)[2], 
+  "Conventional hybrid" = viridis(5)[3], 
+  "Plug-in hybrid" = viridis(5)[4], 
+  "Petrol" = viridis(5)[5]
+)
+
 # Filter df_v for specific fuel types and vehicle type
 filtered_df <- df_v %>%
   filter(Fuel %in% c("Petrol", "Diesel", "Conventional hybrid", "Plug-in hybrid", "Electricity") &
@@ -118,7 +132,8 @@ fuel_type_trends <- filtered_df %>%
 
 # Plotting the trends over time by fuel type
 p_fuel_over_time <- ggplot(fuel_type_trends, aes(x = Date, y = Count, color = Fuel)) +
-  geom_line(alpha = 0.3) +  # Plot the actual lines
+  geom_line(alpha = 0.3, aes(color = Fuel)) +  # Use Viridis colors for lines
+  scale_color_manual(values = fuel_colors) +   # Apply the defined color palette
   geom_smooth(aes(group = Fuel), se = FALSE, method = "loess", span = 0.1) +  # Add smoothed lines per fuel type
   labs(title = "Vehicle Registrations by Fuel Type Over Time",
        x = "Date",
@@ -128,13 +143,13 @@ p_fuel_over_time <- ggplot(fuel_type_trends, aes(x = Date, y = Count, color = Fu
 
 # Convert to an interactive plotly object
 interactive_plot_fuel_over_time <- ggplotly(p_fuel_over_time, width = 600, height = 400)
+
 # Adjust plotly settings 
 interactive_plot_fuel_over_time <- interactive_plot_fuel_over_time %>%
   layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
-
-# Display the interactive plot
 interactive_plot_fuel_over_time
 ```
+
 
 The graph above shows the vehicle registrations in Switzerland by fuel
 type from 2005 to 2023.
@@ -211,6 +226,7 @@ per capita, providing a standardized comparison of EV adoption across
 cantons.
 
 ```{r}
+detach("package:xts", unload = TRUE)
 # Read in the shapefile for Swiss cantons
 swiss_cantons <- st_read("../data/CH_map/swissBOUNDARIES3D_1_4_TLM_KANTONSGEBIET.shp")
 # Define canton abbreviations for matching
@@ -601,30 +617,45 @@ french_specific_fuel_long <- french_specific_fuel_long %>%
     Fuel == "Electrique_delta" ~ "Electricity"
   ))
 
-# Define color palette for each fuel type
-fuel_colors <- c("Diesel" = "black", "Electricity" = "green", "Conventional hybrid" = "purple", "Plug-in hybrid" = "blue", "Petrol" = "orange")
+swiss_specific_fuel$Date <- as.Date(swiss_specific_fuel$Date)
+french_specific_fuel_long$Date <- as.Date(french_specific_fuel_long$Date)
 
+# Define color palette for each fuel type
+fuel_colors <- c(
+  "Diesel" = viridis(5)[1], 
+  "Electricity" = viridis(5)[2], 
+  "Conventional hybrid" = viridis(5)[3], 
+  "Plug-in hybrid" = viridis(5)[4], 
+  "Petrol" = viridis(5)[5]
+)
+# Create the ggplot
 p <- ggplot() +
-  geom_smooth(data = swiss_specific_fuel, aes(x = Date, y = Count, color = Fuel), 
-              method = "loess", se = FALSE, size = 1.5) +
-  geom_line(data = french_specific_fuel_long, aes(x = Date, y = Count, color = Fuel), 
-            alpha = 0.4, size = 0.8) +
-  scale_color_manual(values = fuel_colors, 
-                     labels = c("Diesel", "Electricity", "Conventional hybrid", 
-                                "Plug-in hybrid", "Petrol"),
-                     breaks = c("Diesel", "Electricity", "Conventional hybrid", 
-                                "Plug-in hybrid", "Petrol")) +
+  geom_line(data = french_specific_fuel_long, aes(x = Date, y = Count, color = Fuel), size = 1, alpha = 0.4) +
+  geom_line(data = swiss_specific_fuel, aes(x = Date, y = Count, color = Fuel), size = 1) +
+  scale_color_manual(values = fuel_colors) +
   labs(x = "Date", y = "Standardized Count", color = "Fuel Type") +
   theme_minimal() +
-  geom_text(data = data.frame(x = as.Date("2021-01-01"), y = c(3, 2.8), 
-                              label = c("Switzerland has", "the thickest line")), 
-            aes(x = x, y = y, label = label, color = label), 
-            size = 4, show.legend = FALSE)
+  scale_x_date() # This will handle the dates on the x-axis
 
-interactive_plot <- ggplotly(p, width = 600, height = 400, tooltip = c("x", "y", "color"))
-interactive_plot <- interactive_plot %>%
-  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
-interactive_plot
+# Convert to interactive plot using plotly
+interactive_plot <- ggplotly(p, tooltip = c("x", "y", "color"), width = 600, height = 600)
+
+# Use style() to set the visibility of the lines
+for (i in 1:length(interactive_plot$x$data)) {
+  # Assuming the name of the trace includes the fuel type
+  if (grepl("Electricity", interactive_plot$x$data[[i]]$name)) {
+    interactive_plot$x$data[[i]]$visible <- TRUE
+  } else {
+    interactive_plot$x$data[[i]]$visible <- 'legendonly'
+  }
+}
+
+# Adjust the layout of the interactive plot, if needed
+p_ch_vs_fr1 <- interactive_plot %>%
+  layout(legend = list(orientation = "h", x = 0.5, xanchor = "center", y = -0.2)) # Adjust the legend position
+
+# Print the plot
+p_ch_vs_fr1
 ```
 
 ```{r}
@@ -646,13 +677,11 @@ p <- ggplot() +
   facet_wrap(~Fuel, scales = 'free_y', ncol = 1)
 
 # Convert to interactive plot
-interactive_plot <- ggplotly(p, width = 600, height = 600, tooltip = c("x", "y", "color"))
+p_ch_vs_fr2 <- ggplotly(p, width = 600, height = 600, tooltip = c("x", "y", "color"))
 interactive_plot <- interactive_plot %>%
   layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
-interactive_plot
+p_ch_vs_fr2
 
-swiss_specific_fuel
-french_specific_fuel_long
 ```
 
 ## 3.8 EV and Google Trends

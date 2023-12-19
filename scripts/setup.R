@@ -8,7 +8,7 @@ packages <- c("here","tidyverse", "tidyr", "readxl","ggrepel",
               "kableExtra", "reactable","sf", "shiny", "leaflet",
               "plotly", "rsconnect", "gifski", "gganimate", 
               "factoextra", "viridis", "reshape2", "heatmaply",
-              "gtsummary", "flexdashboard")
+              "gtsummary", "flexdashboard", "zoo", "xts", "dygraphs")
 purrr::walk(packages, library, character.only = TRUE)
 
 ######################################################

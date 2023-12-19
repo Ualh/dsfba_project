@@ -8,6 +8,7 @@ format:
     toc: true
     toc_float: true
     code-fold: true
+    theme: minty
 ---
 
 ```{r child = c('intro.qmd', 'data.qmd', 'eda.qmd', 'analysis.qmd', 'concl.qmd')}
