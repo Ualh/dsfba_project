@@ -297,10 +297,7 @@ Are they true extreme values that are part of the natural variation of the data?
 
 ## 4.3 RQ2
 
-In comparing regions in Switzerland, which areas show higher or lower
-adoption of electric vehicles, and how does this regional adoption align
-or vary with external factors like oil price changes, political
-opinions, and demographic shifts?
+Are there differences in adoption rate within the different regions in Switzerland? And are there different buying behaviors displayed by the demographic segments within Switzerland?
 
 From the initial data:
 
@@ -584,7 +581,7 @@ p_interactive
 ```
 
 
-## 4.5 RQ5
+## 4.5 RQ4
 To what extent does the evolution in the availability of charging stations exert an influence on the adoption of electric vehicles in Switzerland?
 ```{r}
 # First, let's merge the df_v and df_charge_number_CH data sets, and we will look at Fuel: Electricity
