@@ -9,7 +9,11 @@ format:
     toc_float: true
     code-fold: true
     theme: minty
+    includes:
+      in_header: "../styles/styles.css"
 ---
 
 ```{r child = c('intro.qmd', 'data.qmd', 'eda.qmd', 'analysis.qmd', 'concl.qmd')}
 ```
+
+
