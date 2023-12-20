@@ -3,8 +3,27 @@
 ```{r, echo = FALSE, message = FALSE}
 source(here::here("scripts/setup.R"))
 ```
-__TO DO's__
 
-* Take home message
-* Limitations
-* Future work?
+## Limitations and future work
+
+In the current study, a significant limitation is the lack of comparative data regarding the pricing of electric vehicles (EVs) versus thermal vehicles. This price comparison is a crucial factor that very likely influences consumer preferences and purchase decisions. The acquisition of detailed data in this area represents a substantial project in its own right. It could however be very interesting to compare it with our results to get a  wider understanding of buying choices. Furthermore, it could help to get a more precise regression and more explanatory factors to predict the evolution of electric vehicles in the future.
+
+Additionally, the analysis did not account for pollution taxes, an omission that merits attention. Pollution taxes are expected to increase in alignment with environmental objectives, potentially altering the actual cost of fuel at gas stations. While the current data, tied to oil prices, retains relevance, incorporating pollution tax implications could yield a more accurate reflection of real-world costs. 
+
+Another unexplored dimension of this study is the marketing impact on EV adoption in Switzerland. The quantification of marketing effects presents a considerable challenge, as does the lack of available data. Developing a measurement scale and undertaking research in this area would be beneficial but requires extensive time and financial resources. 
+
+Finally, the study did not investigate the influence of governmental subsidies on EV adoption due to data granularity constraints. The data we used extends only to the canton level, while all the subsidies are given at a commune level. We therefore face a problem we cannot solve with our data. Future studies with access to more granular data could provide valuable insights into the impact of these subsidies on EV adoption rates.
+
+## Summary of findings 
+
+Our analysis numerically confirmed what we already believed; that electric vehicles are getting implemented for the long run and it is a switch in the propulsion systems of vehicles in Switzerland. Overall, the new registered vehicles are decreasing compared to the peak which occurred around 2015. Registrations of electric, pluggable and non-pluggable vehicles are on the rise, while those of diesel and petrol vehicles are diminishing. 
+
+In terms of regional variation, the adoption of EVs is most pronounced in the canton of Zurich, attributable to its large population. Additionally, the canton of Zug, when demographically adjusted for population size, shows a high rate of EV adoption, likely influenced by the population's affinity for new technologies and their financial prosperity. 
+
+A pattern of seasonality has been shown when overlaying the different years in one graph. This result could gain interest if a drastic shifts in climate change occurs in the next few years. In the situation of Siberian or tropical weather conditions, the number of registered vehicles will probably be different, and a link to our seasonality results could be identified. 
+
+The study further examined the impact of political dynamics in Switzerland, revealing significant influences from various political parties, including those that are neutral. Therefore, political Neutrality does not rhyme with Environmental neutrality. 
+
+To develop a regression model, we considered factors such as oil prices, the availability of charging stations, the evolution of political parties, Google search trends, and demographic data. However, the model failed to show satisfactory results, possibly due to the limitations identified earlier in our report. 
+
+Overall, our analysis did not give groundbreaking results. It did empirically validate what was previously considered as common knowledge. Our findings offer factual and numerical confirmation of these assumptions. 
