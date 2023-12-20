@@ -177,6 +177,7 @@ table_regression_mod1_multi <- tbl_regression(mod1_multi)
 # Print the table
 table_regression_mod1_multi
 ```
+
 This multivariate linear regression model does not appear to have a strong explanatory power, as indicated by the low adjusted R-squared value and the relatively high RMSE. Additionally, only the Baby Boomers variable shows statistical significance in predicting the Count, while other variables do not appear to be significant in this context. Refining the model or exploring other variables to improve its predictive performance might be suggestible.
 
 
@@ -358,8 +359,6 @@ The correlation coefficients indicate the strength and direction of the
 relationship between each pair of variables. Positive values suggest a
 positive correlation (as one increases, so does the other), while
 negative values suggest an inverse relationship.
-
-\*babyboomers !
 
 ```{r}
 # Data Preparation
@@ -547,6 +546,7 @@ The graph displays a clear upward trend in electric vehicle adoption over time i
 
 ## 4.3 RQ3 - How has the growth of electric vehicles evolved in comparison to other countries such as France, and what factors might account for the differences in their evolution ?
 
+As a matter of fact, the EDA section (3.7) already helps us answering this question involving quite strong arguments. Nevertheless, we decided to find out more about those differences in evolution by comparing the increase in charging station spots both in France and Switzerland. To do so, we computed a bar chart in order to improve the visualisation of this juxtaposition.  
 
 ```{r}
 p_ch_vs_fr1
@@ -646,8 +646,12 @@ p_interactive <- p_interactive %>%
 p_interactive
 ```
 
+The results show that since 2015, France has exponentially increased its number of stations while Switzerland seems to be gradually adapting. It is important to take the respective surface and demography differences of the two countries in consideration.Even with that in mind, Switzerland seems to be late in terms of adoption of charging station spots in the last decade. Overall, an increasing number of charging stations in both countries rhymes with an overall EV adoption for the two historical friends.  
 
 ## 4.4 RQ4 - To what extent does the evolution in the availability of charging stations exert an influence on the adoption of electric vehicles in Switzerland?
+
+To evaluate this question in the best conditions, we decided to compute some empirical plots. 
+
 ```{r}
 # First, let's merge the df_v and df_charge_number_CH data sets, and we will look at Fuel: Electricity
 
@@ -740,6 +744,8 @@ summary(poisson_model)
 par(mfrow = c(1, 1))
 ```
 The year-on-year correlation is the highest, the lagged correlation diminishes. We could suggest hat the availability of charging stations and the new registration of EVs go hand-in-hand, and that the availability of new charging station does not create a demand of new EVs by itself. Correlation does not imply causation, while we see a relationship, we can't conclude that charging stations directly cause changes in electric vehicle adoption only with a Correlation analysis
+
+For this research question, we used both a linear regression and a Poisson-test. It is important to note that the Poisson test presents major limitations in our case, as it assumes constant rates (we have seen that both the adoption of EVs and charging station availability present exponential nature). However, we decided to still include it in our report.
 
 With both a linear regression and a Poisson-test. We find evidence of statistically significant relationship between the count of available charging station and the count of electric vehicles registered. We have Prediction variable/coefficient of 2.68 x 10^-4 and 3.34 respectively. And a p-val < 0.005 for both. However, it is important to remind ourselves that these variables have a bidirectional / mutual influence, beyond the scope of what our analysis shows. The relationship is not strictly unidirectional and therefore, it is hard to conclude anything without further domain-knowledge and context-specific information
 

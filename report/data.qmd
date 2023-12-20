@@ -6,8 +6,6 @@ source(here::here("scripts/setup.R"))
 
 ## 2.1 Raw Datasets
 
-Use a Loop for Similar Files.
-
 Check for Large Data: If any of our datasets are particularly large
 (like the `swiss_vehicle`), we used a more efficient data reading
 librariy `data.table` (with `fread`) to speed up the data loading
@@ -38,10 +36,10 @@ charge_ch_fr <- fread(paste0(file_path,"df_charging_points_CH_FR.csv"))
 ```
 
 For this phase of the project, our approach involves presenting diverse
-datasets in a table form. To achieve this, we used the `kable` function
+data sets in a table form. To achieve this, we used the `kable` function
 from the `kableExtra` package, resulting in a table that displays each
 variable along with its corresponding definition and also added some
-`bootstrap_otions` for different stlyles.
+`bootstrap_otions` for different styles.
 
 ### 2.1.1 Swiss Vehicle Registration Dataset
 
@@ -294,7 +292,10 @@ variable_table_charging %>%
 
 Source - \[IEA.org\]
 (https://www.iea.org/data-and-statistics/data-tools/global-ev-data-explorer)
-\### 2.2.7 Complementary charging station
+
+\### 2.1.7 Complementary charging station
+
+The below data set is supposed to be used as a complement of the charging station data set presented in 2.1.6. One value represents the total number of available charging point for a given region, year and powertrain. Moreover, this file is composed of both Swiss and French datas. Indeed, those elements will help us answering our Research Question treating about the comparison between French and Swiss EV adoption as well as giving us some more information concerning EV adoption by the Swiss population.  
 
 ```{r}
 # Create a tibble with variable descriptions for the Swiss population data set
@@ -320,7 +321,11 @@ variable_charging_station_v2 %>%
 Source -
 [bfe.admin.ch](https://www.bfe.admin.ch/bfe/fr/home/approvisionnement/statistiques-et-geodonnees/geoinformation/geodonnees/mobilite/bornes-de-recharge-pour-la-mobilite-electrique.html)
 
-### 2.2.8 Political strength per canton
+### 2.1.8 Political strength per canton
+
+This dataset is composed of the name and political strength of the major Swiss political parties per Canton, in a given year from 1971 to 2023. 
+
+While this data set would seem to be irrelevant to some, we decided to include it to our paper in order to add the political influence dimension to our analysis. We believe that political affiliation might have a link with the EV adoption in Switzerland. 
 
 ```{r}
 # Create a tibble with variable descriptions for the Swiss population data set
@@ -342,7 +347,9 @@ variable_table_politic %>%
 
 Source - [nom de la source](copy_paste_link)
 
-### 2.2.7 Swiss Population
+### 2.1.9 Swiss Population
+
+The below data file contains the total population of each canton given by age groups, sex, citizenship, marital status and typology. We mainly focused on the variable Age Group to catch the potential influence of being part of one of those groups to the Swiss EV adoption.  
 
 ```{r}
 # Create a tibble with variable descriptions for the Swiss population dataset
@@ -890,7 +897,7 @@ reactable(df_charging_station,
 
 This data set is used to complement the prior charging station data set.
 
-It has data going back to 2012. And data for both Switzerland and France
+This data covers period running from 2012 to 2023. The data concern both Switzerland and France. 
 
 ```{r}
 # Only selecting necessary columns
