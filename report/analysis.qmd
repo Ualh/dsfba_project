@@ -25,8 +25,7 @@ more indicative of long-term trends in EV adoption. Cons: Might lag
 behind sales data, as registration occurs post-purchase and can be
 influenced by administrative processes.
 
-interested in long-term trends in EV adoption and usage, registration
-data could be more appropriate.
+As we are interested in long-term trends in EV adoption and usage, registration data is concluded to be our final choice.
 
 The decision to remove rows with missing values was justified as the
 number of missing values in the Price column was relatively small (28
@@ -75,18 +74,10 @@ The linear regression analysis results indicate that the Price variable
 has a very weak or negligible effect on explaining the variation in the
 Count variable. Specifically:
 
-The coefficient for Price is very close to zero (-0.00542), indicating
-that there is almost no linear relationship between Price and Count.
-
-The p-value for Price (0.97) is much greater than the common
-significance level of 0.05. This high p-value suggests that Price is not
-statistically significant in predicting Count, as it fails to reject the
-null hypothesis that the coefficient is zero.
-
-The R-squared value is very low (3.83e-07), which indicates that the linear regression model solely explains a negligible fraction of the variance related to the variable Count.  
-
-The Root Mean Squared Error (RMSE) is relatively high (247), suggesting
-that the model's predictions have a substantial amount of error.
+* The coefficient for Price is very close to zero (-0.00542), indicating that there is almost no linear relationship between Price and Count.
+* The p-value for Price (0.97) is much greater than the common significance level of 0.05. This high p-value suggests that Price is not statistically significant in predicting Count, as it fails to reject the null hypothesis that the coefficient is zero.
+* The R-squared value is very low (3.83e-07), which indicates that the linear regression model solely explains a negligible fraction of the variance related to the variable Count.  
+* The Root Mean Squared Error (RMSE) is relatively high (247), suggesting that the model's predictions have a substantial amount of error.
 
 In summary, based on these results, it appears that the Price variable
 does not have a meaningful impact on predicting the Count variable, and
@@ -277,14 +268,13 @@ par(mfrow = c(1, 1))
 
 In the plot, most of the data points seem to be randomly scattered around the horizontal line at zero, which is good as it suggests that the residuals have constant variance and that the model's predictions are unbiased. However, there are two data points labeled 74 and 76 that stand out from the rest, with one particularly far from zero. These points could be outliers or influential points that have a large effect on the regression line.
 
-The decision to remove outliers should not be taken lightly. Simply removing outliers solely because they are outliers can lead to overfitting the model to the remaining data, and the results may not generalize well to new data. Instead, we should investigate why those data points are outliers:
+When considering whether to exclude outliers from our analysis, we should proceed with caution. Outliers shouldn't be discarded just because they deviate from the norm; doing so might make our model too specific to the data we've used, and it might not perform well with new data. It's important to understand why these data points are outliers:
 
-Are they the result of data entry errors or measurement errors? If so, they should be corrected or removed.
+* If they're caused by mistakes in data entry or measurement errors, it's appropriate to either fix or remove them.
+* If they represent a part of the population that our model doesn't adequately explain, this could indicate the need for a more sophisticated model.
+* If these outliers are genuine extreme values that naturally occur within the dataset, it's essential to keep them. Removing valid data points can skew the results.
 
-Do they represent a segment of the population that is not well explained by the model? If that's the case, you might need a more complex model.
-
-Are they true extreme values that are part of the natural variation of the data? If they are valid observations, removing them could bias your results.
-
+Given these considerations, we've decided to retain these outliers in our dataset. By keeping them, we ensure that our analysis accounts for the full spectrum of data, including those extreme but valid variations, thereby aiming for a more comprehensive and accurate model.
 
 ## 4.2 RQ2 - Are there differences in adoption rate within the different regions in Switzerland? And are there different buying behaviors displayed by the demographic segments within Switzerland?
 

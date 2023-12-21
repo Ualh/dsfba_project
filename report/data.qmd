@@ -293,9 +293,16 @@ variable_table_charging %>%
 Source - \[IEA.org\]
 (https://www.iea.org/data-and-statistics/data-tools/global-ev-data-explorer)
 
-\### 2.1.7 Complementary charging station
+### 2.1.7 Complementary charging station
 
-The below data set is supposed to be used as a complement of the charging station data set presented in 2.1.6. One value represents the total number of available charging point for a given region, year and powertrain. Moreover, this file is composed of both Swiss and French datas. Indeed, those elements will help us answering our Research Question treating about the comparison between French and Swiss EV adoption as well as giving us some more information concerning EV adoption by the Swiss population.  
+The below data set is supposed to be used as a complement of the
+charging station data set presented in 2.1.6. One value represents the
+total number of available charging point for a given region, year and
+powertrain. Moreover, this file is composed of both Swiss and French
+datas. Indeed, those elements will help us answering our Research
+Question treating about the comparison between French and Swiss EV
+adoption as well as giving us some more information concerning EV
+adoption by the Swiss population.
 
 ```{r}
 # Create a tibble with variable descriptions for the Swiss population data set
@@ -319,13 +326,17 @@ variable_charging_station_v2 %>%
 ```
 
 Source -
-[bfe.admin.ch](https://www.bfe.admin.ch/bfe/fr/home/approvisionnement/statistiques-et-geodonnees/geoinformation/geodonnees/mobilite/bornes-de-recharge-pour-la-mobilite-electrique.html)
+[bfs.admin.ch](https://www.bfe.admin.ch/bfe/fr/home/approvisionnement/statistiques-et-geodonnees/geoinformation/geodonnees/mobilite/bornes-de-recharge-pour-la-mobilite-electrique.html)
 
 ### 2.1.8 Political strength per canton
 
-This dataset is composed of the name and political strength of the major Swiss political parties per Canton, in a given year from 1971 to 2023. 
+This dataset is composed of the name and political strength of the major
+Swiss political parties per Canton, in a given year from 1971 to 2023.
 
-While this data set would seem to be irrelevant to some, we decided to include it to our paper in order to add the political influence dimension to our analysis. We believe that political affiliation might have a link with the EV adoption in Switzerland. 
+While this data set would seem to be irrelevant to some, we decided to
+include it to our paper in order to add the political influence
+dimension to our analysis. We believe that political affiliation might
+have a link with the EV adoption in Switzerland.
 
 ```{r}
 # Create a tibble with variable descriptions for the Swiss population data set
@@ -345,11 +356,15 @@ variable_table_politic %>%
   kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover"))
 ```
 
-Source - [nom de la source](copy_paste_link)
+Source -
+[bfs.admin.ch](https://www.bfs.admin.ch/bfs/fr/home/statistiques/catalogues-banques-donnees/donnees.assetdetail.12967002.html)
 
 ### 2.1.9 Swiss Population
 
-The below data file contains the total population of each canton given by age groups, sex, citizenship, marital status and typology. We mainly focused on the variable Age Group to catch the potential influence of being part of one of those groups to the Swiss EV adoption.  
+The below data file contains the total population of each canton given
+by age groups, sex, citizenship, marital status and typology. We mainly
+focused on the variable Age Group to catch the potential influence of
+being part of one of those groups to the Swiss EV adoption.
 
 ```{r}
 # Create a tibble with variable descriptions for the Swiss population dataset
@@ -765,7 +780,7 @@ Further context was provided on different *hybrid types*:
 
 Conventional Hybrids: These vehicles, powered by petrol or diesel
 **without** plug-in capability, might exhibit different adoption trends
-due to their longer existence in the market.Indeed, they have been
+due to their longer existence in the market. Indeed, they have been
 around for longer and may have a different adoption trend compared to
 newer technologies.
 
@@ -897,7 +912,8 @@ reactable(df_charging_station,
 
 This data set is used to complement the prior charging station data set.
 
-This data covers period running from 2012 to 2023. The data concern both Switzerland and France. 
+This data covers period running from 2012 to 2023. The data concern both
+Switzerland and France.
 
 ```{r}
 # Only selecting necessary columns
@@ -913,6 +929,11 @@ df_charge_number_CH <- charge_ch_fr %>%
 
 df_charge_number_FR <- charge_ch_fr %>%
   filter(region == "France")
+
+# Display cleaned data
+reactable(charge_ch_fr,
+          sortable = TRUE, 
+          searchable = TRUE)
 ```
 
 ### 2.2.8 Political strength per canton
@@ -920,18 +941,24 @@ df_charge_number_FR <- charge_ch_fr %>%
 This data set will be used to explore and analyze the effects of
 political convictions on EVs adoption (per Canton).
 
-The 2 main difficulties with this data set were the following: 1. Create
-a process (loop) general enough to clean all the Cantons at the same
-time, but specific enough for it to work 2. The Swiss political parties'
-names have evolved quite a bit over the years.
+The two main difficulties with this data set were the following:
+
+-   Create a process (loop) general enough to clean all the Cantons at
+    the same time, but specific enough for it to work.
+-   The Swiss political parties' names have evolved quite a bit over the
+    years.
 
 To use this data effectively in our analysis. We will group them in 5
 categories.
 
 The 5 categories respond to the following question: "What is the
-political party's stance on sustainability / ecological measures?" 1.
-Against 2. Slightly Against 3. Neutral 4. Slightly in Favour 5. In
-Favour
+political party's stance on sustainability / ecological measures?"
+
+1.  Against
+2.  Slightly Against
+3.  Neutral
+4.  Slightly in Favour
+5.  In Favour
 
 We assigned each political parties in one of those categories based on
 their program.
@@ -1119,7 +1146,7 @@ most current and relevant demographic context, providing a contemporary
 snapshot that aligns closely with the latest trends in electric vehicle
 registrations.
 
-Assuming the relevant data starts from row 5, canton names are in the
+The relevant data starts from row 5, canton names are in the
 first column, and the population figures for 2022 are in the second
 column.
 
@@ -1208,4 +1235,3 @@ reactable(df_swisspop_2022,
           searchable = TRUE)
 
 ```
-

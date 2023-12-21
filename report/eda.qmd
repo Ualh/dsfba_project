@@ -7,6 +7,7 @@ source(here::here("scripts/setup.R"))
 ## 3.1 Switzerland
 
 ### 3.1.1 seasonality
+
 ```{r}
 #creating dataset for the three seasonality graphs
 passenger_cars_processed <- df_v %>%
@@ -46,7 +47,7 @@ p_seaso1
 
 The blue line represents a smoothed trend, indicating an initial
 increase in car registrations until around 2014-2015, followed by a
-gradual decline. The black line shows the actual number of cars
+gradual decline. The green line shows the actual number of cars
 registered, with significant variability. We will call this variation
 seasonality which is better represented in the following graph.
 
@@ -110,6 +111,7 @@ only year which show a decreasing peak instead of an increasing one as
 it is presented for all other years.
 
 ### 3.1.2 Vehicule Registration by Fuel time over time
+
 ```{r}
 # Define color palette for each fuel type using Viridis
 fuel_colors <- c(
@@ -150,7 +152,6 @@ interactive_plot_fuel_over_time <- interactive_plot_fuel_over_time %>%
 interactive_plot_fuel_over_time
 ```
 
-
 The graph above shows the vehicle registrations in Switzerland by fuel
 type from 2005 to 2023.
 
@@ -184,9 +185,16 @@ interactive_plot_charging_station <- interactive_plot_charging_station %>%
 interactive_plot_charging_station
 ```
 
-The graph above points out the evolution of charging station in Switzerland since 2012. As we can see, their numbers seem to be in an exponential increase since 2017. The main point of this graph is to put the spotlight on the fact that both publicly fast and publicly slow are continuously increasing. Furthermore, the sum of the two evolution lines represents the total number of publicly available charging spots in Switzerland. 
+The graph above points out the evolution of charging station in
+Switzerland since 2012. As we can see, their numbers seem to be in an
+exponential increase since 2017. The main point of this graph is to put
+the spotlight on the fact that both publicly fast and publicly slow are
+continuously increasing. Furthermore, the sum of the two evolution lines
+represents the total number of publicly available charging spots in
+Switzerland.
 
 #### 3.1.3.2 Availability of Charging station in France
+
 ```{r}
 p_charging_station_fr <-ggplot(df_charge_number_FR, aes(x = year, y = value, group = powertrain, color = powertrain)) +
   geom_line() +
@@ -205,9 +213,18 @@ interactive_plot_charging_station_fr <- interactive_plot_charging_station_fr %>%
 interactive_plot_charging_station_fr
 ```
 
-The chart above follows the same scheme except that it now represents the French publicly available charging spots. Again, The most important aspect of this chart is the fact that both publicly fast and publicly slow are continuously increasing. The tendency seems to be quite similar with the Swiss evolution with the exception that the exponential increase stars from 2020 while the Swiss adoption already started in 2017. From 2016 to 2020, France seems to have a linear increase in the number of charging stations publicly available.  
+The chart above follows the same tendency except that it now represents
+the French publicly available charging spots. Again, The most important
+aspect of this chart is the fact that both publicly fast and publicly
+slow are continuously increasing. The tendency seems to be quite similar
+with the Swiss evolution with the exception that the exponential
+increase stars from 2020 while the Swiss adoption already started in
+2017. From 2016 to 2020, France seems to have a linear increase in the
+number of charging stations publicly available.
 
-The last two charts allow us to have a better general idea of the evolution of charging stations both in Switzerland and in France, which will be quite useful for answering our two last research questions.  
+The last two charts allow us to have a better general idea of the
+evolution of charging stations both in Switzerland and in France, which
+will be quite useful for answering our two last research questions.
 
 ### 3.1.4 Map
 
@@ -419,7 +436,9 @@ interactive_plot_demog
 This graph concentrates on the demographic trends' evolution for each
 segment of age above mentioned throughout the time. It points out the
 important overall rise of individuals living in Switzerland over the
-past two decades.It is quite interesting to note that Baby Boomers demographic evolution is still linearly increasing while the Generation Z’s one seems to be moderately flat. 
+past two decades.It is quite interesting to note that Baby Boomers
+demographic evolution is still linearly increasing while the Generation
+Z's one seems to be moderately flat.
 
 ## 3.5 French vehicles
 
@@ -446,7 +465,13 @@ ggplotly(p, width = 600, height = 400) %>%
 
 ```
 
-The graph above represents the French total number of vehicles from 2012 to 2022. While thermic motors (diesel and essence) convey the impression of a flat growth, both electric and hybrid vehicles seem to follow an increasing slope. It is important to mention that the log-scale count linearizes our results which allows us to compare the two growths. Indeed, without the log, scale the actual numbers of thermic and electric would still be too far away to be compared. 
+The graph above represents the French total number of vehicles from 2012
+to 2022. While thermic motors (diesel and essence) convey the impression
+of a flat growth, both electric and hybrid vehicles seem to follow an
+increasing slope. It is important to mention that the log-scale count
+linearizes our results which allows us to compare the two growths.
+Indeed, without the log, scale the actual numbers of thermic and
+electric would still be too far away to be compared.
 
 ### 3.5.2 Deltas evolution
 
@@ -483,13 +508,24 @@ ggplotly(p, width = 600, height = 400) %>%
 
 ```
 
-Now, we will consider a graph showing the evolution of cars registered in France from 2012 to 2022. It is quite different from the last one because it shows the evolution of registered cars in France instead of the total number which allows us to take out a potential tendency in the recent car purchases, neglecting the actual composition of the French automotive fleet. On the one hand, Diesel cars new registrations evolution is fiercely dropping down while petrol ones seem to be surviving for the moment. On the other hand, both electric and hybrid cars gradually increase since 2020 and reached the same evolution rate as petrol cars.  
+Now, we will consider a graph showing the evolution of cars registered
+in France from 2012 to 2022. It is quite different from the last one
+because it shows the evolution of registered cars in France instead of
+the total number which allows us to take out a potential tendency in the
+recent car purchases, neglecting the actual composition of the French
+automotive fleet. On the one hand, Diesel cars new registrations
+evolution is fiercely dropping down while petrol ones seem to be
+surviving for the moment. On the other hand, both electric and hybrid
+cars gradually increase since 2020 and reached the same evolution rate
+as petrol cars.
 
 ## 3.6 Political Parties
 
-Here, we have a cluster plot of the Swiss Cantons according to their political stance on sustainability in 1999 and in 2023
+Here, we have a cluster plot of the Swiss Cantons according to their
+political stance on sustainability in 1999 and in 2023
 
 1999:
+
 ```{r}
 # Let's start with 1999
 political_data_1999 <- political_combined_data[,-8] %>%
@@ -538,9 +574,11 @@ fviz_pca_var(pca_variables, col.var = "contrib",
   ggtitle("PCA Plot for Variables")
 ```
 
-The last four charts represent the clustering of the Swiss cantons about their political view concerning the environment in 1999.  
+The last four charts represent the clustering of the Swiss cantons about
+their political view concerning the environment in 1999.
 
 2023:
+
 ```{r}
 # Now for 2023
 political_data_2023 <- political_combined_data[,-8] %>%
@@ -585,11 +623,19 @@ fviz_pca_var(pca_variables, col.var = "contrib",
   ggtitle("PCA Plot for Variables")
 ```
 
-The last four graphs represent the clustering of the Cantons according to their political stance in 2023.
+The last four graphs represent the clustering of the Cantons according
+to their political stance in 2023.
 
-From 1999 to 2023, we can point out that we went from 7 to 6 optimal numbers of optimal clusters, which shows a certain homogeneity concerning this topic along the Swiss Cantons through the time. In addition to this, extreme values such as Glaris (GL) for 1999 or Appenzell for 2023. Both represent a cluster on their own which neglect the potential bias created by those most distant values. 
+From 1999 to 2023, we can point out that we went from 7 to 6 optimal
+numbers of optimal clusters, which shows a certain homogeneity
+concerning this topic along the Swiss Cantons through the time. In
+addition to this, extreme values such as Glaris (GL) for 1999 or
+Appenzell for 2023. Both represent a cluster on their own which neglect
+the potential bias created by those most distant values.
 
-It is also interesting to observe that VD, NE and GE seem to follow the same tendencies when it comes to sustainabiliy concerns, both in 1999 and 2023.
+It is also interesting to observe that VD, NE and GE seem to follow the
+same tendencies when it comes to sustainabiliy concerns, both in 1999
+and 2023.
 
 ## 3.7 Swiss vs France
 
@@ -598,10 +644,11 @@ It is also interesting to observe that VD, NE and GE seem to follow the same ten
 Here we compare and visualize specific vehicle fuel types between Swiss
 and French datasets.
 
-The thicker line are the for **Switzerland**, the others are for
+The highlighted line are for **Switzerland**, whereas the others are for
 **France**. We standardized the counts in both the Swiss and French
-datas ets for comparison purposes. Please juggle with the interactive
-plot to make it more readable.
+datas ets for comparison purposes. 
+
+Please click on the legend of the graph to show more comparison between other types of fuel.
 
 ```{r}
 # Filtering Swiss data for specific fuel types
@@ -678,7 +725,10 @@ p_ch_vs_fr1 <- interactive_plot %>%
 p_ch_vs_fr1
 ```
 
-We can see what seems to be a good correlation between the different results. We can observe that electric and hybrid cars follows roughly the same trajectory while thermic ones seem to follow a decreasing slope, both for France and Switzerland
+We can see what seems to be a good correlation between the different
+results. We can observe that electric and hybrid cars follows roughly
+the same trajectory while thermic ones seem to follow a decreasing
+slope, both for France and Switzerland
 
 ```{r}
 p <- ggplot() +
@@ -706,11 +756,13 @@ p_ch_vs_fr2
 
 ```
 
-The chart above solely represents a zoomed view of the previous one, which highlights the same intuitions as the prior one. 
+The chart above solely represents a zoomed view of the previous one,
+which highlights the same intuitions as the prior one.
 
 ## 3.8 EV and Google Trends
 
-All in all, the Google trend seems to be in adequation with the actual rise in EVs around Switzerland.
+All in all, the Google trend seems to be in adequation with the actual
+rise in EVs around Switzerland.
 
 ```{r, fig.width=8, fig.height=4}
 
@@ -756,11 +808,10 @@ interactive_plot
 ## 3.9 EV and Oil Price
 
 The results of the graphic comparing oil price and EVs evolution
-comforts us in our choice of including oil price as an explicative variable.
-Indeed, the tendency is quite similar since 2020. In fact, the previous
-years refer to a period where EVs were not as commercialized as today.
-Obviously, we are aware of the numerous other variables explaining both
-oil price and EVs rise over time.
+comforts us in our choice of including oil price as an explicative
+variable. Indeed, the tendency is quite similar since 2020. In fact, the
+previous years refer to a period where EVs were not as commercialized as
+today. We are, however, aware that many other variables exist that explain the rise in both oil prices and electric vehicle (EV) adoption over time.
 
 ```{r}
 # Resample data to monthly frequency and calculate mean oil price
