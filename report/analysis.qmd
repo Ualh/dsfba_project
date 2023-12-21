@@ -115,7 +115,7 @@ Count variable. Specifically:
     suggesting that the model's predictions have a substantial amount of
     error.
 
-###### 4.1.1.1.1.2Linearity 
+###### 4.1.1.1.1.2 Linearity 
 The linear assumption tells us if the relationship between the independent and dependent variables is a straight line. This makes the model simpler and easier to interpret. If this assumption doesn't hold, the model might not accurately capture the relationship, leading to incorrect predictions and conclusions.
 
 We will diagnose this assumptions through a scatter plot of observed vs. predicted values, looking for a straight line pattern; if the points closely follow a straight line, it suggests a linear relationship.
@@ -136,7 +136,7 @@ p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
   expand_limits(x = 0, y = 0)  # Ensure that the plot starts at 0
 
 # Convert to a plotly interactive plot for consistency with the previous plots
-ggplotly(p, tooltip = "text")
+ggplotly(p, tooltip = "text", width = 600, height = 400)
 ```
 The graph indicates a potential issue with the linearity assumption, as the observed values for low predicted values are more spread out and not evenly distributed along a straight line, suggesting the model may not be an appropriate fit for the data.
 
@@ -282,7 +282,7 @@ p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
   expand_limits(x = 0, y = 0)  # Ensure that the plot starts at 0
 
 # Convert to a plotly interactive plot for consistency with the previous plots
-ggplotly(p, tooltip = "text")
+ggplotly(p, tooltip = "text", width = 600, height = 400)
 
 ```
 This graph shows that for a wide range of predicted values, the observed values are consistently low, suggesting that the model may not be effectively capturing the variance in the observed data, and there could be an issue with both the linearity and precision of the model's predictions.
@@ -410,10 +410,10 @@ p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
   expand_limits(x = 0, y = 0)  # Ensure that the plot starts at 0
 
 # Convert to a plotly interactive plot for consistency with the previous plots
-ggplotly(p, tooltip = "text")
+ggplotly(p, tooltip = "text", width = 600, height = 400)
 ```
 
-###### 4.1.3.1.4 Homoskedasticity
+###### 4.1.3.1.4 Homoscedasticity
 ```{r}
 residuals <- test_data$Count - predictions
 
