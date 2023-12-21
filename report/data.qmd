@@ -887,7 +887,7 @@ However, two important points are to note.
 
 Moreover, it is important to keep standardized dates and locations
 
-We merges 'year' and 'month' columns to create a 'Date' column in the
+We merged 'year' and 'month' columns to create a 'Date' column in the
 format "YYYY-MM-01", subsequently reorganizing the dataframe to position
 'Date' as the first column and removing the original 'year' and 'month'
 columns.

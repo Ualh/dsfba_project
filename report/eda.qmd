@@ -157,7 +157,7 @@ type from 2005 to 2023.
 
 On the one hand, it highlights the recent decrease in new registrations
 of thermic vehicles since 2017. On the other hand, the three EVs named
-as Conventional and Plug-in hybrids along with electricity ones are
+as Conventional and Plug-in hybrids along with Electricity ones are
 gradually increasing since approximately the same period. (In fact,
 fully electric cars and Conventional hybrids have even reached a higher
 level of vehicle registration in the past years, spotlighting the EV
@@ -470,7 +470,7 @@ to 2022. While thermic motors (diesel and essence) convey the impression
 of a flat growth, both electric and hybrid vehicles seem to follow an
 increasing slope. It is important to mention that the log-scale count
 linearizes our results which allows us to compare the two growths.
-Indeed, without the log, scale the actual numbers of thermic and
+Indeed, without the log-scale the actual numbers of thermic and
 electric would still be too far away to be compared.
 
 ### 3.5.2 Deltas evolution
@@ -481,14 +481,17 @@ long_df_v_fr <- df_v_fr %>%
   select(Date, Diesel_delta, Essence_delta, Conventional_Hybrid_delta, Plug_in_Hybrid_delta, Electrique_delta) %>%
   gather(key = "Fuel_Type", value = "Delta", -Date)
 
+unique(long_df_v_fr$Fuel_Type)
 # Map Fuel_Type values to desired names
-long_df_v_fr$Fuel_Type <- recode(long_df_v_fr$Fuel_Type,
-  "Diesel_delta" = "Diesel",
-  "Essence_delta" = "Petrol",
-  "Conventional_Hybrid_delta" = "Conventional hybrid",
-  "Plug_in_Hybrid_delta" = "Plug-in hybrid",
-  "Electrique_delta" = "Electricity"
-)
+long_df_v_fr <- long_df_v_fr %>%
+  mutate(Fuel_Type = case_when(
+    Fuel_Type == "Diesel_delta" ~ "Diesel",
+    Fuel_Type == "Essence_delta" ~ "Petrol",
+    Fuel_Type == "Conventional_Hybrid_delta" ~ "Conventional hybrid",
+    Fuel_Type == "Plug_in_Hybrid_delta" ~ "Plug-in hybrid",
+    Fuel_Type == "Electrique_delta" ~ "Electricity",
+    TRUE ~ Fuel_Type  # Keep the original value if none of the conditions match
+  ))
 
 # Create ggplot
 p <- ggplot(long_df_v_fr, aes(x = Date, y = Delta, color = Fuel_Type)) +
@@ -505,7 +508,6 @@ p <- ggplot(long_df_v_fr, aes(x = Date, y = Delta, color = Fuel_Type)) +
 # Convert to interactive plot and adjust legend
 ggplotly(p, width = 600, height = 400) %>%
   layout(legend = list(orientation = 'h', x = 0.5, xanchor = 'center', y = -0.3))
-
 ```
 
 Now, we will consider a graph showing the evolution of cars registered
@@ -648,7 +650,7 @@ The highlighted line are for **Switzerland**, whereas the others are for
 **France**. We standardized the counts in both the Swiss and French
 datas ets for comparison purposes. 
 
-Please click on the legend of the graph to show more comparison between other types of fuel.
+*Please click on the legend of the graph to show more comparison between other types of fuel.*
 
 ```{r}
 # Filtering Swiss data for specific fuel types
@@ -749,11 +751,10 @@ p <- ggplot() +
   facet_wrap(~Fuel, scales = 'free_y', ncol = 1)
 
 # Convert to interactive plot
-p_ch_vs_fr2 <- ggplotly(p, width = 600, height = 600, tooltip = c("x", "y", "color"))
+p_ch_vs_fr2 <- ggplotly(p, width = 600, height = 800, tooltip = c("x", "y", "color"))
 interactive_plot <- interactive_plot %>%
   layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
 p_ch_vs_fr2
-
 ```
 
 The chart above solely represents a zoomed view of the previous one,

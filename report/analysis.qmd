@@ -6,31 +6,38 @@ source(here::here("scripts/setup.R"))
 
 ## 4.1 RQ1 - Based on past electric vehicle adoption trends in Switzerland, can we forecast future adoption rates and pinpoint times of significant increases or decreases correlated with major events or policy changes?
 
+Here is the process we used to compute those two regressions.
+
+The first step was to choose dependent variables such as sales or EV
+registrations:
+
+1 . Sales Data :
+
+-   The main advantage of this regressing with this variable is that it
+    directly reflects market demand and consumer purchasing behaviour.
+    Nonetheless, it can be influenced by short-term factors such as
+    promotions or subsidies, which might not indicate long-term adoption
+    trends.
+
+2.  Registration Data :
+
+-   The benefits we can obtain from including this variable is that it
+    represents actual additions to the vehicle population and can be
+    more indicative of long-term trends in EV adoption. On the other
+    hand, it might lag behind sales data, as registration occurs
+    post-purchase and can be influenced by administrative processes.
+
+As we are interested in long-term trends in EV adoption and usage,
+registration data is concluded to be our final choice.
 ### Simple Linear Regression
 
-#### With Oil
+#### 4.1.1 With Oil
 
-Choosing Dependent Variable, sales or EV registrations
-
-Sales Data :
-
-Pros: Directly reflects market demand and consumer purchasing behavior.
-Cons: Can be influenced by short-term factors such as promotions or
-subsidies, which might not indicate long-term adoption trends.
-
-Registration Data :
-
-Pros: Represents actual additions to the vehicle population and can be
-more indicative of long-term trends in EV adoption. Cons: Might lag
-behind sales data, as registration occurs post-purchase and can be
-influenced by administrative processes.
-
-As we are interested in long-term trends in EV adoption and usage, registration data is concluded to be our final choice.
-
-The decision to remove rows with missing values was justified as the
-number of missing values in the Price column was relatively small (28
-out of a larger dataset) and couldn't be reliably imputed, ensuring that
-the analysis was performed on a more complete and consistent dataset.
+Note: the decision to remove rows with missing values was
+justified as the number of missing values in the Price column was
+relatively small (28 out of a larger dataset) and couldn't be reliably
+imputed, ensuring that the analysis was performed on a more complete and
+consistent dataset.
 
 ```{r}
 # Select the columns you want to keep in df_v_electric
@@ -65,8 +72,28 @@ rmse <- sqrt(mean(residuals^2))
 print(paste("RMSE:", rmse))
 # Creating a summary table for the linear model
 table_regression <- tbl_regression(mod1_lin)
+```
 
-# Viewing the table
+
+
+
+
+
+
+
+
+
+
+##### 4.1.1.1 Model Diagnostic
+We are going to analyse our models by reviewing the *results* and checking weather the key *assumptions* that are:
+
+- Linearity: if relationships between variables are linear
+- Normal distribution: if the errors are normally distributed
+- Homoscedasticity: if the errors have constant variance
+- Independence: if the observations are independent
+
+###### 4.1.1.1.1 Results
+```{r}
 table_regression
 ```
 
@@ -74,19 +101,106 @@ The linear regression analysis results indicate that the Price variable
 has a very weak or negligible effect on explaining the variation in the
 Count variable. Specifically:
 
-* The coefficient for Price is very close to zero (-0.00542), indicating that there is almost no linear relationship between Price and Count.
-* The p-value for Price (0.97) is much greater than the common significance level of 0.05. This high p-value suggests that Price is not statistically significant in predicting Count, as it fails to reject the null hypothesis that the coefficient is zero.
-* The R-squared value is very low (3.83e-07), which indicates that the linear regression model solely explains a negligible fraction of the variance related to the variable Count.  
-* The Root Mean Squared Error (RMSE) is relatively high (247), suggesting that the model's predictions have a substantial amount of error.
+-   The *coefficient* for Price is very close to zero (-0.00542),
+    indicating that there is almost no linear relationship between Price
+    and Count.
+-   The *p-value* for Price (0.97) is much greater than the common
+    significance level of 0.05. This high p-value suggests that Price is
+    not statistically significant in predicting Count, as it fails to
+    reject the null hypothesis that the coefficient is zero.
+-   The *R-*squared value is very low (3.83e-07), which indicates that the
+    linear regression model solely explains a negligible fraction of the
+    variance related to the variable Count.\
+-   The *Root Mean Squared Erro*r (RMSE) is relatively high (247),
+    suggesting that the model's predictions have a substantial amount of
+    error.
 
-In summary, based on these results, it appears that the Price variable
-does not have a meaningful impact on predicting the Count variable, and
-the linear regression model is not suitable for explaining the
-relationship between these two variables. Further exploration of the
-data and potentially considering other factors or modeling approaches
-may be necessary to improve predictive accuracy.
+###### 4.1.1.1.1.2Linearity 
+The linear assumption tells us if the relationship between the independent and dependent variables is a straight line. This makes the model simpler and easier to interpret. If this assumption doesn't hold, the model might not accurately capture the relationship, leading to incorrect predictions and conclusions.
 
-#### with google trends
+We will diagnose this assumptions through a scatter plot of observed vs. predicted values, looking for a straight line pattern; if the points closely follow a straight line, it suggests a linear relationship.
+```{r}
+plot_data <- data.frame(
+  Observed = test_data$Count,
+  Predicted = predictions
+)
+
+# Create ggplot object for observed vs predicted values
+p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
+  geom_point(aes(color = Observed), alpha = 0.6) +  # Use color to represent the Observed values
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +  # Line y=x for reference
+  scale_color_viridis(option = "C", direction = 1) +  # Consistent color scheme with the previous plots
+  theme_minimal() +
+  theme(text = element_text(size = 14), legend.position = "bottom") +  # Consistent theme and text size
+  labs(title = "Observed vs. Predicted", x = "Predicted Values", y = "Observed Values", color = "Observed Count") +
+  expand_limits(x = 0, y = 0)  # Ensure that the plot starts at 0
+
+# Convert to a plotly interactive plot for consistency with the previous plots
+ggplotly(p, tooltip = "text")
+```
+The graph indicates a potential issue with the linearity assumption, as the observed values for low predicted values are more spread out and not evenly distributed along a straight line, suggesting the model may not be an appropriate fit for the data.
+
+###### 4.1.1.1.1.3 Homoscedasticity
+A key indicator of homoscedasticity is a random spread of residuals across all levels of fitted values. If the residuals display a pattern, it suggests heteroscedasticity, which means the variance of residuals changes across fitted values, violating the assumption of homoscedasticity.
+```{r}
+# Create a data frame for plotting
+plot_data <- data.frame(
+  Fitted = predictions,
+  Residuals = residuals
+)
+
+# Create ggplot object
+p <- ggplot(plot_data, aes(x = Fitted, y = Residuals)) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_point(aes(color = Residuals), alpha = 0.6) +
+  scale_color_viridis(option = "C", direction = 1) +
+  theme_minimal() +
+  theme(text = element_text(size = 14), legend.position = "bottom") +
+  labs(title = "Residuals vs. Fitted", x = "Fitted Values", y = "Residuals", color = "Residual Size")+
+  expand_limits(y = -1000)  # Extend y-axis
+
+# Convert to a plotly interactive plot
+ggplotly(p, width = 600, height = 400)
+```
+
+This plot shows a pattern where the majority of residuals are clustered
+around a narrow range of fitted values, with a few extreme residuals.
+This could indicate that the model is not capturing the variability in
+the data. We also observe the presence of extreme outliers or influential points that are affecting the model fit.
+
+The outliers represent rare but possible scenarios within the dataset,
+providing valuable insights into the extremes of the observed
+phenomenon, and should therefore be retained for a comprehensive
+analysis of the data's behavior.
+
+###### 4.1.1.1.1.4 Normality
+A histogram allows us to see if the distribution of residuals resembles a normal distribution.
+```{r}
+# Histogram of Residuals
+p <- ggplot(plot_data, aes(x = Residuals, fill = ..count..)) +
+  geom_histogram(binwidth = 250, alpha = 0.6) +  # Wider bins for clearer view
+  scale_fill_viridis_c(option = "C", begin = 0.3, end = 0.7, direction = -1) +  # Single color scale
+  theme_minimal() +
+  theme(text = element_text(size = 14)) +  # Larger text for better readability
+  labs(title = "Histogram of Residuals", x = "Residuals", y = "Frequency", fill = "Frequency")
+ggplotly(p, width = 600, height = 400 )
+```
+
+This plot shows that the residuals are not normally distributed.
+Instead, there is a large spike near zero and a few large residuals,
+confirming that there are outliers and that the model is not appropriate
+for the data.
+
+##### 4.1.1.1.2 Conclusion
+
+In summary, based on these results and the diagnostic graphs, it appears
+that the Price variable does not have a meaningful impact on predicting
+the Count variable, and the linear regression model is *not suitable*
+for explaining the relationship between these two variables. Further
+exploration of the data and potentially considering other factors or
+modeling approaches may be necessary to improve predictive accuracy.
+
+#### 4.1.2. With google trends
 
 ```{r}
 # Merge the two datasets based on the common Date column
@@ -120,19 +234,113 @@ print(paste("RMSE:", rmse))
 
 # Creating a summary table for the linear model
 table_regression2 <- tbl_regression(mod2_lin)
+```
 
+
+
+
+
+
+
+
+
+
+
+##### 4.1.2.1 Model Diagnostic
+
+We will proceed in the same way as for the previous linear regression.
+
+###### 4.1.2.1.1 Results
+```{r}
 # Viewing the table
 table_regression2
 ```
 
+The linear regression analysis results indicate that the SearchRatio variable has a small but *significant* effect on explaining the variation in the Count variable. 
+
+- The coefficient for SearchRatio is 5.957, indicating that there is a positive linear relationship between SearchRatio and Count. For each unit increase in SearchRatio, the Count increases by an average of 5.957 units.
+- The p-value for SearchRatio is less than 2e-16, which is far below the common significance level of 0.05. This extremely low p-value strongly suggests that SearchRatio is statistically significant in predicting Count, allowing us to reject the null hypothesis that the coefficient is zero.
+- The R-squared value is 0.0695, which indicates that the linear regression model explains about 6.95% of the variance in the Count variable. This is a modest amount, indicating that while SearchRatio does contribute to explaining Count, other factors are also likely to play a significant role.
+- The Root Mean Squared Error (RMSE) is 240.6, suggesting that the model's predictions have a moderate amount of error. This figure should be evaluated in the context of the magnitude of Count values to determine its practical significance.
+
+###### 4.1.2.1.2 Linearity
+
+```{r}
+plot_data <- data.frame(
+  Observed = test_data$Count,
+  Predicted = predictions
+)
+
+# Create ggplot object for observed vs predicted values
+p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
+  geom_point(aes(color = Observed), alpha = 0.6) +  # Use color to represent the Observed values
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +  # Line y=x for reference
+  scale_color_viridis(option = "C", direction = 1) +  # Consistent color scheme with the previous plots
+  theme_minimal() +
+  theme(text = element_text(size = 14), legend.position = "bottom") +  # Consistent theme and text size
+  labs(title = "Observed vs. Predicted", x = "Predicted Values", y = "Observed Values", color = "Observed Count") +
+  expand_limits(x = 0, y = 0)  # Ensure that the plot starts at 0
+
+# Convert to a plotly interactive plot for consistency with the previous plots
+ggplotly(p, tooltip = "text")
+
+```
+This graph shows that for a wide range of predicted values, the observed values are consistently low, suggesting that the model may not be effectively capturing the variance in the observed data, and there could be an issue with both the linearity and precision of the model's predictions.
+
+###### 4.1.2.1.3 Homoscedasticity
+```{r}
+# Create a data frame for plotting
+plot_data <- data.frame(
+  Fitted = predictions,
+  Residuals = residuals
+)
+
+# Create ggplot object for Residuals vs. Fitted
+p_residuals_fitted <- ggplot(plot_data, aes(x = Fitted, y = Residuals)) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_point(aes(color = Residuals), alpha = 0.6) +
+  scale_color_viridis(option = "C", direction = 1) +
+  theme_minimal() +
+  theme(text = element_text(size = 14), legend.position = "bottom") +
+  labs(title = "Residuals vs. Fitted", x = "Fitted Values", y = "Residuals", color = "Residual Size") +
+  expand_limits(y = -1000)  # Extend y-axis
+
+# Convert to a plotly interactive plot
+ggplotly(p_residuals_fitted, width = 600, height = 400)
+```
+
+The residual plots suggest that there may be non-linearity in the relationship between SearchRatio and Count or the presence of *outliers*, as indicated by the large residuals for higher fitted values.
+
+###### 4.1.2.1.4 Normality
+```{r}
+# Create ggplot object for Histogram of Residuals
+p_histogram_residuals <- ggplot(plot_data, aes(x = Residuals, fill = ..count..)) +
+  geom_histogram(binwidth = 250, alpha = 0.6) +  # Adjust binwidth as needed
+  scale_fill_viridis_c(option = "C", begin = 0.3, end = 0.7, direction = -1) +
+  theme_minimal() +
+  theme(text = element_text(size = 14)) +
+  labs(title = "Histogram of Residuals", x = "Residuals", y = "Frequency", fill = "Frequency")
+
+# Convert to a plotly interactive plot
+ggplotly(p_histogram_residuals, width = 600, height = 400)
+
+```
+
+As for the other linear regression, the histogram shows a right-skewed distribution with a long tail, indicating and non-normal distribution and the presence of outliers.
+
+##### 4.1.2.2 Conclusion
 
 Overall, while there is a statistically significant relationship between
 SearchRatio and Count, the model's R-squared value suggests that other
 factors not included in the model may also influence the Count variable.
-One might want to explore additional variables along with more complex models to improve predictive accuracy.
+One might want to explore additional variables along with more complex
+models to improve predictive accuracy.
 
-### Multivariable Regression
-#### with Demographic groups, Oil Price and Google Trend
+The diagnostic plots from our regression analysis further suggest potential violations of linearity, normality, and homoscedasticity, which may necessitate reevaluation of the model or the use of alternative methods.
+
+### 4.1.3 Multivariable Regression
+
+#### 4.1.3.1 with Demographic groups, Oil Price and Google Trend
 
 ```{r}
 # Merge the data frames on the 'Year' column
@@ -168,11 +376,158 @@ table_regression_mod1_multi <- tbl_regression(mod1_multi)
 # Print the table
 table_regression_mod1_multi
 ```
+##### 4.1.3.1.1 Model Diagnostic
 
-This multivariate linear regression model does not appear to have a strong explanatory power, as indicated by the low adjusted R-squared value and the relatively high RMSE. Additionally, only the Baby Boomers variable shows statistical significance in predicting the Count, while other variables do not appear to be significant in this context. Refining the model or exploring other variables to improve its predictive performance might be suggestible.
+In multivariable regression, we are going to check the same key assumptions of the model as for the linear regression. However,  there's an additional need to check for *multicollinearity* among predictors.
+
+###### 4.1.3.1.2 Results
+
+The multilinear regression analysis results indicate that most of the independent variables have a weak or negligible effect on explaining the variation in the Count variable.
+
+* The coefficient for SearchRatio is slightly above zero (1.04e+00), but with a p-value of 0.437, it suggests that SearchRatio is not statistically significant in predicting Count.
+* The coefficient for Price is also very close to zero (4.10e-02), and its p-value of 0.885 reinforces the conclusion that Price does not significantly contribute to the model.
+* The generational variables (Generation Z, Millennials, Generation X) have very small coefficients (ranging from -1.02e-03 to 1.38e-03) and p-values well above the significance level, indicating that these, too, are not statistically significant predictors of Count, with the exception of Baby Boomers.
+* Baby Boomers is the only variable that shows a statistically significant relationship with Count (coefficient = 6.32e-04, p-value = 0.018)
+* The R-squared value of the model is low (0.0924), meaning it only explains about 9.24% of the variance in the Count variable, which is not substantially improved when considering the adjusted R-squared (0.0815).
+* The Root Mean Squared Error (RMSE) is 35.6, which suggests that the model's predictions have a moderate amount of error relative to the magnitude of Count
+
+###### 4.1.3.1.3 Linearity
+
+```{r}
+plot_data <- data.frame(
+  Observed = test_data$Count,
+  Predicted = predictions
+)
+
+# Create ggplot object for observed vs predicted values
+p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
+  geom_point(aes(color = Observed), alpha = 0.6) +  # Use color to represent the Observed values
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +  # Line y=x for reference
+  scale_color_viridis(option = "C", direction = 1) +  # Consistent color scheme with the previous plots
+  theme_minimal() +
+  theme(text = element_text(size = 14), legend.position = "bottom") +  # Consistent theme and text size
+  labs(title = "Observed vs. Predicted", x = "Predicted Values", y = "Observed Values", color = "Observed Count") +
+  expand_limits(x = 0, y = 0)  # Ensure that the plot starts at 0
+
+# Convert to a plotly interactive plot for consistency with the previous plots
+ggplotly(p, tooltip = "text")
+```
+
+###### 4.1.3.1.4 Homoskedasticity
+```{r}
+residuals <- test_data$Count - predictions
+
+# Create a data frame for plotting
+plot_data <- data.frame(
+  Fitted = predictions,
+  Residuals = residuals
+)
+
+# Create ggplot object for Residuals vs. Fitted
+p_residuals_fitted <- ggplot(plot_data, aes(x = Fitted, y = Residuals)) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_point(aes(color = Residuals), alpha = 0.6) +
+  scale_color_viridis(option = "C", direction = -1) +
+  theme_minimal() +
+  labs(title = "Residuals vs. Fitted - Multivariable Model", x = "Fitted Values", y = "Residuals")
+
+# Convert to a plotly interactive plot
+ggplotly(p_residuals_fitted, width = 600, height = 400)
+```
+
+###### 4.1.3.1.5 Normality
+```{r}
+plot_data <- data.frame(Residuals = residuals)
+
+# Create ggplot object for Histogram of Residuals
+p_histogram_residuals <- ggplot(plot_data, aes(x = Residuals, fill = ..count..)) +
+  geom_histogram(binwidth = 20, alpha = 0.7) +  # Adjust binwidth as necessary
+  scale_fill_viridis_c(option = "C", begin = 0.3, end = 0.7, direction = -1) +  # Single color scale
+  theme_minimal() +
+  labs(title = "Histogram of Residuals", x = "Residuals", y = "Frequency", fill = "Frequency")
+
+# Print the plot
+ggplotly( p_histogram_residuals, width = 600, height = 400)
+```
+
+###### 4.1.3.1.6 Multicollinearity
+
+The VIF values indicate the level of multicollinearity.
+When variables in a model are too similar to each other, it can ruin the accuracy of our predictions. High VIF scores tell us that our variables are too alike, which means they might not each be telling us something unique about what we're trying to predict.
+```{r}
+vif_values <- vif(mod1_multi)
+
+# Print VIF values
+print(vif_values)
+
+# Interpret VIF values
+# A rule of thumb is that if VIF is greater than 5 or 10, it indicates high multicollinearity.
+high_vif <- vif_values[vif_values > 5]
+if(length(high_vif) > 0){
+  print("The following variables have a high VIF indicating potential multicollinearity:")
+  print(high_vif)
+} else {
+  print("No evidence of concerning multicollinearity among the predictor variables.")
+}
+
+vif_values <- c(SearchRatio = 7.10, Price = 1.76, `Generation Z` = 88.11, 
+                Millennials = 48.53, `Generation X` = 289.98, `Baby Boomers` = 110.94)
+
+# Create a data frame from the VIF values
+vif_df <- data.frame(
+  Variable = names(vif_values),
+  VIF = unname(vif_values),
+  Multicollinearity_Interpretation = c(
+    "Moderate to high, indicating potential concerns.",
+    "Low, suggesting little to no multicollinearity.",
+    "Very high, indicating significant multicollinearity.",
+    "High, indicating significant multicollinearity.",
+    "Very high, indicating significant multicollinearity.",
+    "Very high, indicating significant multicollinearity."
+  )
+)
+
+# Generate the summary table
+vif_table <- kable(vif_df, "html", booktabs = TRUE) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F) %>%
+  column_spec(1, bold = TRUE, width = "15em") %>%
+  column_spec(2, width = "5em") %>%
+  column_spec(3, width = "30em")
+
+# Print the table to view it in R Markdown or R HTML output
+vif_table
+```
+
+Not surprinsingly, the VIF was high among the generational variables, which should be addressed to improve the model's interpretability and reliability.
+
+##### 4.1.3.2. Conclusion
+
+```{r}
+effects <- as.data.frame(fortify(mod1_multi))
+
+# Create ggplot object for 'Baby Boomers' Effect
+p_baby_boomers_effect <- ggplot(effects, aes_string(x = "`Baby Boomers`", y = ".fitted")) +
+  geom_point(alpha = 0.6) +
+  geom_smooth(method = "lm", se = FALSE) +
+  theme_minimal() +
+  labs(title = "Baby Boomers Effect on EV Adoption", x = "Baby Boomers", y = "Fitted Values")
+
+# Convert to a plotly interactive plot
+ggplotly(p_baby_boomers_effect, width = 600, height = 400)
+
+```
 
 
-#### Adding Political Parties
+This multivariate linear regression model does not appear to have a
+strong explanatory power, as indicated by the low adjusted R-squared
+value and the relatively high RMSE. Additionally, only the `Baby Boomers`
+variable shows statistical significance in predicting the Count, while
+other variables do not appear to be significant in this context. However, given the high VIF this result should be interpreted with caution.
+Refining the model or exploring other variables to improve its
+predictive performance might be suggestible.
+
+#### 4.1.3.2 Adding Political Parties
+
 ```{r}
 # Remove 'Confederation' from df_merged
 df_multi_reg <- df_merged[df_merged$Location != 'Confederation', ]
@@ -231,25 +586,65 @@ table_regression_mod2_multi <- tbl_regression(reduced_model)
 table_regression_mod2_multi
 ```
 
+##### 4.1.3.2.1 Model Diagnosis
 
-1. **Starting Model**: The initial model includes a wide range of predictor variables: Year, Price, SearchRatio, various generational groups (Generation Z, Millennials, Generation X, Baby Boomers), and several categories of opinions (Against, Slightly Against, Neutral, Slightly in Favour, In Favour).
+###### 4.1.3.2.1.1 Results
+1.  **Starting Model**: The initial model includes a wide range of
+    predictor variables: Year, Price, SearchRatio, various generational
+    groups (Generation Z, Millennials, Generation X, Baby Boomers), and
+    several categories of opinions (Against, Slightly Against, Neutral,
+    Slightly in Favour, In Favour).
 
-2. **Stepwise Process**: The stepwise procedure iteratively removes the least significant variables based on their contribution to the model (using the Akaike Information Criterion, AIC, as a guide). A lower AIC indicates a better model fit with respect to the number of variables.
+2.  **Stepwise Process**: The stepwise procedure iteratively removes the
+    least significant variables based on their contribution to the model
+    (using the Akaike Information Criterion, AIC, as a guide). A lower
+    AIC indicates a better model fit with respect to the number of
+    variables.
 
-3. **Model Refinement**: As we progress through the steps, we observe the removal of several variables like `Baby Boomers`, `Millennials`, and `Generation X`. This suggests that these variables were not significantly contributing to the explanation of variations in `Count`.
+3.  **Model Refinement**: As we progress through the steps, we observe
+    the removal of several variables like `Baby Boomers`, `Millennials`,
+    and `Generation X`. This suggests that these variables were not
+    significantly contributing to the explanation of variations in
+    `Count`.
 
-4. **Final Model**: The last step shows the model with the variables: SearchRatio, Slightly Against, Neutral, and In Favour. This model has an AIC of 710, which is lower than the starting AIC of 715, indicating a more efficient model.
+4.  **Final Model**: The last step shows the model with the variables:
+    SearchRatio, Slightly Against, Neutral, and In Favour. This model
+    has an AIC of 710, which is lower than the starting AIC of 715,
+    indicating a more efficient model.
 
-5. **Significance of Remaining Variables**: In the final model, all the variables are considered significant contributors. If any were to be removed, it would result in a higher AIC, indicating a less optimal model.
+5.  **Significance of Remaining Variables**: In the final model, all the
+    variables are considered significant contributors. If any were to be
+    removed, it would result in a higher AIC, indicating a less optimal
+    model.
 
-6. **Interpretation of Variables**:
-   - `SearchRatio`, `Slightly Against`, `Neutral`, and `In Favour` are significant predictors for `Count`.
-   - The absence of demographic variables in the final model suggests that the adoption count may not be strongly related to these demographic factors, or their effect is captured by other variables.
-   - The presence of opinion-related variables (like `In Favour`) indicates a possible correlation between public opinion and the count of the dependent variable (possibly related to EV adoption or similar context).
+6.  **Interpretation of Variables**:
 
-7. **Cautions**: While stepwise regression is useful for variable selection, it can sometimes lead to overfitting or neglecting important variables that don't show strong individual effects but are important in combination with others. Hence, the results should be interpreted with caution, and further analysis (like checking for multicollinearity, interactions between variables, etc.) is recommended to validate the findings.
+    -   `SearchRatio`, `Slightly Against`, `Neutral`, and `In Favour`
+        are significant predictors for `Count`.
+    -   The absence of demographic variables in the final model suggests
+        that the adoption count may not be strongly related to these
+        demographic factors, or their effect is captured by other
+        variables.
+    -   The presence of opinion-related variables (like `In Favour`)
+        indicates a possible correlation between public opinion and the
+        count of the dependent variable (possibly related to EV adoption
+        or similar context).
 
-##### Vizualisation of regression Quality
+7.  **Cautions**: While stepwise regression is useful for variable
+    selection, it can sometimes lead to overfitting or neglecting
+    important variables that don't show strong individual effects but
+    are important in combination with others. Hence, the results should
+    be interpreted with caution, and further analysis (like checking for
+    multicollinearity, interactions between variables, etc.) is
+    recommended to validate the findings.
+
+###### 4.1.3.2.1.2 Linearity
+
+###### 4.1.3.2.1.3 Homoscedasticity
+
+###### 4.1.3.2.1.4 Normality
+
+###### 4.1.3.2.1.5 Multicollinearity
 
 ```{r}
 # Set up the layout for a 2x2 plot
@@ -265,20 +660,40 @@ plot(full_model, 5, main = "Full Model Residuals vs Leverage")
 par(mfrow = c(1, 1))
 ```
 
+In the plot, most of the data points seem to be randomly scattered
+around the horizontal line at zero, which is good as it suggests that
+the residuals have constant variance and that the model's predictions
+are unbiased. However, there are two data points labelled 74 and 76 that
+stand out from the rest, with one particularly far from zero. These
+points could be outliers or influential points that have a large effect
+on the regression line.
 
-In the plot, most of the data points seem to be randomly scattered around the horizontal line at zero, which is good as it suggests that the residuals have constant variance and that the model's predictions are unbiased. However, there are two data points labeled 74 and 76 that stand out from the rest, with one particularly far from zero. These points could be outliers or influential points that have a large effect on the regression line.
+When considering whether to exclude outliers from our analysis, we
+should proceed with caution. Outliers shouldn't be discarded just
+because they deviate from the norm; doing so might make our model too
+specific to the data we've used, and it might not perform well with new
+data. It's important to understand why these data points are outliers:
 
-When considering whether to exclude outliers from our analysis, we should proceed with caution. Outliers shouldn't be discarded just because they deviate from the norm; doing so might make our model too specific to the data we've used, and it might not perform well with new data. It's important to understand why these data points are outliers:
+-   If they're caused by mistakes in data entry or measurement errors,
+    it's appropriate to either fix or remove them.
+-   If they represent a part of the population that our model doesn't
+    adequately explain, this could indicate the need for a more
+    sophisticated model.
+-   If these outliers are genuine extreme values that naturally occur
+    within the dataset, it's essential to keep them. Removing valid data
+    points can skew the results.
 
-* If they're caused by mistakes in data entry or measurement errors, it's appropriate to either fix or remove them.
-* If they represent a part of the population that our model doesn't adequately explain, this could indicate the need for a more sophisticated model.
-* If these outliers are genuine extreme values that naturally occur within the dataset, it's essential to keep them. Removing valid data points can skew the results.
+Given these considerations, we've decided to retain these outliers in
+our dataset. By keeping them, we ensure that our analysis accounts for
+the full spectrum of data, including those extreme but valid variations,
+thereby aiming for a more comprehensive and accurate model.
 
-Given these considerations, we've decided to retain these outliers in our dataset. By keeping them, we ensure that our analysis accounts for the full spectrum of data, including those extreme but valid variations, thereby aiming for a more comprehensive and accurate model.
+##### 4.1.3.2.2 Conclusion
 
 ## 4.2 RQ2 - Are there differences in adoption rate within the different regions in Switzerland? And are there different buying behaviors displayed by the demographic segments within Switzerland?
 
 ### EV Adoption per Capita
+
 From the initial data:
 
 In 2005, the EV adoption rate per capita was approximately 0.000004,
@@ -401,7 +816,14 @@ ggplotly(p, tooltip = c("label", "fill"), width = 600, height = 500)
 ```
 
 ### Rural vs Urban
-We merged two datasets, one listing Swiss cantons as urban or rural ('df_cantons') and the other tracking monthly electric vehicle counts ('df_ev'), filtered out non-canton data, grouped by urban/rural typology and month, then calculated a 12-month rolling average to smooth out variances, and finally created an interactive time-series graph using 'dygraphs' to visually compare EV trends between urban and rural areas in Switzerland.
+
+We merged two datasets, one listing Swiss cantons as urban or rural
+('df_cantons') and the other tracking monthly electric vehicle counts
+('df_ev'), filtered out non-canton data, grouped by urban/rural typology
+and month, then calculated a 12-month rolling average to smooth out
+variances, and finally created an interactive time-series graph using
+'dygraphs' to visually compare EV trends between urban and rural areas
+in Switzerland.
 
 Source -
 [bfs.admin.ch](https://www.bfs.admin.ch/bfs/en/home/statistics/cross-sectional-topics/city-statistics/urban-switzerland.html)
@@ -530,80 +952,20 @@ dygraph(roll_mean, main = "Urban vs Rural EV Adoption (12-Month Rolling Mean)", 
   dyRangeSelector(height = 20) # Adds a range selector for zooming 
 ```
 
-
-Key Findings: 
-The graph displays a clear upward trend in electric vehicle adoption over time in both urban and rural areas of Switzerland, with urban areas consistently showing higher counts. This could be due to factors like better charging infrastructure, higher population density, or more environmental awareness in urban regions.
+The graph displays a clear upward trend in electric vehicle adoption
+over time in both urban and rural areas of Switzerland, with urban areas
+consistently showing higher counts. This could be due to factors such as
+better charging infrastructure, higher population density, or more
+environmental awareness in urban regions.
 
 ## 4.3 RQ3 - How has the growth of electric vehicles evolved in comparison to other countries such as France, and what factors might account for the differences in their evolution ?
 
-As a matter of fact, the EDA section (3.7) already helps us answering this question involving quite strong arguments. Nevertheless, we decided to find out more about those differences in evolution by comparing the increase in charging station spots both in France and Switzerland. To do so, we computed a bar chart in order to improve the visualisation of this juxtaposition.  
-
-```{r}
-p_ch_vs_fr1
-```
-
-
-```{r}
-# Filtering Swiss data for specific fuel types
-swiss_specific_fuel <- df_v %>%
-  filter(Fuel %in% c("Electricity", "Conventional hybrid", "Plug-in hybrid")) %>%
-  filter(Location == 'Switzerland' & VehicleType == 'Passenger car' & Date > as.Date('2012-01-01') & Date < as.Date('2021-12-31'))
-
-# Selecting equivalent columns from the French dataset
-french_specific_fuel <- df_v_fr %>%
-  select(Date, Diesel_delta, Essence_delta, Conventional_Hybrid_delta, Plug_in_Hybrid_delta, Electrique_delta) # Adjust column names accordingly
-
-# Reshape French dataset to long format for easier plotting
-french_specific_fuel_long <- french_specific_fuel %>%
-  pivot_longer(cols = -Date, names_to = "Fuel", values_to = "Count") %>%
-  mutate(Fuel = case_when(
-    Fuel == "Conventional_Hybrid_delta" ~ "Conventional hybrid",
-    Fuel == "Plug_in_Hybrid_delta" ~ "Plug-in hybrid",
-    Fuel == "Electrique_delta" ~ "Electricity"
-  ))
-
-# Standardize counts in each dataset
-swiss_specific_fuel <- swiss_specific_fuel %>%
-  mutate(Count = scale(Count))
-
-french_specific_fuel_long <- french_specific_fuel_long %>%
-  filter(Fuel %in% c("Conventional hybrid", "Plug-in hybrid", "Electricity")) %>%
-  mutate(Count = scale(Count))
-
-# Define color palette for each fuel type
-fuel_colors <- c("Conventional hybrid" = "purple", "Plug-in hybrid" = "blue", "Electricity" = "green")
-
-# Plotting with faceting and improved axis text
-p <- ggplot() +
-  geom_smooth(data = swiss_specific_fuel, aes(x = Date, y = Count, color = Fuel), 
-              method = "loess", se = FALSE, size = 1.5) +
-  geom_line(data = french_specific_fuel_long, aes(x = Date, y = Count, color = Fuel), 
-            alpha = 0.4, size = 0.8) +
-  scale_color_manual(values = fuel_colors, labels = c("Switzerland", "France")) +
-  labs(x = "Date", y = "Standardized Count") +
-  theme_minimal() +
-  theme(legend.position = "bottom",
-        strip.background = element_blank(),
-        strip.text.x = element_text(size = 10, angle = 0),
-        axis.text.x = element_blank(),
-        axis.text.y = element_blank(),
-        axis.title.x = element_text(size = 12, margin = margin(t = 10)),
-        axis.title.y = element_text(size = 12, margin = margin(r = 10))) +
-  facet_wrap(~Fuel, scales = 'free_y', ncol = 1)
-
-# Convert to interactive plot
-interactive_plot <- ggplotly(p, width = 600, height = 600, tooltip = c("x", "y", "color"))
-interactive_plot <- interactive_plot %>%
-  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
-interactive_plot
-```
-Switzerland has the thickest line
-
-This compares the rate at which a certain category of fuel is adopted by the citizen of each country (Switzerland vs. France) and is normalized for each country's size.
-
-We can see that Electricity and Plug-in Hybrid follow roughly the same trajectory. This could be caused by the fact that they are used in a very similar way. In both these categories Switzerland has a slightly higher adoption rate.
-
-For Conventional hybrid however, France seems to have a slightly faster adopting rate. 
+As a matter of fact, the EDA section [(3.7)](#3-7-swiss-vs-france)
+already helps us answering this question involving quite strong
+arguments. Nevertheless, we decided to find out more about those
+differences in evolution by comparing the increase in charging station
+spots both in France and Switzerland. To do so, we computed a bar chart
+in order to improve the visualisation of this juxtaposition.
 
 ```{r}
 data <- charge_ch_fr 
@@ -636,11 +998,19 @@ p_interactive <- p_interactive %>%
 p_interactive
 ```
 
-The results show that since 2015, France has exponentially increased its number of stations while Switzerland seems to be gradually adapting. It is important to take the respective surface and demography differences of the two countries in consideration.Even with that in mind, Switzerland seems to be late in terms of adoption of charging station spots in the last decade. Overall, an increasing number of charging stations in both countries rhymes with an overall EV adoption for the two historical friends.  
+The results show that since 2015, France has exponentially increased its
+number of stations while Switzerland seems to be gradually adapting. It
+is important to take the respective surface and demography differences
+of the two countries in consideration.Even with that in mind,
+Switzerland seems to be late in terms of adoption of charging station
+spots in the last decade. Overall, an increasing number of charging
+stations in both countries rhymes with an overall EV adoption for the
+two historical friends.
 
 ## 4.4 RQ4 - To what extent does the evolution in the availability of charging stations exert an influence on the adoption of electric vehicles in Switzerland?
 
-To evaluate this question in the best conditions, we decided to compute some empirical plots. 
+To evaluate this question in the best conditions, we decided to compute
+some empirical plots.
 
 ```{r}
 # First, let's merge the df_v and df_charge_number_CH data sets, and we will look at Fuel: Electricity
@@ -733,9 +1103,28 @@ summary(poisson_model)
 # Reset the layout
 par(mfrow = c(1, 1))
 ```
-The year-on-year correlation is the highest, the lagged correlation diminishes. We could suggest hat the availability of charging stations and the new registration of EVs go hand-in-hand, and that the availability of new charging station does not create a demand of new EVs by itself. Correlation does not imply causation, while we see a relationship, we can't conclude that charging stations directly cause changes in electric vehicle adoption only with a Correlation analysis
 
-For this research question, we used both a linear regression and a Poisson-test. It is important to note that the Poisson test presents major limitations in our case, as it assumes constant rates (we have seen that both the adoption of EVs and charging station availability present exponential nature). However, we decided to still include it in our report.
+The year-on-year correlation is the highest, the lagged correlation
+diminishes. We could suggest hat the availability of charging stations
+and the new registration of EVs go hand-in-hand, and that the
+availability of new charging station does not create a demand of new EVs
+by itself. Correlation does not imply causation, while we see a
+relationship, we can't conclude that charging stations directly cause
+changes in electric vehicle adoption only with a Correlation analysis
 
-With both a linear regression and a Poisson-test. We find evidence of statistically significant relationship between the count of available charging station and the count of electric vehicles registered. We have Prediction variable/coefficient of 2.68 x 10^-4 and 3.34 respectively. And a p-val < 0.005 for both. However, it is important to remind ourselves that these variables have a bidirectional / mutual influence, beyond the scope of what our analysis shows. The relationship is not strictly unidirectional and therefore, it is hard to conclude anything without further domain-knowledge and context-specific information
+For this research question, we used both a linear regression and a
+Poisson-test. It is important to note that the Poisson test presents
+major limitations in our case, as it assumes constant rates (we have
+seen that both the adoption of EVs and charging station availability
+present exponential nature). However, we decided to still include it in
+our report.
 
+With both a linear regression and a Poisson-test. We find evidence of
+statistically significant relationship between the count of available
+charging station and the count of electric vehicles registered. We have
+Prediction variable/coefficient of 2.68 x 10\^-4 and 3.34 respectively.
+And a p-val \< 0.005 for both. However, it is important to remind
+ourselves that these variables have a bidirectional / mutual influence,
+beyond the scope of what our analysis shows. The relationship is not
+strictly unidirectional and therefore, it is hard to conclude anything
+without further domain-knowledge and context-specific information
