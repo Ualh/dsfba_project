@@ -608,6 +608,12 @@ fviz_pca_var(pca_variables, col.var = "contrib",
 The last four charts represent the clustering of the Swiss cantons about
 their political view concerning the environment in 1999.
 
+On these plots, GL seem to have an outlier behaviour. Upon further exploring we can
+see that this is explained by the fact that, in 1999, this canton was represented at 85,7%
+by the "Parti socialiste Suisse", namely a political party in the "In Favour" category. This
+strong influence of a single political party explains the atyipical position of this Canton in
+our Cluster plot.
+
 2023:
 
 ```{r}
@@ -658,23 +664,27 @@ The last four graphs represent the clustering of the Cantons according
 to their political stance in 2023.
 
 From 1999 to 2023, we can point out that we went from 7 to 6 optimal
-numbers of optimal clusters, which shows a certain homogeneity
-concerning this topic along the Swiss Cantons through the time. In
-addition to this, extreme values such as Glaris (GL) for 1999 or
-Appenzell for 2023. Both represent a cluster on their own which neglect
-the potential bias created by those most distant values.
+numbers of optimal clusters, which shows more homogeneity
+concerning this topic along the Swiss Cantons through the time.
 
-It is interesting to see that VD, NE and GE seem to follow the same tendencies
+First, we can observe that GL has now joined other cantons in the Cluster 1. Indeed,
+their political representation is far more balanced in 2023 than it was in 1999. It is
+interesting to see that VD, NE and GE seem to follow the same tendencies
 both in 1999 and 2023, and are represented by Dimension 1 and 2 by roughly the same
-amounts. 
+amounts.
 
 Another interesting observation is that NW and UR are their own cluster both
 in 1999 and 2023, as these two geographical neighbors likely show the same political 
-inclination. We can see in the PCA plot for variables (both 1999 and 2023) that these
-two cantons have a strong contribution to the principal components and therefore explain 
+inclination. Indeed, in 1999, both NW and UR had an overwhelming majority of "Slightly
+Against" (90.4% and 81.7% respectively). In 2023, these two cantons are displaying some of
+the strongest "Against" tendencies. We can see in the PCA plot for variables (both 1999 and 2023)
+that these two cantons have a strong contribution to the principal components and therefore explain 
 a large portion of the variance.
 
-One last thing we would like to mention is how 
+One last thing we would like to mention is how the cantons are clustered in a way that is
+close to their regional/geographical distribution in Switzerland (especially in the 2023 cluster plot).
+With more populated cantons such as GE or ZH in a cluster, more rural cantons such as VS or GR in another
+cluster, and then historically conservative cantons such as AR and OW sharing a cluster.
 
 
 
