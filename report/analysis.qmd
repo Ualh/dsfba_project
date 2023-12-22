@@ -77,7 +77,7 @@ that the analysis was performed on a more complete and consistent
 dataset.
 
 ```{r}
-# Select the columns you want to keep in df_v_electric
+# Select the columns to keep in df_v_electric
 df_v_electric <- df_v_electric %>%
   select(Location, Count, Date)
 
@@ -148,7 +148,7 @@ plot_data <- data.frame(
 p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
   geom_point(aes(color = Observed), alpha = 0.6) +  # Use color to represent the Observed values
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +  # Line y=x for reference
-  scale_color_viridis(option = "C", direction = 1) +  # Consistent color scheme with the previous plots
+  scale_color_viridis(option = "D", direction = 1) +  # Consistent color scheme with the previous plots
   theme_minimal() +
   theme(text = element_text(size = 14), legend.position = "bottom") +  # Consistent theme and text size
   labs(title = "Observed vs. Predicted", x = "Predicted Values", y = "Observed Values", color = "Observed Count") +
@@ -176,7 +176,7 @@ plot_data <- data.frame(
 p <- ggplot(plot_data, aes(x = Fitted, y = Residuals)) +
   geom_hline(yintercept = 0, linetype = "dashed") +
   geom_point(aes(color = Residuals), alpha = 0.6) +
-  scale_color_viridis(option = "C", direction = 1) +
+  scale_color_viridis(option = "D", direction = 1) +
   theme_minimal() +
   theme(text = element_text(size = 14), legend.position = "bottom") +
   labs(title = "Residuals vs. Fitted", x = "Fitted Values", y = "Residuals", color = "Residual Size")+
@@ -203,7 +203,7 @@ analysis of the data's behavior.
 # Histogram of Residuals
 p <- ggplot(plot_data, aes(x = Residuals, fill = ..count..)) +
   geom_histogram(binwidth = 250, alpha = 0.6) +  # Wider bins for clearer view
-  scale_fill_viridis_c(option = "C", begin = 0.3, end = 0.7, direction = -1) +  # Single color scale
+  scale_fill_viridis_c(option = "D", begin = 0.3, end = 0.7, direction = -1) +  # Single color scale
   theme_minimal() +
   theme(text = element_text(size = 14)) +  # Larger text for better readability
   labs(title = "Histogram of Residuals", x = "Residuals", y = "Frequency", fill = "Frequency")
@@ -306,7 +306,7 @@ plot_data <- data.frame(
 p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
   geom_point(aes(color = Observed), alpha = 0.6) +  # Use color to represent the Observed values
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +  # Line y=x for reference
-  scale_color_viridis(option = "C", direction = 1) +  # Consistent color scheme with the previous plots
+  scale_color_viridis(option = "D", direction = 1) +  # Consistent color scheme with the previous plots
   theme_minimal() +
   theme(text = element_text(size = 14), legend.position = "bottom") +  # Consistent theme and text size
   labs(title = "Observed vs. Predicted", x = "Predicted Values", y = "Observed Values", color = "Observed Count") +
@@ -336,7 +336,7 @@ plot_data <- data.frame(
 p_residuals_fitted <- ggplot(plot_data, aes(x = Fitted, y = Residuals)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = 'red') +
   geom_point(aes(color = Residuals), alpha = 0.6) +
-  scale_color_viridis(option = "C", direction = 1) +
+  scale_color_viridis(option = "D", direction = 1) +
   theme_minimal() +
   theme(text = element_text(size = 14), legend.position = "bottom") +
   labs(title = "Residuals vs. Fitted", x = "Fitted Values", y = "Residuals", color = "Residual Size") +
@@ -357,7 +357,7 @@ values.
 # Create ggplot object for Histogram of Residuals
 p_histogram_residuals <- ggplot(plot_data, aes(x = Residuals, fill = ..count..)) +
   geom_histogram(binwidth = 250, alpha = 0.6) +  # Adjust binwidth as needed
-  scale_fill_viridis_c(option = "C", begin = 0.3, end = 0.7, direction = -1) +
+  scale_fill_viridis_c(option = "D", begin = 0.3, end = 0.7, direction = -1) +
   theme_minimal() +
   theme(text = element_text(size = 14)) +
   labs(title = "Histogram of Residuals", x = "Residuals", y = "Frequency", fill = "Frequency")
@@ -471,7 +471,7 @@ plot_data <- data.frame(
 p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
   geom_point(aes(color = Observed), alpha = 0.6) +  # Use color to represent the Observed values
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +  # Line y=x for reference
-  scale_color_viridis(option = "C", direction = 1) +  # Consistent color scheme with the previous plots
+  scale_color_viridis(option = "D", direction = 1) +  # Consistent color scheme with the previous plots
   theme_minimal() +
   theme(text = element_text(size = 14), legend.position = "bottom") +  # Consistent theme and text size
   labs(title = "Observed vs. Predicted", x = "Predicted Values", y = "Observed Values", color = "Observed Count") +
@@ -498,7 +498,7 @@ plot_data <- data.frame(
 p_residuals_fitted <- ggplot(plot_data, aes(x = Fitted, y = Residuals)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = 'red') +
   geom_point(aes(color = Residuals), alpha = 0.6) +
-  scale_color_viridis(option = "C", direction = -1) +
+  scale_color_viridis(option = "D", direction = -1) +
   theme_minimal() +
   labs(title = "Residuals vs. Fitted - Multivariable Model", x = "Fitted Values", y = "Residuals")
 
@@ -516,7 +516,7 @@ plot_data <- data.frame(Residuals = residuals)
 # Create ggplot object for Histogram of Residuals
 p_histogram_residuals <- ggplot(plot_data, aes(x = Residuals, fill = ..count..)) +
   geom_histogram(binwidth = 20, alpha = 0.7) +  # Adjust binwidth as necessary
-  scale_fill_viridis_c(option = "C", begin = 0.3, end = 0.7, direction = -1) +  # Single color scale
+  scale_fill_viridis_c(option = "D", begin = 0.3, end = 0.7, direction = -1) +  # Single color scale
   theme_minimal() +
   labs(title = "Histogram of Residuals", x = "Residuals", y = "Frequency", fill = "Frequency")
 
@@ -652,11 +652,6 @@ reduced_model <- step(full_model, direction = "backward")
 # View the summary of the reduced model
 summary(reduced_model)
 
-# Perform backward elimination
-reduced_model <- step(full_model, direction = "backward")
-
-# View the summary of the reduced model
-summary(reduced_model)
 # Create a summary table for the linear model
 table_regression_mod2_multi <- tbl_regression(reduced_model)
 
@@ -732,7 +727,7 @@ plot_data <- data.frame(Observed = df_multi_reg$Count, Predicted = df_multi_reg$
 p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
   geom_point(aes(color = Observed), alpha = 0.6) +
   geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
-  scale_color_viridis(option = "C", direction = 1) +
+  scale_color_viridis(option = "D", direction = 1) +
   theme_minimal() +
   theme(text = element_text(size = 14), legend.position = "bottom") +
   labs(title = "Observed vs. Predicted", x = "Predicted Values", y = "Observed Values", color = "Observed Count") +
@@ -760,7 +755,7 @@ plot_data <- data.frame(Fitted = df_multi_reg$Fitted, Residuals = df_multi_reg$R
 p_residuals_fitted <- ggplot(plot_data, aes(x = Fitted, y = Residuals)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = 'red') +
   geom_point(aes(color = Residuals), alpha = 0.6) +
-  scale_color_viridis(option = "C", direction = -1) +
+  scale_color_viridis(option = "D", direction = -1) +
   theme_minimal() +
   labs(title = "Residuals vs. Fitted - Multivariable Model", x = "Fitted Values", y = "Residuals")
 
@@ -784,7 +779,7 @@ plot_data <- data.frame(Residuals = residuals)
 # Step 3: Create ggplot object for Histogram of Residuals
 p_histogram_residuals <- ggplot(plot_data, aes(x = Residuals, fill = ..count..)) +
   geom_histogram(binwidth = 20, alpha = 0.7) +  # Adjust binwidth as necessary
-  scale_fill_viridis_c(option = "C", begin = 0.3, end = 0.7, direction = -1) +  # Single color scale
+  scale_fill_viridis_c(option = "D", begin = 0.3, end = 0.7, direction = -1) +  # Single color scale
   theme_minimal() +
   labs(title = "Histogram of Residuals", x = "Residuals", y = "Frequency", fill = "Frequency")
 
@@ -832,7 +827,6 @@ vif_table <- kable(vif_df, "html", booktabs = TRUE) %>%
   column_spec(2, width = "5em") %>%
   column_spec(3, width = "30em")
 
-# Print the table to view it in R Markdown or R HTML output
 vif_table
 
 ```
@@ -916,7 +910,7 @@ merged_data$ev_per_capita <- merged_data$total_ev / merged_data$total_population
 
 # Creating a ggplot object with your data
 p <- ggplot(merged_data, aes(x = Year, y = ev_per_capita, group = 1)) +
-  geom_line(color = "darkblue", size = 1) +
+  geom_line(color = "#24918d", size = 1) +
   labs(title = "EV Adoption Per Capita Over Time in Switzerland",
        x = "Year",
        y = "EV Adoption Per Capita")
@@ -977,27 +971,37 @@ melted_correlation_matrix$Var2 <- gsub("prop_", "", melted_correlation_matrix$Va
 melted_correlation_matrix$Var1 <- gsub("_", " ", melted_correlation_matrix$Var1)
 melted_correlation_matrix$Var2 <- gsub("_", " ", melted_correlation_matrix$Var2)
 
-# Creating the heatmap
-p <- ggplot(melted_correlation_matrix, aes(Var1, Var2, fill = value)) +
+# Choose a single color from the viridis palette
+# Here, we pick a color at the midpoint of the palette; 
+# 0 would be the start and 1 would be the end of the palette.
+single_viridis_color <- viridis_pal()(1)
+
+# Create a gradient of shades based on the single color
+viridis_shades <- colorRampPalette(c("#24918d", single_viridis_color))
+
+# Creating the heatmap with the single shade gradient
+p <- ggplot(melted_correlation_matrix, aes(Var1, Var2, fill = rescale(value, c(0, 1)))) +
   geom_tile() +
   geom_text(aes(label = sprintf("%.2f", value)), color = "white", size = 4) +
-  scale_fill_gradient(low = "lightgreen", high = "darkgreen", name = "Correlation") +
+  scale_fill_gradientn(colors = viridis_shades(100), name = "Correlation") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   labs(x = "", y = "", title = "Correlation Heatmap")
 
 # Convert to interactive plot
-ggplotly(p, tooltip = c("label", "fill"), width = 600, height = 500)
+interactive_plot <- ggplotly(p, tooltip = c("label", "fill"), width = 600, height = 500)
+
+interactive_plot
 ```
 
 ### Rural vs Urban
 
 We merged two datasets, one listing Swiss cantons as urban or rural
-('df_cantons') and the other tracking monthly electric vehicle counts
-('df_ev'), filtered out non-canton data, grouped by urban/rural typology
+`df_cantons` and the other tracking monthly electric vehicle counts
+`df_ev`, filtered out non-canton data, grouped by urban/rural typology
 and month, then calculated a 12-month rolling average to smooth out
 variances, and finally created an interactive time-series graph using
-'dygraphs' to visually compare EV trends between urban and rural areas
+`dygraphs` to visually compare EV trends between urban and rural areas
 in Switzerland.
 
 Source -
@@ -1067,8 +1071,8 @@ df_cantons <- dataset %>%
     Canton == "Basel-Stadt" ~ "BS",
     Canton == "Basel-Landschaft" ~ "BL",
     Canton == "Schaffhausen" ~ "SH",
-    Canton == "Appenzell Ausserrhoden" ~ "AR", # Adjusted to match your data
-    Canton == "Appenzell Innerrhoden" ~ "AI",  # Adjusted to match your data
+    Canton == "Appenzell Ausserrhoden" ~ "AR",
+    Canton == "Appenzell Innerrhoden" ~ "AI",  
     Canton == "St. Gallen" ~ "SG",
     Canton == "Graubünden" ~ "GR",
     Canton == "Aargau" ~ "AG",
@@ -1077,12 +1081,11 @@ df_cantons <- dataset %>%
     Canton == "Vaud" ~ "VD",
     Canton == "Valais" ~ "VS",
     Canton == "Neuchâtel" ~ "NE",
-    Canton == "Genève" ~ "GE", # Adjusted to match your data
+    Canton == "Genève" ~ "GE", 
     Canton == "Jura" ~ "JU",
     TRUE ~ Canton # Default case to keep original names for unmatched entries
   ))
 
-library(xts)
 # Filter out 'Confederation' and 'Switzerland' from df_ev before merging
 df_ev_filtered <- df_ev %>%
   filter(!Location %in% c("Confederation", "Switzerland"))
@@ -1118,10 +1121,10 @@ xts_data <- xts(df_wide[, -1], order.by = df_wide$Month)
 # Calculate rolling mean
 roll_mean <- rollapply(xts_data, width = 12, FUN = mean, by.column = TRUE, align = "right", fill = NA)
 
-# Create the dygraph with options for improved readability
+# Create the dygraph with 
 dygraph(roll_mean, main = "Urban vs Rural EV Adoption (12-Month Rolling Mean)", width = "600px", height = "400px") %>%
-  dySeries("Urban", label = "Urban", color = "#1c61b6", fillGraph = TRUE) %>%
-  dySeries("Rural", label = "Rural", color = "#4daf4a", fillGraph = TRUE) %>%
+  dySeries("Urban", label = "Urban", color = "#2f114a", fillGraph = TRUE) %>%
+  dySeries("Rural", label = "Rural", color = "#24918d", fillGraph = TRUE) %>%
   dyOptions(strokeWidth = 1.5) %>%
   dyLegend(show = "always") %>%
   dyRangeSelector(height = 20) # Adds a range selector for zooming 
@@ -1154,10 +1157,11 @@ data_summarized <- data %>%
   group_by(year, region) %>%
   summarize(total_value = sum(value))
 
+viridis_colors <- viridis(2.1)
 # Create the ggplot
 p <- ggplot(data_summarized, aes(x = year, y = total_value, fill = region)) +
   geom_bar(stat = "identity", position = "dodge") +
-  scale_fill_manual(values = c("France" = "#4E79A7", "Switzerland" = "#F28E2B")) +  # Adjusted custom colors
+  scale_fill_manual(values = viridis_colors) +  # Adjusted custom colors
   labs(title = "Total Availability of Charging Stations in France vs Switzerland",
        x = "Year",
        y = "Total Charging Stations") +

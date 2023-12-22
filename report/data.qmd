@@ -6,7 +6,7 @@ source(here::here("scripts/setup.R"))
 
 ## 2.1 Raw Datasets
 
-Check for Large Data: If any of our datasets are particularly large
+First, we had to do a check for Large Data: If any of our datasets are particularly large
 (like the `swiss_vehicle`), we used a more efficient data reading
 librariy `data.table` (with `fread`) to speed up the data loading
 process.
@@ -248,7 +248,7 @@ information about the Swiss adaption to EVs and their potential effects
 on EVs adoption by the Swiss population
 
 ```{r}
-# Create a tibble with variable descriptions in English for charging station data
+# Create a tibble with variable descriptions 
 variable_table_charging <- tibble(
   Variable = c("year",
                 "month",
@@ -304,7 +304,7 @@ adoption as well as giving us some more information concerning EV
 adoption by the Swiss population.
 
 ```{r}
-# Create a tibble with variable descriptions for the Swiss population data set
+# Create a tibble with variable descriptions 
 variable_charging_station_v2 <- tibble(
   Variable = c("Region", "Category", "Parameter", "Mode","Powertrain", "Unit","Value"),
   Description = c(
@@ -338,7 +338,7 @@ dimension to our analysis. We believe that political affiliation might
 have a link with the EV adoption in Switzerland.
 
 ```{r}
-# Create a tibble with variable descriptions for the Swiss population data set
+# Create a tibble with variable descriptions 
 variable_table_politic <- tibble(
   Variable = c("Years 1971-2023", "Canton", "Political parties", "Taux de participation"),
   Description = c(
@@ -580,7 +580,7 @@ The main issue with this data set was to transform it in a way that
 makes it useful for our analysis. We first had to remove all rows
 containing category summaries in the middle of the data.
 
-We then formulated to following hypothesizes:
+We then formulated the following hypothesizes:
 
 -   Male and Female present the same attitude towards electric vehicles
 -   Swiss and Foreign citizen living in Switzerland present the same

@@ -23,21 +23,16 @@ passenger_cars_processed <- df_v %>%
 # Ensure the YearMonth is in Date format
 passenger_cars_processed$YearMonth <- as.Date(passenger_cars_processed$YearMonth, format = "%Y-%m-%d")
 
-# Calculate a smoothed series using a rolling mean or LOESS
-# For a rolling mean:
+# Calculate a smoothed series using a rolling mean
 passenger_cars_processed$Smoothed <- rollmean(passenger_cars_processed$Count, k = 12, fill = NA)
-
-# Alternatively, for LOESS smoothing:
-# loess_fit <- loess(Count ~ as.numeric(YearMonth), data = df_seasonality, span = 0.5)
-# df_seasonality$Smoothed <- predict(loess_fit)
 
 # Create an xts object with both the original and smoothed counts
 df_xts <- xts(passenger_cars_processed[, c("Count", "Smoothed")], order.by = passenger_cars_processed$YearMonth)
 
 # Plot using dygraphs
 p_seaso1 <- dygraph(df_xts, main = "Passenger Car Adoption Over Time in Switzerland", width = "600px", height = "400px") %>%
-  dySeries("Count", label = "Number of Passenger Cars Registered") %>%
-  dySeries("Smoothed", label = "Smoothed Trend") %>%
+  dySeries("Count", label = "Number of Passenger Cars Registered", color = "#24918d") %>%
+  dySeries("Smoothed", label = "Smoothed Trend", color = "#2f114a") %>%
   dyOptions(stackedGraph = FALSE) %>%
   dyRangeSelector(height = 20)
 
@@ -45,9 +40,9 @@ p_seaso1 <- dygraph(df_xts, main = "Passenger Car Adoption Over Time in Switzerl
 p_seaso1
 ```
 
-The blue line represents a smoothed trend, indicating an initial
+The purple line represents a smoothed trend, indicating an initial
 increase in car registrations until around 2014-2015, followed by a
-gradual decline. The green line shows the actual number of cars
+gradual decline. The blue line shows the actual number of cars
 registered, with significant variability. We will call this variation
 seasonality which is better represented in the following graph.
 
@@ -66,7 +61,7 @@ p_seaso_2 <- ggplot(passenger_cars_processed, aes(x = Month, y = Count, group = 
 # Convert to an interactive plotly object
 interactive_plot_seaso_2 <- ggplotly(p_seaso_2, width = 600, height = 400)
 
-# Adjust plotly settings if needed, such as margins or layout
+# Adjust plotly settings 
 interactive_plot_seaso_2 <- interactive_plot_seaso_2 %>%
   layout(margin = list(l = 40, r = 10, b = 40, t = 40), # Adjust margins
          legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2)) # Adjust legend position
@@ -180,8 +175,8 @@ xts_data <- xts(df_wide[, -1], order.by = df_wide$year)
 
 # Create the dygraph with options for improved readability
 dygraph(xts_data, main = "Available Charging Stations in Switzerland", width = "600px", height = "400px") %>%
-  dySeries("Publicly available fast", label = "Fast Charging", color = "#1c61b6") %>%
-  dySeries("Publicly available slow", label = "Slow Charging", color = "#4daf4a") %>%
+  dySeries("Publicly available fast", label = "Fast Charging", color = "#2f114a") %>%
+  dySeries("Publicly available slow", label = "Slow Charging", color = "#24918d") %>%
   dyOptions(strokeWidth = 1.5, fillGraph = TRUE) %>%
   dyLegend(show = "always") %>%
   dyRangeSelector(height = 30) # Adds a range selector for zooming in and out
@@ -211,8 +206,8 @@ xts_data <- xts(df_wide[, -1], order.by = df_wide$year)
 
 # Create the dygraph with options for improved readability
 dygraph(xts_data, main = "Available Charging Stations in France", width = "600px", height = "400px") %>%
-  dySeries("Publicly available fast", label = "Fast Charging", color = "#1c61b6") %>%
-  dySeries("Publicly available slow", label = "Slow Charging", color = "#4daf4a") %>%
+  dySeries("Publicly available fast", label = "Fast Charging", color = "#2f114a") %>%
+  dySeries("Publicly available slow", label = "Slow Charging", color = "#24918d") %>%
   dyOptions(strokeWidth = 1.5, fillGraph = TRUE) %>%
   dyLegend(show = "always") %>%
   dyRangeSelector(height = 20) # Adds a range selector for zooming in and out
@@ -220,7 +215,7 @@ dygraph(xts_data, main = "Available Charging Stations in France", width = "600px
 ```
 
 The chart above follows the same tendency except that it now represents
-the French publicly available charging spots. Again, The most important
+the French publicly available charging spots. Again, the most important
 aspect of this chart is the fact that both publicly fast and publicly
 slow are continuously increasing. The tendency seems to be quite similar
 with the Swiss evolution with the exception that the exponential
@@ -316,7 +311,7 @@ leaflet_map_total <- leaflet(map_data_sf) %>%
     title = "Total EV <br> Registrations",
     position = "topright"
   )
-
+#second one
 leaflet_map_per_capita <- leaflet(map_data_sf) %>%
   addProviderTiles(providers$CartoDB.Positron) %>%
   addPolygons(
@@ -337,6 +332,7 @@ leaflet_map_per_capita <- leaflet(map_data_sf) %>%
 
 # Print the maps to view them
 leaflet_map_total
+
 ```
 
 #### 3.1.4.2 Count of Electricity car Registration for all years per cantons Standardized
@@ -364,12 +360,12 @@ library(xts)
 # Convert to xts object for dygraphs
 xts_data <- xts(df_gtrends[, -1], order.by = df_gtrends$Date)
 
-# Calculate rolling mean with a width of 12 (you can adjust this width as needed)
+# Calculate rolling mean with a width of 12 
 roll_mean <- rollapply(xts_data, width = 5, FUN = mean, by.column = TRUE, align = "right", fill = NA)
 
-# Create the dygraph with options for improved readability
+# Create the dygraph 
 dygraph(roll_mean, main = "Google Search About EV in Switzerland", width = "600px", height = "400px") %>%
-  dySeries("SearchRatio", label = "Search Ratio", color = "#4daf4a") %>%
+  dySeries("SearchRatio", label = "Search Ratio", color = "#24918d") %>%
   dyOptions(strokeWidth = 1.5, fillGraph = TRUE) %>%
   dyLegend(show = "always") %>%
   dyRangeSelector(height = 20) # Adds a range selector for zooming in and out
@@ -391,14 +387,10 @@ The `fig.show='animate'` option tells Quarto to render the plot as an
 animation.
 
 ```{r, fig.show='animate'}
-## basic plot
-#ggplot(df_oil, aes(x = Date , y = Price)) +
-#  geom_line(color = "darkred", size = 1) +
-#  labs(x = "Date", y = "Price", title = "Oil Price Over Time")
 
 # Create a ggplot object with your data
 p <- ggplot(df_oil, aes(x = Date, y = Price, group = 1)) +
-  geom_line(color = "darkred", size = 1) +
+  geom_line(color = "#24918d", size = 1) +
   labs(x = "Date", y = "Price", title = "Oil Price Over Time")
 
 # Animate the plot with gganimate, revealing the line over time
@@ -446,7 +438,6 @@ interactive_plot_demog <- ggplotly(p_demog, width = 600, height = 400)
 interactive_plot_demog <- interactive_plot_demog %>%
   layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
 
-# The interactive plot can be displayed in an R Markdown document or a Shiny app
 interactive_plot_demog
 
 ```
@@ -454,7 +445,7 @@ interactive_plot_demog
 This graph concentrates on the demographic trends' evolution for each
 segment of age above mentioned throughout the time. It points out the
 important overall rise of individuals living in Switzerland over the
-past two decades.It is quite interesting to note that Baby Boomers
+past two decades. It is quite interesting to note that Baby Boomers
 demographic evolution is still linearly increasing while the Generation
 Z's one seems to be moderately flat.
 
@@ -565,12 +556,10 @@ political_data_1999 <- political_combined_data[,-8] %>%
 
 # We will use the K-Means method
 # We start by looking for the right amount of clusters
-
 fviz_nbclust(political_data_1999[,-1], kmeans, method = "wss") +
   geom_vline(xintercept = 7, linetype = 2, color = 'red')
 
 # We can see that 7 clusters seems to be the choice
-
 # Changing my tibble
 pol_cantons_1999 <- as.data.frame(political_data_1999)
 rownames(pol_cantons_1999) <- pol_cantons_1999$Canton
@@ -706,7 +695,7 @@ and French datasets.
 
 The highlighted line are for **Switzerland**, whereas the others are for
 **France**. We standardized the counts in both the Swiss and French
-datas ets for comparison purposes. 
+datasets for comparison purposes. 
 
 *Please click on the legend of the graph to show more comparison between other types of fuel.*
 
@@ -777,7 +766,7 @@ for (i in 1:length(interactive_plot$x$data)) {
   }
 }
 
-# Adjust the layout of the interactive plot, if needed
+# Adjust the layout of the interactive plot
 p_ch_vs_fr1 <- interactive_plot %>%
   layout(legend = list(orientation = "h", x = 0.5, xanchor = "center", y = -0.2)) # Adjust the legend position
 
@@ -788,7 +777,7 @@ p_ch_vs_fr1
 We can see what seems to be a good correlation between the different
 results. We can observe that electric and hybrid cars follows roughly
 the same trajectory while thermic ones seem to follow a decreasing
-slope, both for France and Switzerland
+slope, both for France and Switzerland.
 
 ```{r}
 p <- ggplot() +
@@ -829,7 +818,6 @@ df_v_electric <- df_v |>
   filter(VehicleType == "Passenger car") |>
   filter(Fuel == 'Electricity')
 df_electric_vehicles_agg <- df_v_electric %>% group_by(Date) %>% summarize(Count = sum(Count))
-# Resample both datasets to a monthly frequency using the first day of the month
 
 # Merge datasets
 merged_df <- merge(df_electric_vehicles_agg, df_gtrends, by = "Date")
@@ -841,7 +829,10 @@ ratio <- max_values$max_count / max_values$max_search
 # Add the ratio-adjusted SearchRatio to the merged dataset
 merged_df <- merged_df |> mutate(AdjustedSearchRatio = SearchRatio * ratio)
 
-# Plotting with smoothing and color changes
+# Pick colors from the viridis palette
+colors <- viridis(2.1)
+
+# Plotting with smoothing and color changes using viridis colors
 p <- ggplot(merged_df, aes(x = Date)) +
   geom_bar(aes(y = AdjustedSearchRatio, fill = "Google Trends"), stat = "identity") +
   geom_smooth(aes(y = Count, color = "Electric Vehicles Smoothed"), method = "loess", span = 0.2) +
@@ -851,13 +842,13 @@ p <- ggplot(merged_df, aes(x = Date)) +
   ) +
   labs(title = "Comparison of Electric Vehicle Rise and Google Trends Over Time",
        x = "Date", fill = "Legend", color = "Legend") +
-  scale_fill_manual(values = c("Google Trends" = "darkred")) +
-  scale_color_manual(values = c("Electric Vehicles Smoothed" = "blue")) +
+  scale_fill_manual(values = c("Google Trends" = colors[2.1])) + # Use first viridis color for bars
+  scale_color_manual(values = c("Electric Vehicles Smoothed" = colors[1.5])) + # Use second viridis color for line
   theme_minimal() +
   theme(legend.position = "bottom")
 
 # Convert to interactive plot
-interactive_plot <- ggplotly(p, width = 600, height = 400) %>%
+interactive_plot <- ggplotly(p, tooltip = "text", width = 600, height = 400) %>%
   layout(legend = list(orientation = "h", x = 0.5, xanchor = "center", y = -0.3))
 
 interactive_plot
@@ -895,6 +886,9 @@ ratio <- max_values$max_count / max_values$max_price
 # Add the ratio-adjusted Price to the merged dataset
 df_merged <- df_merged |> mutate(AdjustedPrice = Price * ratio)
 
+# Create the viridis color palette
+viridis_colors <- viridis_pal()(2.1)
+
 # Plotting with smoothing and color changes
 p <- ggplot(df_merged, aes(x = Date)) +
   geom_smooth(aes(y = Count, color = "Electric Vehicles Smoothed"), method = "loess", span = 0.2) +
@@ -905,7 +899,7 @@ p <- ggplot(df_merged, aes(x = Date)) +
   ) +
   labs(title = "Comparison of Electric Vehicle Rise and Oil Prices Over Time",
        x = "Date", color = "Legend") +
-  scale_color_manual(values = c("Electric Vehicles Smoothed" = "blue", "Oil Price" = "darkred")) +
+  scale_color_manual(values = c("Electric Vehicles Smoothed" = viridis_colors[1], "Oil Price" = viridis_colors[2])) +
   theme_minimal() +
   theme(legend.position = "bottom")
 
