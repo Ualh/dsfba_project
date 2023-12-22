@@ -168,21 +168,24 @@ tendency in recent years.)
 #### 3.1.3.1 Availability of Charging station in Switzerland
 
 ```{r}
-p_charging_station <-ggplot(df_charge_number_CH, aes(x = year, y = value, group = powertrain, color = powertrain)) +
-  geom_line() +
-  labs(title = "Available charging station in Switzerland over the years",
-       x = "Year",
-       y = "Number of Charging Stations") +
-  theme_minimal()
+# Reshape the data into a wide format
+df_wide <- df_charge_number_CH %>%
+  spread(key = powertrain, value = value)
 
-# Convert to an interactive plotly object
-interactive_plot_charging_station <- ggplotly(p_charging_station, width = 600, height = 400)
-# Adjust plotly settings 
-interactive_plot_charging_station <- interactive_plot_charging_station %>%
-  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
+# Ensure the 'date' column is of type Date
+df_wide$year <- as.Date(df_wide$year)
 
-# Display the interactive plot
-interactive_plot_charging_station
+# Convert to xts object for dygraphs
+xts_data <- xts(df_wide[, -1], order.by = df_wide$year)
+
+# Create the dygraph with options for improved readability
+dygraph(xts_data, main = "Available Charging Stations in Switzerland", width = "600px", height = "400px") %>%
+  dySeries("Publicly available fast", label = "Fast Charging", color = "#1c61b6") %>%
+  dySeries("Publicly available slow", label = "Slow Charging", color = "#4daf4a") %>%
+  dyOptions(strokeWidth = 1.5, fillGraph = TRUE) %>%
+  dyLegend(show = "always") %>%
+  dyRangeSelector(height = 30) # Adds a range selector for zooming in and out
+
 ```
 
 The graph above points out the evolution of charging station in
@@ -196,21 +199,24 @@ Switzerland.
 #### 3.1.3.2 Availability of Charging station in France
 
 ```{r}
-p_charging_station_fr <-ggplot(df_charge_number_FR, aes(x = year, y = value, group = powertrain, color = powertrain)) +
-  geom_line() +
-  labs(title = "Available charging station in France over the years",
-       x = "Year",
-       y = "Number of Charging Stations") +
-  theme_minimal()
+# Reshape the data into a wide format
+df_wide <- df_charge_number_FR %>%
+  spread(key = powertrain, value = value)
 
-# Convert to an interactive plotly object
-interactive_plot_charging_station_fr <- ggplotly(p_charging_station_fr, width = 600, height = 400)
-# Adjust plotly settings 
-interactive_plot_charging_station_fr <- interactive_plot_charging_station_fr %>%
-  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
+# Ensure the 'date' column is of type Date
+df_wide$year <- as.Date(df_wide$year)
 
-# Display the interactive plot
-interactive_plot_charging_station_fr
+# Convert to xts object for dygraphs
+xts_data <- xts(df_wide[, -1], order.by = df_wide$year)
+
+# Create the dygraph with options for improved readability
+dygraph(xts_data, main = "Available Charging Stations in France", width = "600px", height = "400px") %>%
+  dySeries("Publicly available fast", label = "Fast Charging", color = "#1c61b6") %>%
+  dySeries("Publicly available slow", label = "Slow Charging", color = "#4daf4a") %>%
+  dyOptions(strokeWidth = 1.5, fillGraph = TRUE) %>%
+  dyLegend(show = "always") %>%
+  dyRangeSelector(height = 20) # Adds a range selector for zooming in and out
+
 ```
 
 The chart above follows the same tendency except that it now represents
@@ -354,17 +360,19 @@ leaflet_map_per_capita
 ## 3.2 Google Trend
 
 ```{r}
-p_gtrends <- ggplot(df_gtrends, aes(x = Date, y = SearchRatio)) +
-  geom_line(color = "darkgreen", size = 1, stat='smooth', se = FALSE, method = "loess", span = 0.1, size = 1) +
-  labs(x = "Date", y = "Google Search", title = "Google search About EV in Switzerland")
+library(xts)
+# Convert to xts object for dygraphs
+xts_data <- xts(df_gtrends[, -1], order.by = df_gtrends$Date)
 
-# Convert to an interactive plotly object
-interactive_plot_gtrends <- ggplotly(p_gtrends, width = 600, height = 400)
-# Adjust plotly settings 
-interactive_plot_gtrends <- interactive_plot_gtrends %>%
-  layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
+# Calculate rolling mean with a width of 12 (you can adjust this width as needed)
+roll_mean <- rollapply(xts_data, width = 5, FUN = mean, by.column = TRUE, align = "right", fill = NA)
 
-interactive_plot_gtrends
+# Create the dygraph with options for improved readability
+dygraph(roll_mean, main = "Google Search About EV in Switzerland", width = "600px", height = "400px") %>%
+  dySeries("SearchRatio", label = "Search Ratio", color = "#4daf4a") %>%
+  dyOptions(strokeWidth = 1.5, fillGraph = TRUE) %>%
+  dyLegend(show = "always") %>%
+  dyRangeSelector(height = 20) # Adds a range selector for zooming in and out
 ```
 
 Another interesting point to look out is the Google search about EV
@@ -405,6 +413,15 @@ animate(animated_plot, renderer = gganimate::gifski_renderer(), width = 600, hei
 ## 3.4 Demographics
 
 ```{r}
+# Define color palette for each generation
+generation_colors <- c(
+  "Generation Z" = viridis(4)[1],
+  "Millennials" = viridis(4)[2],
+  "Generation X" = viridis(4)[3],
+  "Baby Boomers" = viridis(4)[4]
+)
+
+# Pivot the data
 demographic_data_long <- df_demographic %>%
   pivot_longer(
     cols = c('Generation Z', 'Millennials', 'Generation X', 'Baby Boomers'),
@@ -420,17 +437,18 @@ p_demog <- ggplot(demographic_data_long, aes(x = Year, y = Population, color = G
        y = "Population") +
   theme_minimal() +
   theme(legend.position = "bottom") +
-  scale_color_manual(values = c("Generation Z" = "blue", "Millennials" = "red", "Generation X" = "green", "Baby Boomers" = "purple"))
+  scale_color_manual(values = generation_colors)
 
 # Convert the ggplot object to an interactive plotly object
 interactive_plot_demog <- ggplotly(p_demog, width = 600, height = 400)
 
 # Adjust plotly settings 
-interactive_plot_demog <- interactive_plot_demog%>%
+interactive_plot_demog <- interactive_plot_demog %>%
   layout(legend = list(orientation = "h", x = 0, xanchor = "left", y = -0.2))
 
 # The interactive plot can be displayed in an R Markdown document or a Shiny app
 interactive_plot_demog
+
 ```
 
 This graph concentrates on the demographic trends' evolution for each
@@ -445,23 +463,30 @@ Z's one seems to be moderately flat.
 ### 3.5.1 Total vehicles evolution France
 
 ```{r}
+# Define color palette for each fuel type
+fuel_colors <- c(
+  "Diesel" = viridis(5)[1], 
+  "Electrique" = viridis(5)[2], 
+  "Conventional_Hybrid" = viridis(5)[3], 
+  "Plug_in_Hybrid" = viridis(5)[4], 
+  "Essence" = viridis(5)[5]
+)
+
 # Reshape data to long format
 long_registration_data <- df_v_fr %>%
-  select(Date, Diesel, Essence, Conventional_Hybrid, Plug_in_Hybrid, Electrique) %>%
+  select(Date, Diesel, Electrique, Conventional_Hybrid, Plug_in_Hybrid, Essence) %>%
   gather(key = "Fuel_Type", value = "Count", -Date)
 
 # Create ggplot
 p <- ggplot(long_registration_data, aes(x = Date, y = log(Count), color = Fuel_Type)) +
-  geom_line() +
-  scale_color_manual(values = c("Diesel" = "red", "Essence" = "blue", 
-                                "Conventional_Hybrid" = "green", "Plug_in_Hybrid" = "purple", "Electrique" = "orange")) +
+  geom_line(size = 1) +
+  scale_color_manual(values = fuel_colors) +
   labs(x = "Date", y = "Log-Scale Count", color = "Fuel Type") +
   theme_minimal()
 
 # Convert to interactive plot and adjust legend
 ggplotly(p, width = 600, height = 400) %>%
   layout(legend = list(orientation = 'h', x = 0.5, xanchor = 'center', y = -0.15))
-
 
 ```
 
@@ -476,12 +501,18 @@ electric would still be too far away to be compared.
 ### 3.5.2 Deltas evolution
 
 ```{r}
+fuel_colors <- c(
+  "Diesel" = viridis(5)[1], 
+  "Electricity" = viridis(5)[2], 
+  "Conventional hybrid" = viridis(5)[3], 
+  "Plug-in hybrid" = viridis(5)[4], 
+  "Petrol" = viridis(5)[5]
+)
 # Reshape data to long format
 long_df_v_fr <- df_v_fr %>%
   select(Date, Diesel_delta, Essence_delta, Conventional_Hybrid_delta, Plug_in_Hybrid_delta, Electrique_delta) %>%
   gather(key = "Fuel_Type", value = "Delta", -Date)
 
-unique(long_df_v_fr$Fuel_Type)
 # Map Fuel_Type values to desired names
 long_df_v_fr <- long_df_v_fr %>%
   mutate(Fuel_Type = case_when(
@@ -501,9 +532,7 @@ p <- ggplot(long_df_v_fr, aes(x = Date, y = Delta, color = Fuel_Type)) +
        y = "Value",
        color = "Fuel Category") +
   theme_minimal() +
-  scale_color_manual(values = c("Diesel" = "red", "Petrol" = "blue", 
-                                "Conventional hybrid" = "green", "Plug-in hybrid" = "purple",
-                                "Electricity" = "orange"))
+  scale_color_manual(values = fuel_colors)
 
 # Convert to interactive plot and adjust legend
 ggplotly(p, width = 600, height = 400) %>%
