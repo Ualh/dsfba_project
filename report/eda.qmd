@@ -567,7 +567,7 @@ political_data_1999 <- political_combined_data[,-8] %>%
 # We start by looking for the right amount of clusters
 
 fviz_nbclust(political_data_1999[,-1], kmeans, method = "wss") +
-  geom_vline(xintercept = 7, linetype = 2)
+  geom_vline(xintercept = 7, linetype = 2, color = 'red')
 
 # We can see that 7 clusters seems to be the choice
 
@@ -579,28 +579,36 @@ pol_cantons_1999 <- pol_cantons_1999[,-1]
 # Fit k-means with 7 clusters
 km.res <- kmeans(pol_cantons_1999, 7, nstart = 26)
 
-fviz_cluster(km.res, data = pol_cantons_1999) +
-  ggtitle("Cluster Analysis of Cantons' stance on sustainability 1999")
+cluster_plot <- fviz_cluster(km.res, data = pol_cantons_1999) +
+  ggtitle("Cluster Analysis of Cantons' stance on sustainability 1999") +
+  scale_color_viridis_d() + # Apply viridis palette to points
+  scale_fill_viridis_d()    # Apply viridis palette to cluster polygons
+
+# Display the plot
+cluster_plot
 
 
 # Then the PCA:
 pca_cantons <- prcomp(pol_cantons_1999)
+
 pca_plot <- fviz_pca(pca_cantons,
-                     col.ind = as.factor(km.res$cluster),
-                     palette = "jco",
+                     col.ind = as.factor(km.res$cluster), # This assigns a color to each cluster
                      label = "all",
                      repel = TRUE) +
-  ggtitle("PCA Plot for each Canton")
+  scale_color_viridis_d() +  # This applies the viridis palette to the colors
+  ggtitle("PCA Plot for each Canton") +
+  coord_cartesian(xlim = c(-100, 100), ylim = c(-100, 100)) +
+  theme(legend.title = element_blank()) # Optionally remove the legend title
 
-# Adjust zoom level by setting xlim and ylim
-pca_plot + coord_cartesian(xlim = c(-100, 100), ylim = c(-100, 100))
+
+pca_plot
 
 #Now the PCA for the variables
 pca_variables <- prcomp(t(pol_cantons_1999))
 
 # Plot variables
 fviz_pca_var(pca_variables, col.var = "contrib", 
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             gradient.cols = viridis(3),
              repel = TRUE) +
   ggtitle("PCA Plot for Variables")
 ```
@@ -611,7 +619,7 @@ their political view concerning the environment in 1999.
 On these plots, GL seem to have an outlier behaviour. Upon further exploring we can
 see that this is explained by the fact that, in 1999, this canton was represented at 85,7%
 by the "Parti socialiste Suisse", namely a political party in the "In Favour" category. This
-strong influence of a single political party explains the atyipical position of this Canton in
+strong influence of a single political party explains the atypical position of this Canton in
 our Cluster plot.
 
 2023:
@@ -629,35 +637,36 @@ pol_canton_2023 <- pol_canton_2023[,-1]
 
 # How many clusters?
 fviz_nbclust(pol_canton_2023, kmeans, method = "wss") +
-  geom_vline(xintercept = 6, linetype = 2)
+  geom_vline(xintercept = 6, linetype = 2, color = 'red')
 
 # We can see that 6 clusters seems to be the choice
 
 # Fit k-means with 6 clusters
 km.res_2023 <- kmeans(pol_canton_2023, 6, nstart = 26)
 fviz_cluster(km.res_2023, data = pol_canton_2023) +
-  ggtitle("Cluster Analysis of Cantons' stance on sustainability 2023")
+  ggtitle("Cluster Analysis of Cantons' stance on sustainability 2023") +
+  scale_color_viridis_d() + # Apply viridis palette to points
+  scale_fill_viridis_d()    # Apply viridis palette to cluster polygons
 
 #Then the PCA plot
 pca_cantons <- prcomp(pol_canton_2023)
 pca_plot <- fviz_pca(pca_cantons,
                      col.ind = as.factor(km.res$cluster),
-                     palette = "jco",
                      label = "all",
                      repel = TRUE) +
-  ggtitle("PCA Plot for each Canton")
-
-# Adjust zoom level by setting xlim and ylim
-pca_plot + coord_cartesian(xlim = c(-100, 100), ylim = c(-100, 100))
+  ggtitle("PCA Plot for each Canton") +
+  scale_color_viridis_d() +  # This applies the viridis palette to the colors
+  pca_plot + coord_cartesian(xlim = c(-100, 100), ylim = c(-100, 100))
 
 #Now the PCA for the variables
 pca_variables <- prcomp(t(pol_canton_2023))
 
 # Plot variables
-fviz_pca_var(pca_variables, col.var = "contrib", 
-             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+fviz_pca_var(pca_variables, col.var = "contrib",
+             gradient.cols = viridis(3),
              repel = TRUE) +
   ggtitle("PCA Plot for Variables")
+
 ```
 
 The last four graphs represent the clustering of the Cantons according
