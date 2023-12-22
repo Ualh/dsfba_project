@@ -6,7 +6,7 @@ source(here::here("scripts/setup.R"))
 
 ## 4.1 RQ1 - Based on past electric vehicle adoption trends in Switzerland, can we forecast future adoption rates and pinpoint times of significant increases or decreases correlated with major events or policy changes?
 
-Here is the process we used to compute those two regressions.
+Here is the process we used to compute those 4 regressions.
 
 The first step was to choose dependent variables such as sales or EV
 registrations:
@@ -28,16 +28,53 @@ registrations:
     post-purchase and can be influenced by administrative processes.
 
 As we are interested in long-term trends in EV adoption and usage,
-registration data is concluded to be our final choice.
-### Simple Linear Regression
+registration data is concluded to be our final choice. 
 
-#### 4.1.1 With Oil
+We then performed some analyse using linear regression and multivariate regression.
 
-Note: the decision to remove rows with missing values was
-justified as the number of missing values in the Price column was
-relatively small (28 out of a larger dataset) and couldn't be reliably
-imputed, ensuring that the analysis was performed on a more complete and
-consistent dataset.
+To evaluate the quality of our models we then reviewed the *results* and
+checking weather the key *assumptions* of the regressions that are:
+
+-   Linearity: if relationships between variables are linear
+The linear assumption tells us if the relationship between the independent and dependent variables is a straight line. This makes the model simpler and easier to interpret.
+
+We will diagnose this assumptions through a scatter plot of *observed vs. predicted values*, looking for a straight line pattern; if the points closely follow a straight line, it suggests a linear relationship.
+
+-   Normal distribution: if the errors are normally distributed
+In linear regression, the normal assumption refers to the idea that the errors or residuals, which represent the deviations between observed and predicted values, follow a normal (Gaussian) distribution.
+
+We will diagnose this assumptions through an *histogram of residuals* which will allows us to see if the distribution of residuals resembles a normal distribution.
+
+-   Homoscedasticity: if the errors have constant variance
+A key indicator of homoscedasticity is a random spread of residuals across all levels of fitted values. If the residuals display a pattern, it suggests heteroscedasticity, which means the variance of residuals changes across fitted values, violating the assumption of homoscedasticity.
+
+We will diagnose this assumptions through a scatter plot of *residuals vs. fitted values*, looking for an even spread (constant variance) of the residuals across different levels of the fitted values.
+
+-   Multicollinearity : if independent variables are highly correlated with one and another (only for multivariable regression)
+
+The VIF (Variance Inflation Factor) values will indicate the level of multicollinearity. When variables in a model are too similar to each other, it can ruin the accuracy of our predictions. 
+
+We will diagnose this through the `VIF`  measure.  A rule of thumb is that if VIF is greater than 5 or 10, it indicates high multicollinearity. A high VIF indicates that a predictor variable is highly correlated with other predictors in the model, potentially causing instability in coefficient estimates.
+
+If one of those assumptions doesn't hold, the model might not accurately capture the relationship, leading to incorrect predictions and conclusions.
+
+Finally, we concluded by indicating the relevance of the results taking into account the quality of the model.
+
+### 4.1.1. Simple Linear Regression
+
+We started with the simple linear regression models to understand how well a single independent variable can predict EV adoption rates.
+
+#### 4.1.1.1 With Oil
+
+We started with oil price as a independent variable.
+
+Linear models were fitted using the `lm()` function
+
+Note: the decision to remove rows with missing values was justified as
+the number of missing values in the Price column was relatively small
+(28 out of a larger dataset) and couldn't be reliably imputed, ensuring
+that the analysis was performed on a more complete and consistent
+dataset.
 
 ```{r}
 # Select the columns you want to keep in df_v_electric
@@ -74,25 +111,9 @@ print(paste("RMSE:", rmse))
 table_regression <- tbl_regression(mod1_lin)
 ```
 
+##### 4.1.1.1.1 Model Diagnostic
+###### 4.1.1.1.1.2 Results
 
-
-
-
-
-
-
-
-
-
-##### 4.1.1.1 Model Diagnostic
-We are going to analyse our models by reviewing the *results* and checking weather the key *assumptions* that are:
-
-- Linearity: if relationships between variables are linear
-- Normal distribution: if the errors are normally distributed
-- Homoscedasticity: if the errors have constant variance
-- Independence: if the observations are independent
-
-###### 4.1.1.1.1 Results
 ```{r}
 table_regression
 ```
@@ -108,17 +129,15 @@ Count variable. Specifically:
     significance level of 0.05. This high p-value suggests that Price is
     not statistically significant in predicting Count, as it fails to
     reject the null hypothesis that the coefficient is zero.
--   The *R-*squared value is very low (3.83e-07), which indicates that the
-    linear regression model solely explains a negligible fraction of the
-    variance related to the variable Count.\
+-   The *R-*squared value is very low (3.83e-07), which indicates that
+    the linear regression model solely explains a negligible fraction of
+    the variance related to the variable Count.\
 -   The *Root Mean Squared Erro*r (RMSE) is relatively high (247),
     suggesting that the model's predictions have a substantial amount of
     error.
 
-###### 4.1.1.1.1.2 Linearity 
-The linear assumption tells us if the relationship between the independent and dependent variables is a straight line. This makes the model simpler and easier to interpret. If this assumption doesn't hold, the model might not accurately capture the relationship, leading to incorrect predictions and conclusions.
+###### 4.1.1.1.1.1.2 Linearity
 
-We will diagnose this assumptions through a scatter plot of observed vs. predicted values, looking for a straight line pattern; if the points closely follow a straight line, it suggests a linear relationship.
 ```{r}
 plot_data <- data.frame(
   Observed = test_data$Count,
@@ -138,10 +157,14 @@ p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
 # Convert to a plotly interactive plot for consistency with the previous plots
 ggplotly(p, tooltip = "text", width = 600, height = 400)
 ```
-The graph indicates a potential issue with the linearity assumption, as the observed values for low predicted values are more spread out and not evenly distributed along a straight line, suggesting the model may not be an appropriate fit for the data.
 
-###### 4.1.1.1.1.3 Homoscedasticity
-A key indicator of homoscedasticity is a random spread of residuals across all levels of fitted values. If the residuals display a pattern, it suggests heteroscedasticity, which means the variance of residuals changes across fitted values, violating the assumption of homoscedasticity.
+The graph indicates a potential issue with the linearity assumption, as
+the observed values for low predicted values are more spread out and not
+evenly distributed along a straight line, suggesting the model may not
+be an appropriate fit for the data.
+
+###### 4.1.1.1.1.1.3 Homoscedasticity
+
 ```{r}
 # Create a data frame for plotting
 plot_data <- data.frame(
@@ -166,15 +189,16 @@ ggplotly(p, width = 600, height = 400)
 This plot shows a pattern where the majority of residuals are clustered
 around a narrow range of fitted values, with a few extreme residuals.
 This could indicate that the model is not capturing the variability in
-the data. We also observe the presence of extreme outliers or influential points that are affecting the model fit.
+the data. We also observe the presence of extreme outliers or
+influential points that are affecting the model fit.
 
-The outliers represent rare but possible scenarios within the dataset,
+Note : The outliers represent rare but possible scenarios within the dataset,
 providing valuable insights into the extremes of the observed
 phenomenon, and should therefore be retained for a comprehensive
 analysis of the data's behavior.
 
-###### 4.1.1.1.1.4 Normality
-A histogram allows us to see if the distribution of residuals resembles a normal distribution.
+###### 4.1.1.1.1.1.4 Normality
+
 ```{r}
 # Histogram of Residuals
 p <- ggplot(plot_data, aes(x = Residuals, fill = ..count..)) +
@@ -191,7 +215,7 @@ Instead, there is a large spike near zero and a few large residuals,
 confirming that there are outliers and that the model is not appropriate
 for the data.
 
-##### 4.1.1.1.2 Conclusion
+##### 4.1.1.1.3 Conclusion
 
 In summary, based on these results and the diagnostic graphs, it appears
 that the Price variable does not have a meaningful impact on predicting
@@ -200,8 +224,11 @@ for explaining the relationship between these two variables. Further
 exploration of the data and potentially considering other factors or
 modeling approaches may be necessary to improve predictive accuracy.
 
-#### 4.1.2. With google trends
+The diagnostic plots obtained from our regression analysis indicate possible issues with linearity, normality, and homoscedasticity, highlighting the need to reconsider the model or explore alternative methods.
 
+#### 4.1.1.2. With google trends
+
+We then continue with the google trends, `SearchRatio`, as an independent variable.
 ```{r}
 # Merge the two datasets based on the common Date column
 df_merged <- merge(df_merged, df_gtrends, by = "Date")
@@ -236,34 +263,38 @@ print(paste("RMSE:", rmse))
 table_regression2 <- tbl_regression(mod2_lin)
 ```
 
-
-
-
-
-
-
-
-
-
-
 ##### 4.1.2.1 Model Diagnostic
+###### 4.1.1.2.1.1. Results
 
-We will proceed in the same way as for the previous linear regression.
-
-###### 4.1.2.1.1 Results
 ```{r}
 # Viewing the table
 table_regression2
 ```
 
-The linear regression analysis results indicate that the SearchRatio variable has a small but *significant* effect on explaining the variation in the Count variable. 
+The linear regression analysis results indicate that the SearchRatio
+variable has a small but *significant* effect on explaining the
+variation in the Count variable.
 
-- The coefficient for SearchRatio is 5.957, indicating that there is a positive linear relationship between SearchRatio and Count. For each unit increase in SearchRatio, the Count increases by an average of 5.957 units.
-- The p-value for SearchRatio is less than 2e-16, which is far below the common significance level of 0.05. This extremely low p-value strongly suggests that SearchRatio is statistically significant in predicting Count, allowing us to reject the null hypothesis that the coefficient is zero.
-- The R-squared value is 0.0695, which indicates that the linear regression model explains about 6.95% of the variance in the Count variable. This is a modest amount, indicating that while SearchRatio does contribute to explaining Count, other factors are also likely to play a significant role.
-- The Root Mean Squared Error (RMSE) is 240.6, suggesting that the model's predictions have a moderate amount of error. This figure should be evaluated in the context of the magnitude of Count values to determine its practical significance.
+-   The coefficient for SearchRatio is 5.957, indicating that there is a
+    positive linear relationship between SearchRatio and Count. For each
+    unit increase in SearchRatio, the Count increases by an average of
+    5.957 units.
+-   The p-value for SearchRatio is less than 2e-16, which is far below
+    the common significance level of 0.05. This extremely low p-value
+    strongly suggests that SearchRatio is statistically significant in
+    predicting Count, allowing us to reject the null hypothesis that the
+    coefficient is zero.
+-   The R-squared value is 0.0695, which indicates that the linear
+    regression model explains about 6.95% of the variance in the Count
+    variable. This is a modest amount, indicating that while SearchRatio
+    does contribute to explaining Count, other factors are also likely
+    to play a significant role.
+-   The Root Mean Squared Error (RMSE) is 240.6, suggesting that the
+    model's predictions have a moderate amount of error. This figure
+    should be evaluated in the context of the magnitude of Count values
+    to determine its practical significance.
 
-###### 4.1.2.1.2 Linearity
+###### 4.1.2.1.1.2 Linearity
 
 ```{r}
 plot_data <- data.frame(
@@ -285,9 +316,15 @@ p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
 ggplotly(p, tooltip = "text", width = 600, height = 400)
 
 ```
-This graph shows that for a wide range of predicted values, the observed values are consistently low, suggesting that the model may not be effectively capturing the variance in the observed data, and there could be an issue with both the linearity and precision of the model's predictions.
 
-###### 4.1.2.1.3 Homoscedasticity
+This graph shows that for a wide range of predicted values, the observed
+values are consistently low, suggesting that the model may not be
+effectively capturing the variance in the observed data, and there could
+be an issue with both the linearity and precision of the model's
+predictions.
+
+###### 4.1.2.1.1.3. Homoscedasticity
+
 ```{r}
 # Create a data frame for plotting
 plot_data <- data.frame(
@@ -297,7 +334,7 @@ plot_data <- data.frame(
 
 # Create ggplot object for Residuals vs. Fitted
 p_residuals_fitted <- ggplot(plot_data, aes(x = Fitted, y = Residuals)) +
-  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_hline(yintercept = 0, linetype = "dashed", color = 'red') +
   geom_point(aes(color = Residuals), alpha = 0.6) +
   scale_color_viridis(option = "C", direction = 1) +
   theme_minimal() +
@@ -309,9 +346,13 @@ p_residuals_fitted <- ggplot(plot_data, aes(x = Fitted, y = Residuals)) +
 ggplotly(p_residuals_fitted, width = 600, height = 400)
 ```
 
-The residual plots suggest that there may be non-linearity in the relationship between SearchRatio and Count or the presence of *outliers*, as indicated by the large residuals for higher fitted values.
+The residual plots suggest that there may be non-linearity in the
+relationship between SearchRatio and Count or the presence of
+*outliers*, as indicated by the large residuals for higher fitted
+values.
 
-###### 4.1.2.1.4 Normality
+###### 4.1.2.1.1.4 Normality
+
 ```{r}
 # Create ggplot object for Histogram of Residuals
 p_histogram_residuals <- ggplot(plot_data, aes(x = Residuals, fill = ..count..)) +
@@ -323,12 +364,13 @@ p_histogram_residuals <- ggplot(plot_data, aes(x = Residuals, fill = ..count..))
 
 # Convert to a plotly interactive plot
 ggplotly(p_histogram_residuals, width = 600, height = 400)
-
 ```
 
-As for the other linear regression, the histogram shows a right-skewed distribution with a long tail, indicating and non-normal distribution and the presence of outliers.
+As for the other linear regression, the histogram shows a right-skewed
+distribution with a long tail, indicating and non-normal distribution
+and the presence of outliers.
 
-##### 4.1.2.2 Conclusion
+##### 4.1.1.2.2 Conclusion
 
 Overall, while there is a statistically significant relationship between
 SearchRatio and Count, the model's R-squared value suggests that other
@@ -336,12 +378,18 @@ factors not included in the model may also influence the Count variable.
 One might want to explore additional variables along with more complex
 models to improve predictive accuracy.
 
-The diagnostic plots from our regression analysis further suggest potential violations of linearity, normality, and homoscedasticity, which may necessitate reevaluation of the model or the use of alternative methods.
+The diagnostic plots from our regression analysis further suggest
+potential violations of linearity, normality, and homoscedasticity,
+which may necessitate reevaluation of the model or the use of
+alternative methods.
 
-### 4.1.3 Multivariable Regression
+### 4.1.1.3 Multivariable Regression
 
-#### 4.1.3.1 with Demographic groups, Oil Price and Google Trend
+Given the limitations of simple linear models in explaining our dependent variable, EV adoption, likely due to the intricate interplay of various contributing factors, we will now transition to a more comprehensive approach using a multiple linear regression model.
 
+#### 4.1.1.1.3.1 With Demographic groups, Oil Price and Google Trend
+
+We first explored the combined influence of Demographic groups, Oil Price and Google Trend as predictors.
 ```{r}
 # Merge the data frames on the 'Year' column
 df_merged <- merge(df_merged, df_demographic, by.x = "Date", by.y = "Year")
@@ -376,22 +424,42 @@ table_regression_mod1_multi <- tbl_regression(mod1_multi)
 # Print the table
 table_regression_mod1_multi
 ```
-##### 4.1.3.1.1 Model Diagnostic
 
-In multivariable regression, we are going to check the same key assumptions of the model as for the linear regression. However,  there's an additional need to check for *multicollinearity* among predictors.
+##### 4.1.1.3.1.1 Model Diagnostic
 
-###### 4.1.3.1.2 Results
+In multivariable regression, we are going to check the same key
+assumptions of the model as for the linear regression. However, there's
+an additional need to check for *multicollinearity* among predictors.
 
-The multilinear regression analysis results indicate that most of the independent variables have a weak or negligible effect on explaining the variation in the Count variable.
+###### 4.1.1.3.1.2 Results
 
-* The coefficient for SearchRatio is slightly above zero (1.04e+00), but with a p-value of 0.437, it suggests that SearchRatio is not statistically significant in predicting Count.
-* The coefficient for Price is also very close to zero (4.10e-02), and its p-value of 0.885 reinforces the conclusion that Price does not significantly contribute to the model.
-* The generational variables (Generation Z, Millennials, Generation X) have very small coefficients (ranging from -1.02e-03 to 1.38e-03) and p-values well above the significance level, indicating that these, too, are not statistically significant predictors of Count, with the exception of Baby Boomers.
-* Baby Boomers is the only variable that shows a statistically significant relationship with Count (coefficient = 6.32e-04, p-value = 0.018)
-* The R-squared value of the model is low (0.0924), meaning it only explains about 9.24% of the variance in the Count variable, which is not substantially improved when considering the adjusted R-squared (0.0815).
-* The Root Mean Squared Error (RMSE) is 35.6, which suggests that the model's predictions have a moderate amount of error relative to the magnitude of Count
+The multilinear regression analysis results indicate that most of the
+independent variables have a weak or negligible effect on explaining the
+variation in the Count variable.
 
-###### 4.1.3.1.3 Linearity
+-   The *coefficient* for `SearchRatio` is slightly above zero (1.04e+00),
+    but with a *p-value* of 0.437, it suggests that SearchRatio is not
+    statistically significant in predicting EV adoption.
+-   The *coefficient* for `Price` is also very close to zero (4.10e-02), and
+    its *p-value* of 0.885 reinforces the conclusion that `Price` does not
+    significantly contribute to the model.
+-   The generational variables (`Generation Z`, `Millennials`, `Generation X`)
+    have very small *coefficients* (ranging from -1.02e-03 to 1.38e-03)
+    and *p-values* well above the significance level, indicating that
+    these, too, are not statistically significant predictors of EV adoption,
+    with the exception of `Baby Boomers`.
+-   `Baby Boomers` is the only variable that shows a statistically
+    significant relationship with Count (*coefficient* = 6.32e-04, *p-value*
+    = 0.018)
+-   The *R-squared* value of the model is low (0.0924), meaning it only
+    explains about 9.24% of the variance in the EV adoption variable, which is
+    not substantially improved when considering the *adjusted R-squared*
+    (0.0815).
+-   The *Root Mean Squared Error* (RMSE) is 35.6, which suggests that the
+    model's predictions have a moderate amount of error relative to the
+    magnitude of EV adoption
+
+###### 4.1.1.3.1.3 Linearity
 
 ```{r}
 plot_data <- data.frame(
@@ -413,7 +481,10 @@ p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
 ggplotly(p, tooltip = "text", width = 600, height = 400)
 ```
 
-###### 4.1.3.1.4 Homoscedasticity
+The scatter plot shows many points along the lower left, suggesting the model may underpredict for higher actual values, as evidenced by points falling above the red dashed line, which represents perfect prediction. The color intensity indicates fewer occurrences of higher values.
+
+###### 4.1.1.3.1.4 Homoscedasticity
+
 ```{r}
 residuals <- test_data$Count - predictions
 
@@ -425,7 +496,7 @@ plot_data <- data.frame(
 
 # Create ggplot object for Residuals vs. Fitted
 p_residuals_fitted <- ggplot(plot_data, aes(x = Fitted, y = Residuals)) +
-  geom_hline(yintercept = 0, linetype = "dashed") +
+  geom_hline(yintercept = 0, linetype = "dashed", color = 'red') +
   geom_point(aes(color = Residuals), alpha = 0.6) +
   scale_color_viridis(option = "C", direction = -1) +
   theme_minimal() +
@@ -435,7 +506,10 @@ p_residuals_fitted <- ggplot(plot_data, aes(x = Fitted, y = Residuals)) +
 ggplotly(p_residuals_fitted, width = 600, height = 400)
 ```
 
-###### 4.1.3.1.5 Normality
+This plot indicates some non-random patterns in the residuals. The spread of residuals is not consistent across the range of fitted values, suggesting potential issues with homoscedasticity and possibly with the linearity assumption. The model may not be capturing all the systematic information present in the data.
+
+###### 4.1.1.3.1.5 Normality
+
 ```{r}
 plot_data <- data.frame(Residuals = residuals)
 
@@ -450,10 +524,10 @@ p_histogram_residuals <- ggplot(plot_data, aes(x = Residuals, fill = ..count..))
 ggplotly( p_histogram_residuals, width = 600, height = 400)
 ```
 
-###### 4.1.3.1.6 Multicollinearity
+This histogram indicates a distribution of residuals that is not symmetric and shows a peak at the center. This central peak is a good sign, as it often indicates that the model's predictions are on average correct, but the spread and potential skewness of the data still need to be assessed for normality.
 
-The VIF values indicate the level of multicollinearity.
-When variables in a model are too similar to each other, it can ruin the accuracy of our predictions. High VIF scores tell us that our variables are too alike, which means they might not each be telling us something unique about what we're trying to predict.
+###### 4.1.1.3.1.6 Multicollinearity
+
 ```{r}
 vif_values <- vif(mod1_multi)
 
@@ -500,7 +574,9 @@ vif_table
 
 Not surprinsingly, the VIF was high among the generational variables, which should be addressed to improve the model's interpretability and reliability.
 
-##### 4.1.3.2. Conclusion
+SearchRatio also demonstrate a high VIF, even though it’s not as extreme as for the generational variables.
+
+##### 4.1.1.3.2. Conclusion
 
 ```{r}
 effects <- as.data.frame(fortify(mod1_multi))
@@ -508,7 +584,7 @@ effects <- as.data.frame(fortify(mod1_multi))
 # Create ggplot object for 'Baby Boomers' Effect
 p_baby_boomers_effect <- ggplot(effects, aes_string(x = "`Baby Boomers`", y = ".fitted")) +
   geom_point(alpha = 0.6) +
-  geom_smooth(method = "lm", se = FALSE) +
+  geom_smooth(method = "lm", se = FALSE, color = 'red', linetype = "dashed") +
   theme_minimal() +
   labs(title = "Baby Boomers Effect on EV Adoption", x = "Baby Boomers", y = "Fitted Values")
 
@@ -517,16 +593,18 @@ ggplotly(p_baby_boomers_effect, width = 600, height = 400)
 
 ```
 
-
 This multivariate linear regression model does not appear to have a
 strong explanatory power, as indicated by the low adjusted R-squared
-value and the relatively high RMSE. Additionally, only the `Baby Boomers`
-variable shows statistical significance in predicting the Count, while
-other variables do not appear to be significant in this context. However, given the high VIF this result should be interpreted with caution.
-Refining the model or exploring other variables to improve its
-predictive performance might be suggestible.
+value and the relatively high RMSE. Additionally, only the
+`Baby Boomers` variable shows statistical significance, as the graph demonstrate, in predicting the
+Count, while other variables do not appear to be significant in this
+context. However, given the high VIF this result should be interpreted
+with caution. Refining the model or exploring other variables to improve
+its predictive performance might be suggestible.
 
-#### 4.1.3.2 Adding Political Parties
+#### 4.1.1.3.2 Adding Political Parties
+
+As the initial results were inconclusive, we opted to incorporate the Political Parties dataset and perform a backward integration to determine the most suitable model for our prediction.
 
 ```{r}
 # Remove 'Confederation' from df_merged
@@ -582,22 +660,25 @@ summary(reduced_model)
 # Create a summary table for the linear model
 table_regression_mod2_multi <- tbl_regression(reduced_model)
 
+```
+
+##### 4.1.1.3.2.1 Model Diagnosis
+
+###### 4.1.1.3.2.1.1 Results
+```{r}
 # Print the table
 table_regression_mod2_multi
 ```
 
-##### 4.1.3.2.1 Model Diagnosis
-
-###### 4.1.3.2.1.1 Results
 1.  **Starting Model**: The initial model includes a wide range of
-    predictor variables: Year, Price, SearchRatio, various generational
-    groups (Generation Z, Millennials, Generation X, Baby Boomers), and
-    several categories of opinions (Against, Slightly Against, Neutral,
-    Slightly in Favour, In Favour).
+    predictor variables: `Year`, `Price`, `SearchRatio`, various generational
+    groups (`Generation Z`, `Millennials`, `Generation X`,`Baby Boomers`), and
+    several categories of opinions (`Against`, `Slightly Against`, `Neutral`,
+    `Slightly in Favour`, `In Favour`).
 
 2.  **Stepwise Process**: The stepwise procedure iteratively removes the
     least significant variables based on their contribution to the model
-    (using the Akaike Information Criterion, AIC, as a guide). A lower
+    (using the Akaike Information Criterion, *AIC*, as a guide). A lower
     AIC indicates a better model fit with respect to the number of
     variables.
 
@@ -608,8 +689,8 @@ table_regression_mod2_multi
     `Count`.
 
 4.  **Final Model**: The last step shows the model with the variables:
-    SearchRatio, Slightly Against, Neutral, and In Favour. This model
-    has an AIC of 710, which is lower than the starting AIC of 715,
+    `SearchRatio`, `Slightly Against`, `Neutral`, and `In Favour`. This model
+    has an *AIC* of 710, which is lower than the starting *AIC* of 715,
     indicating a more efficient model.
 
 5.  **Significance of Remaining Variables**: In the final model, all the
@@ -638,35 +719,131 @@ table_regression_mod2_multi
     multicollinearity, interactions between variables, etc.) is
     recommended to validate the findings.
 
-###### 4.1.3.2.1.2 Linearity
-
-###### 4.1.3.2.1.3 Homoscedasticity
-
-###### 4.1.3.2.1.4 Normality
-
-###### 4.1.3.2.1.5 Multicollinearity
+###### 4.1.1.3.2.1.2 Linearity
 
 ```{r}
-# Set up the layout for a 2x2 plot
-par(mfrow = c(2, 2))
+# Step 1: Create predictions
+df_multi_reg$Predicted <- predict(reduced_model, newdata = df_multi_reg)
 
-# Create the diagnostic plots
-plot(full_model, 1, main = "Full Model Residuals vs Fitted")
-plot(full_model, 2, main = "Full Model Q-Q Plot")
-plot(full_model, 3, main = "Full Model Scale-Location Plot")
-plot(full_model, 5, main = "Full Model Residuals vs Leverage")
+# Step 2: Combine predicted and observed values
+plot_data <- data.frame(Observed = df_multi_reg$Count, Predicted = df_multi_reg$Predicted)
 
-# Reset to default layout
-par(mfrow = c(1, 1))
+# Step 3: Plot using ggplot2
+p <- ggplot(plot_data, aes(x = Predicted, y = Observed)) +
+  geom_point(aes(color = Observed), alpha = 0.6) +
+  geom_abline(intercept = 0, slope = 1, linetype = "dashed", color = "red") +
+  scale_color_viridis(option = "C", direction = 1) +
+  theme_minimal() +
+  theme(text = element_text(size = 14), legend.position = "bottom") +
+  labs(title = "Observed vs. Predicted", x = "Predicted Values", y = "Observed Values", color = "Observed Count") +
+  expand_limits(x = 0, y = 0)
+
+# Step 4: Convert to a plotly interactive plot
+ggplotly(p, tooltip = "text", width = 600, height = 400)
+
 ```
 
-In the plot, most of the data points seem to be randomly scattered
-around the horizontal line at zero, which is good as it suggests that
-the residuals have constant variance and that the model's predictions
-are unbiased. However, there are two data points labelled 74 and 76 that
-stand out from the rest, with one particularly far from zero. These
-points could be outliers or influential points that have a large effect
-on the regression line.
+This graph shows that for lower predicted values, the observed and predicted values are closer, but as values increase, the predictions become less accurate. This suggest that the model's predictions are not consistent across the range of data, especially at higher values. This could indicate potential model limitations or the influence of outliers or leverage points at higher values.
+
+###### 4.1.1.3.2.1.3 Homoscedasticity
+
+```{r}
+
+# Step 1: Calculate residuals and get fitted values
+df_multi_reg$Residuals <- residuals(reduced_model)
+df_multi_reg$Fitted <- fitted(reduced_model)
+
+# Step 2: Prepare data for plotting
+plot_data <- data.frame(Fitted = df_multi_reg$Fitted, Residuals = df_multi_reg$Residuals)
+
+# Step 3: Create ggplot object for Residuals vs. Fitted
+p_residuals_fitted <- ggplot(plot_data, aes(x = Fitted, y = Residuals)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = 'red') +
+  geom_point(aes(color = Residuals), alpha = 0.6) +
+  scale_color_viridis(option = "C", direction = -1) +
+  theme_minimal() +
+  labs(title = "Residuals vs. Fitted - Multivariable Model", x = "Fitted Values", y = "Residuals")
+
+# Step 4: Convert to a plotly interactive plot
+ggplotly(p_residuals_fitted, width = 600, height = 400)
+
+```
+
+This graph shows a pattern where residuals spread out as the fitted values increase. The presence of a few large residuals suggests potential outliers or influential points. This pattern suggests that the model may not be capturing all the complexities of the data.
+
+###### 4.1.1.3.2.1.4 Normality
+
+```{r}
+
+# Step 1: Calculate residuals
+residuals <- residuals(reduced_model)
+
+# Step 2: Prepare data for plotting
+plot_data <- data.frame(Residuals = residuals)
+
+# Step 3: Create ggplot object for Histogram of Residuals
+p_histogram_residuals <- ggplot(plot_data, aes(x = Residuals, fill = ..count..)) +
+  geom_histogram(binwidth = 20, alpha = 0.7) +  # Adjust binwidth as necessary
+  scale_fill_viridis_c(option = "C", begin = 0.3, end = 0.7, direction = -1) +  # Single color scale
+  theme_minimal() +
+  labs(title = "Histogram of Residuals", x = "Residuals", y = "Frequency", fill = "Frequency")
+
+# Step 4: Convert to an interactive plot
+ggplotly(p_histogram_residuals, width = 600, height = 400)
+
+```
+
+The histogram displays a distribution of residuals with a significant peak in the center, suggesting that many of the residuals are small and close to zero, which is a good sign for model accuracy. However, there are also some residuals far from zero, indicating potential outliers or model misspecification. The presence of outliers can distort the overall distribution, making it appear less normal and potentially impacting the model's predictive performance.
+
+###### 4.1.1.3.2.1.5 Multicollinearity
+
+```{r}
+vif_values <- vif(reduced_model)
+
+# Interpret VIF values
+# A rule of thumb is that if VIF is greater than 5 or 10, it indicates high multicollinearity.
+high_vif <- vif_values[vif_values > 5]
+if(length(high_vif) > 0){
+  print("The following variables have a high VIF indicating potential multicollinearity:")
+  print(high_vif)
+} else {
+  print("No evidence of concerning multicollinearity among the predictor variables.")
+}
+
+vif_values <- c(SearchRatio = 1.08, `Slightly Against`= 23.99, Neutral = 5.46, 
+                `In Favour` = 19.36)
+
+# Create a data frame from the VIF values
+vif_df <- data.frame(
+  Variable = names(vif_values),
+  VIF = unname(vif_values),
+  Multicollinearity_Interpretation = c(
+    "No evidence of concerning multicollinearity among the predictor variables.",
+    "Very high, indicating significant multicollinearity.",
+    "High, indicating significant multicollinearity.",
+    "Very high, indicating significant multicollinearity."
+  )
+)
+
+# Generate the summary table
+vif_table <- kable(vif_df, "html", booktabs = TRUE) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = F) %>%
+  column_spec(1, bold = TRUE, width = "15em") %>%
+  column_spec(2, width = "5em") %>%
+  column_spec(3, width = "30em")
+
+# Print the table to view it in R Markdown or R HTML output
+vif_table
+
+```
+
+The table indicates that `Slightly Against` and `In Favour` have very high Variance Inflation Factors (VIFs) of 23.99 and 19.32 respectively, pointing to significant multicollinearity issues, which means they share a lot of information and could be problematic for the regression analysis. `Neutral` has a moderate to high VIF, which might also be a concern. `SearchRatio` has a low VIF, suggesting it doesn't have multicollinearity problems with other variables.
+
+##### 4.1.1.3.2.2 Conclusion
+
+Based on the regression results and the graphs, it seems that the final model with variables `SearchRatio`, `Slightly Against`, `Neutral`, and `In Favour` explains a substantial part of the variance in the dependent variable (Multiple R-squared: 0.699). The residuals show some potential outliers, but the histogram suggests most errors are small. While the model appears statistically significant and explains much of the variability, caution should be exercised due to potential outliers and the patterns observed in the residuals, which could indicate model misspecification or the need for transformation of variables.
+
+Significant multicollinearity in the model, especially with `slightly Against` and `In Favour`, casts doubt on the reliability of the regression results and suggests the need for model adjustments or alternative analysis methods.
 
 When considering whether to exclude outliers from our analysis, we
 should proceed with caution. Outliers shouldn't be discarded just
@@ -687,8 +864,6 @@ Given these considerations, we've decided to retain these outliers in
 our dataset. By keeping them, we ensure that our analysis accounts for
 the full spectrum of data, including those extreme but valid variations,
 thereby aiming for a more comprehensive and accurate model.
-
-##### 4.1.3.2.2 Conclusion
 
 ## 4.2 RQ2 - Are there differences in adoption rate within the different regions in Switzerland? And are there different buying behaviors displayed by the demographic segments within Switzerland?
 

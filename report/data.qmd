@@ -290,8 +290,7 @@ variable_table_charging %>%
   kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover", "condensed"))
 ```
 
-Source - \[IEA.org\]
-(https://www.iea.org/data-and-statistics/data-tools/global-ev-data-explorer)
+Source - [IEA.org](https://www.iea.org/data-and-statistics/data-tools/global-ev-data-explorer)
 
 ### 2.1.7 Complementary charging station
 
@@ -888,8 +887,8 @@ However, two important points are to note.
 Moreover, it is important to keep standardized dates and locations
 
 We merged 'year' and 'month' columns to create a 'Date' column in the
-format "YYYY-MM-01", subsequently reorganizing the dataframe to position
-'Date' as the first column and removing the original 'year' and 'month'
+format `YYYY-MM-01`, subsequently reorganizing the dataframe to position
+`Date` as the first column and removing the original `year` and `month`
 columns.
 
 ```{r}
@@ -951,8 +950,7 @@ The two main difficulties with this data set were the following:
 To use this data effectively in our analysis. We will group them in 5
 categories.
 
-The 5 categories respond to the following question: "What is the
-political party's stance on sustainability / ecological measures?"
+The 5 categories respond to the following question: **"What is the political party's stance on sustainability / ecological measures?"**
 
 1.  Against
 2.  Slightly Against
