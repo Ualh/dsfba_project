@@ -548,7 +548,7 @@ rownames(pol_cantons_1999) <- pol_cantons_1999$Canton
 pol_cantons_1999 <- pol_cantons_1999[,-1]
 
 # Fit k-means with 7 clusters
-km.res <- kmeans(pol_cantons_1999, 5, nstart = 26)
+km.res <- kmeans(pol_cantons_1999, 7, nstart = 26)
 
 fviz_cluster(km.res, data = pol_cantons_1999) +
   ggtitle("Cluster Analysis of Cantons' stance on sustainability 1999")
@@ -635,9 +635,19 @@ addition to this, extreme values such as Glaris (GL) for 1999 or
 Appenzell for 2023. Both represent a cluster on their own which neglect
 the potential bias created by those most distant values.
 
-It is also interesting to observe that VD, NE and GE seem to follow the
-same tendencies when it comes to sustainabiliy concerns, both in 1999
-and 2023.
+It is interesting to see that VD, NE and GE seem to follow the same tendencies
+both in 1999 and 2023, and are represented by Dimension 1 and 2 by roughly the same
+amounts. 
+
+Another interesting observation is that NW and UR are their own cluster both
+in 1999 and 2023, as these two geographical neighbors likely show the same political 
+inclination. We can see in the PCA plot for variables (both 1999 and 2023) that these
+two cantons have a strong contribution to the principal components and therefore explain 
+a large portion of the variance.
+
+One last thing we would like to mention is how 
+
+
 
 ## 3.7 Swiss vs France
 
