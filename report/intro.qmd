@@ -4,7 +4,10 @@
 source(here::here("scripts/setup.R"))
 ```
 
-## 1.1 Background and Motivation
+## 1.1 Executive Summary
+This study explores electric vehicle (EV) adoption trends in Switzerland, investigating factors like regional differences, demographic influences, and comparisons with France. It uses diverse datasets, including vehicle registrations, oil prices, demographics, Google trends, and political affiliations. Key findings include a rise in EV registrations, variations in adoption rates across regions and demographics, and the influence of charging station availability. The analysis also highlights the role of political dynamics in EV adoption. Limitations include the lack of detailed pricing data and the unexplored impact of marketing and government subsidies. Future research could delve into these aspects for a more nuanced understanding.
+
+## 1.2 Background and Motivation
 
 In an era marked by unprecedented environmental challenges, our world is
 at a critical juncture where sustainable practices are no longer an
@@ -51,7 +54,7 @@ inspire positive change, foster innovation, and advocate for a paradigm
 shift towards eco-friendly practices in the automotive sector and
 beyond.
 
-## 1.2 Related Work
+## 1.3 Related Work
 
 We came across this
 [article](https://www.hivepower.tech/blog/electric-vehicles-evs-in-switzerland-what-you-should-know).
@@ -78,7 +81,7 @@ on the confederation website regarding the evolution of vehicles in
 Switzerland. These results are showing a continuity in the trends we
 observed in the previous years.
 
-## 1.3 Reseach Questions
+## 1.4 Reseach Questions
 
 -   
 

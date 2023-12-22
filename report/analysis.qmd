@@ -859,6 +859,10 @@ our dataset. By keeping them, we ensure that our analysis accounts for
 the full spectrum of data, including those extreme but valid variations,
 thereby aiming for a more comprehensive and accurate model.
 
+### Overall Conclusion of our regressions
+
+In the analysis of Swiss EV adoption trends, the final model with 'SearchRatio', 'Slightly Against', 'Neutral', and 'In Favour' showed significant results despite multicollinearity and outlier concerns. For future studies, considering nonlinear models, machine learning techniques, or incorporating time series analysis could provide deeper insights, especially for long-term trends and event-related impacts. These alternative approaches might better capture complex dynamics and interactions among variables, enhancing the model's predictive power and robustness.
+
 ## 4.2 RQ2 - Are there differences in adoption rate within the different regions in Switzerland? And are there different buying behaviors displayed by the demographic segments within Switzerland?
 
 ### EV Adoption per Capita
