@@ -1135,7 +1135,7 @@ environmental awareness in urban regions.
 
 ## 4.3 RQ3 - How has the growth of electric vehicles evolved in comparison to other countries such as France, and what factors might account for the differences in their evolution ?
 
-As a matter of fact, the EDA section [(3.7)](#3-7-swiss-vs-france)
+The EDA section [(3.7)](#3-7-swiss-vs-france)
 already helps us answering this question involving quite strong
 arguments. Nevertheless, we decided to find out more about those
 differences in evolution by comparing the increase in charging station
@@ -1246,6 +1246,32 @@ print(corr_charge_ev)
 print("Lagged Correlations:")
 print(lagged_correlations_df)
 
+# Create a table that displays the correlations
+
+# Putting together year-on-year correlation and lagged correlation
+new_row <- tibble(Lag = 0, Correlation = corr_charge_ev)
+ev_charging_correlation_df <- bind_rows(new_row, lagged_correlations_df)
+ev_charging_correlation_df <- arrange(ev_charging_correlation_df, Lag)
+
+
+correlation_table <- tibble(
+  Variable = ev_charging_correlation_df[,1],
+  Description = ev_charging_correlation_df[,2]
+)
+
+kable_correlation <- tibble(
+  Lag = c("2022 & 2022", "2022 & 2021", "2022 & 2020", "2022 & 2019"),
+  Correlations = c("0.957", "0.943", "0.910", "0.885")
+)
+
+# Display the table using kableExtra
+kable_correlation %>%
+  kbl() %>%
+  kable_styling(position = "center", bootstrap_options = c("striped", "bordered", "hover"))
+
+
+# Displaying a table for the report:
+
 
 # Now we formulate the following Hypothesis
 
@@ -1255,7 +1281,7 @@ print(lagged_correlations_df)
 linear_charging <- lm(Total_Count ~ Count, data = merged_v_charge)
 
 # Poisson Test
-poisson_model <- glm(Total_Count ~ Count, family = poisson, data = merged_v_charge)
+# poisson_model <- glm(Total_Count ~ Count, family = poisson, data = merged_v_charge)
 
 # Set up the layout using mfrow
 par(mfrow = c(1, 2))  # 1 row, 2 columns
@@ -1267,38 +1293,38 @@ plot(linear_charging, 3, main = "LM Scale-Location Plot")
 plot(linear_charging, 5, main = "LM Residuals vs Leverage")
 
 # Plotting for Poisson Regression
-plot(poisson_model, which = 1, main = "Poisson Residuals vs Fitted")
-plot(poisson_model, which = 2, main = "Poisson Normal Q-Q Plot")
-plot(poisson_model, which = 3, main = "Poisson Scale-Location Plot")
-plot(poisson_model, which = 5, main = "Poisson Residuals vs Leverage")
+#plot(poisson_model, which = 1, main = "Poisson Residuals vs Fitted")
+#plot(poisson_model, which = 2, main = "Poisson Normal Q-Q Plot")
+#plot(poisson_model, which = 3, main = "Poisson Scale-Location Plot")
+#plot(poisson_model, which = 5, main = "Poisson Residuals vs Leverage")
 
 # Printing
 summary(linear_charging)
-summary(poisson_model)
+# summary(poisson_model)
 # Reset the layout
 par(mfrow = c(1, 1))
+
 ```
 
 The year-on-year correlation is the highest, the lagged correlation
-diminishes. We could suggest hat the availability of charging stations
-and the new registration of EVs go hand-in-hand, and that the
+diminishes. One possible interpretation is that the adoption of EVs is extremely
+reactive to the availability of new charging stations. However, it is almost certainly
+not the case, rather, the availability of charging stations
+and the new registration of EVs go hand-in-hand, and the
 availability of new charging station does not create a demand of new EVs
 by itself. Correlation does not imply causation, while we see a
 relationship, we can't conclude that charging stations directly cause
 changes in electric vehicle adoption only with a Correlation analysis
 
-For this research question, we used both a linear regression and a
-Poisson-test. It is important to note that the Poisson test presents
-major limitations in our case, as it assumes constant rates (we have
-seen that both the adoption of EVs and charging station availability
-present exponential nature). However, we decided to still include it in
-our report.
+For fruther explore this research question, we used both a linear regression and a
+Poisson-test.However, given the assumptions needed for a relevant Poisson-test,
+and the fact that we could not ensure these were respected with our data, we decided
+not to include it in our final report, although the results were "statistically significant"
 
-With both a linear regression and a Poisson-test. We find evidence of
-statistically significant relationship between the count of available
-charging station and the count of electric vehicles registered. We have
-Prediction variable/coefficient of 2.68 x 10\^-4 and 3.34 respectively.
-And a p-val \< 0.005 for both. However, it is important to remind
+For our linear regression. We find evidence of statistically significant relationship between
+the count of available charging station and the count of electric vehicles registered. Our
+Prediction variable/coefficient is 3.34 and the p-val < 0.005, namely, for each additional charging station available,
+3.34 new EVs would be adopted according to this model. However, it is important to remind
 ourselves that these variables have a bidirectional / mutual influence,
 beyond the scope of what our analysis shows. The relationship is not
 strictly unidirectional and therefore, it is hard to conclude anything
